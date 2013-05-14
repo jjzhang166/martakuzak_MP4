@@ -10,6 +10,7 @@ tmp/
 *.tmp
 *.bak
 *.swp
+*.html
 *~.nib
 local.properties
 .classpath
@@ -40,6 +41,7 @@ local.properties
 *.suo
 *.user
 *.sln.docstates
+*.pro
 
 # Build results
 
