@@ -23,3 +23,31 @@ TrackHeaderBox::TrackHeaderBox(int s,QString t, long int off, int e): FullBox(s,
 /////////////
 TrackReferenceBox::TrackReferenceBox(int s,QString t, long int off, int e): Box(s,t,off,e) {}
 /////////////
+HandlerBox::HandlerBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+/////////////
+MediaInformationBox::MediaInformationBox(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+/////////////
+VideoMediaHeaderBox::VideoMediaHeaderBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+/////////////
+SoundMediaHeaderBox::SoundMediaHeaderBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+/////////////
+HintMediaHeaderBox::HintMediaHeaderBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+/////////////
+NullMediaHeaderBox::NullMediaHeaderBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+/////////////
+DataInformationBox::DataInformationBox(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+/////////////
+DataEntryUrnBox::DataEntryUrnBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+/////////////
+DataEntryUrlBox::DataEntryUrlBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+/////////////
+DataReferenceBox::DataReferenceBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+/////////////
+SampleTableBox::SampleTableBox(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+/////////////
+TimeToSampleBox::TimeToSampleBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+/////////////
+CompositionOffsetBox::CompositionOffsetBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+/////////////
+SampleDescriptionBox::SampleDescriptionBox(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+/////////////
