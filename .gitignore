@@ -10,8 +10,12 @@ tmp/
 *.tmp
 *.bak
 *.swp
-*.html
+*.js
 *~.nib
+
+*/html
+*/latex
+
 local.properties
 .classpath
 .settings/
