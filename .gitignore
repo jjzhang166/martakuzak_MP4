@@ -11,6 +11,12 @@ tmp/
 *.bak
 *.swp
 *.js
+*.png
+*.css
+*.tex
+*.eps
+*.bat
+*.sty
 *~.nib
 
 */html
