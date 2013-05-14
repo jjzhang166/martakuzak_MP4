@@ -19,8 +19,8 @@ tmp/
 *.sty
 *~.nib
 
-*/html/
-*/latex/
+*html/
+*latex/
 
 local.properties
 .classpath
