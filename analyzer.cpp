@@ -74,7 +74,6 @@ void Analyzer:: setData(QByteArray& array, TreeItem* parent, long off) {
     bool progress= true;
     int i=0;
     while(progress) {
-        //std::cout<<"off "<<offset<<std::endl;
         unsigned long int size=valueOfGroupOfFields(array, i, i+3);
         unsigned long int type= valueOfGroupOfFields(array, i+4, i+7);
 
@@ -88,10 +87,9 @@ void Analyzer:: setData(QByteArray& array, TreeItem* parent, long off) {
         TreeItem* newItem= new TreeItem(columnData,parent,i+offset);
         parent->appendChild(newItem);
 
-        if((type==1836019574) || (type==1953653099) || (type==1835297121) ||(type==1835626086) || (type==1684631142) || (type==1937007212)){
+        if(newItem->isContainer()){
             setData(array.mid(i+8,size-8),newItem,offset+i+8);
         }
-        //else offset+=size;
 
         i+=size;
         if(i>=array.size()) {

@@ -4,12 +4,14 @@
 #include <QList>
 #include <QVariant>
 #include <QStringList>
+#include <QByteArray>
+#include <iostream>
 #include "box.h"
 #include "boxfactory.h"
-#include <iostream>
-#include <qDebug>
 #include "exceptions.h"
+//#include "analyzer.h"
 
+class Analyzer;
 /*!
  * \brief The TreeItem class represent single element of the tree model
  */
@@ -63,6 +65,11 @@ public:
      * \return parent of the item
      */
     TreeItem *parent();
+    /*!
+     * \brief isContainer Tests if represented box is container
+     * \return If box is container.
+     */
+    bool isContainer() { return box->isContainer(); }
 
 private:
     /*!

@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <qDebug>
+#include <QMap>
 
 /*!
  * \brief The Box class
@@ -27,6 +28,11 @@ private:
      * \brief offset bit offset of the box location
      */
     long int offset;
+    /*!
+     * \brief otherBoxOffset bit byte distance between begin of box and the begin of boxes from the box
+     * (for boxes who are containers)
+     */
+    long int otherBoxOffset;
 public:
     /*!
      * \brief Box
@@ -37,6 +43,7 @@ public:
      * \param e extended_type (0 or 1)
      */
     Box(int s=0,QString t="", long int off=0, int e=0);
+    virtual bool isContainer() { return false; }
     //Box(Box& box);
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,6 +63,7 @@ class MediaBox : public Box
 {
 public:
     MediaBox(int s=0,QString t="", long int off=0, int e=0);
+    virtual bool isContainer() { return true; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 class MediaDataBox : public Box
@@ -74,6 +82,7 @@ class MovieBox : public Box
 {
 public:
     MovieBox(int s=0,QString t="", long int off=0, int e=0);
+    virtual bool isContainer() { return true; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MovieHeaderBox : public FullBox
@@ -86,6 +95,7 @@ class TrackBox : public Box
 {
 public:
     TrackBox(int s=0,QString t="", long int off=0, int e=0);
+    virtual bool isContainer() { return true; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class TrackHeaderBox : public FullBox
@@ -110,6 +120,7 @@ class MediaInformationBox : public Box
 {
 public:
     MediaInformationBox(int s=0,QString t="", long int off=0, int e=0);
+    virtual bool isContainer() { return true; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class VideoMediaHeaderBox : public FullBox
@@ -140,6 +151,7 @@ class DataInformationBox : public Box
 {
 public:
     DataInformationBox(int s=0,QString t="", long int off=0, int e=0);
+    virtual bool isContainer() { return true; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class DataEntryUrnBox : public FullBox
@@ -164,6 +176,7 @@ class SampleTableBox : public Box
 {
 public:
     SampleTableBox(int s=0,QString t="", long int off=0, int e=0);
+    virtual bool isContainer() { return true; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class SampleEntry: public Box {
@@ -256,12 +269,14 @@ class FreeSpaceBox : public Box
 {
 public:
     FreeSpaceBox(int s=0,QString t="", long int off=0, int e=0);
+    virtual bool isContainer() { return true; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class EditBox : public Box
 {
 public:
     EditBox(int s=0,QString t="", long int off=0, int e=0);
+    virtual bool isContainer() { return true; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class EditListBox : public Box
@@ -286,6 +301,7 @@ class MovieExtendsBox : public Box
 {
 public:
     MovieExtendsBox(int s=0,QString t="", long int off=0, int e=0);
+    virtual bool isContainer() { return true; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MovieExtendsHeaderBox : public FullBox
@@ -304,6 +320,7 @@ class MovieFragmentBox : public Box
 {
 public:
     MovieFragmentBox(int s=0,QString t="", long int off=0, int e=0);
+    virtual bool isContainer() { return true; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MovieFragmentHeadreBox : public FullBox
@@ -316,6 +333,7 @@ class TrackFragmentBox : public Box
 {
 public:
     TrackFragmentBox(int s=0,QString t="", long int off=0, int e=0);
+    virtual bool isContainer() { return true; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class TrackFragmentHeaderBox : public FullBox
@@ -334,6 +352,7 @@ class MovieFragmentRandomAccessBox : public Box
 {
 public:
     MovieFragmentRandomAccessBox(int s=0,QString t="", long int off=0, int e=0);
+    virtual bool isContainer() { return true; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class TrackFragmentRandomAccessBox : public FullBox
@@ -388,6 +407,7 @@ class MetaBox : public FullBox
 {
 public:
     MetaBox(int s=0,QString t="", long int off=0, int e=0);
+    virtual bool isContainer() { return true; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class XMLBox : public FullBox
@@ -418,6 +438,7 @@ class ItemProtectionBox : public FullBox
 {
 public:
     ItemProtectionBox(int s=0,QString t="", long int off=0, int e=0);
+    virtual bool isContainer() { return true; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class ItemInfoEntry : public FullBox
@@ -436,6 +457,7 @@ class ProtectionSchemeInfoBox : public Box
 {
 public:
     ProtectionSchemeInfoBox(int s=0,QString t="", long int off=0, int e=0);
+    virtual bool isContainer() { return true; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class OriginalFormatBox : public Box

@@ -6,8 +6,8 @@
 #include <QVariant>
 #include <iostream>
 #include <QStringList>
-#include "analyzer.h"
 #include "treeitem.h"
+#include "analyzer.h"
 #include <qDebug>
 //using namespace std;
 
