@@ -14,6 +14,7 @@
 #include "treemodel.h"
 #include "treeitem.h"
 #include <QStringList>
+#include <qDebug>
 
 /*!
  * \brief The MainWindow class defines a mind window of the application

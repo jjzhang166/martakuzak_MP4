@@ -5,7 +5,13 @@ TreeItem::TreeItem(const QList<QVariant> &data, TreeItem *parent, int off)
 {
     parentItem = parent;
     itemData = data;
-    box= new Box(data.value(1).toUInt(),data.value(0).toString(),off);
+    BoxFactory bf;
+    if(!(data.value(0).toString()=="Name"))
+    try{
+        box= bf.getBox( data.value(1).toUInt(),data.value(0).toString(),off ) ;
+    }
+    catch(NoSuchABoxException) {}
+
 }
 
 TreeItem::~TreeItem()

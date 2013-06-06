@@ -3,12 +3,13 @@
 TreeModel::TreeModel(const QString &fileName, QObject *parent)
     : QAbstractItemModel(parent)
 {
-    Analyzer an(fileName);
-    QString data= an.getData();
+    Analyzer* an= new Analyzer(fileName);
+    //QString data= an.getData();
+    //qDebug()<<data;
     QList<QVariant> rootData;
     rootData << "Name" << "Size"<<"Offset";
     rootItem = new TreeItem(rootData);
-    an.setData(rootItem);
+    an->setData(rootItem);
     //setupModelData(data.split(QString("\n")), rootItem);
 }
 

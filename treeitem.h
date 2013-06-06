@@ -5,6 +5,10 @@
 #include <QVariant>
 #include <QStringList>
 #include "box.h"
+#include "boxfactory.h"
+#include <iostream>
+#include <qDebug>
+#include "exceptions.h"
 
 /*!
  * \brief The TreeItem class represent single element of the tree model
@@ -76,7 +80,7 @@ private:
     /*!
      * \brief box corresponding box
      */
-    Box* box;
+    std::shared_ptr<Box> box;
 };
 
 #endif // TREEITEM_H

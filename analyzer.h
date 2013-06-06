@@ -10,6 +10,7 @@
 #include <QVariant>
 #include "treemodel.h"
 #include "treeitem.h"
+#include <qDebug>
 
 /*!
  * \brief The Analyzer class - provides with tools to analyze MP4 file.
@@ -26,7 +27,7 @@ public:
      * \brief getData
      * \return QString object that contains data for the treeView.
      */
-    QString getData();
+    //QString getData();
     /*!
      * \brief setData adds children to the parent.
      * \param parent parent of the tree fragment that children are to be analyzed.
@@ -57,7 +58,7 @@ private:
      * \param parent parent of the tree fragment that children are to be analyzed.
      * \param off offset
      */
-    void set(QByteArray& arr, TreeItem* parent, long off=0);
+    void setData(QByteArray& arr, TreeItem* parent, long off=0);
     /*!
      * \brief fileName
      *  name of the analyzed file

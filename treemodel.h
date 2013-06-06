@@ -8,6 +8,7 @@
 #include <QStringList>
 #include "analyzer.h"
 #include "treeitem.h"
+#include <qDebug>
 //using namespace std;
 
 //class TreeItem;

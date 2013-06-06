@@ -25,12 +25,11 @@ QString Analyzer:: toQString(unsigned int num, int bytes) {
         result.push_front(QChar((num-((num>>8)<<8))));
         num= num>>8;
     }
-    qDebug()<<"D";
     result.push_front(QChar(num));
     return result;
 }
 
-QString Analyzer:: getData() {
+/*QString Analyzer:: getData() {
 
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
@@ -59,7 +58,7 @@ QString Analyzer:: getData() {
         }
     }
     return list;
-}
+}*/
 
 void Analyzer::setData(TreeItem* parent) {
     QFile file(fileName);
@@ -67,10 +66,10 @@ void Analyzer::setData(TreeItem* parent) {
         return ;
     }
     QByteArray array = file.readAll();
-    set(array,parent);
+    setData(array,parent);
 }
 
-void Analyzer:: set(QByteArray& array, TreeItem* parent, long off) {
+void Analyzer:: setData(QByteArray& array, TreeItem* parent, long off) {
     long offset= off;
     bool progress= true;
     int i=0;
@@ -90,7 +89,7 @@ void Analyzer:: set(QByteArray& array, TreeItem* parent, long off) {
         parent->appendChild(newItem);
 
         if((type==1836019574) || (type==1953653099) || (type==1835297121) ||(type==1835626086) || (type==1684631142) || (type==1937007212)){
-            set(array.mid(i+8,size-8),newItem,offset+i+8);
+            setData(array.mid(i+8,size-8),newItem,offset+i+8);
         }
         //else offset+=size;
 
