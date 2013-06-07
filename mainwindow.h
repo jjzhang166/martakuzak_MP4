@@ -14,6 +14,11 @@
 #include "treemodel.h"
 #include "treeitem.h"
 #include <QStringList>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QGridLayout>
+#include <QLabel>
+#include <QTextEdit>
 #include <qDebug>
 
 /*!
@@ -72,6 +77,8 @@ private:
      * \brief title
      */
     QString title;
+
+    QHBoxLayout * layout;
 
 };
 

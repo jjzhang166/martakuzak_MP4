@@ -4,7 +4,7 @@
 #include "box.h"
 #include <iostream>
 #include <qDebug>
-
+#include <memory>
 class BoxFactory
 {
 public:

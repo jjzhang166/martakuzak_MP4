@@ -10,9 +10,13 @@ MainWindow::MainWindow(QWidget *parent) :
     title=QString("MP4 ");
     setWindowTitle(title);
     setMinimumSize(160, 160);
-    const int width = QApplication::desktop()->width();
-    const int height = QApplication::desktop()->height();
-    resize(0.9*width, 0.8*height);
+    const int m_width = QApplication::desktop()->width();
+    const int m_height = QApplication::desktop()->height();
+    resize(0.9*m_width, 0.8*m_height);
+    layout = new QHBoxLayout();
+    QWidget *window = new QWidget();
+    setCentralWidget(window);
+    window->setLayout(layout);
 }
 
 MainWindow::~MainWindow()
@@ -53,7 +57,16 @@ void MainWindow::openFile()
     model= new TreeModel(fileName);
     treeView = new QTreeView(this);
     treeView->setModel(model);
-    setCentralWidget(treeView);
+    layout->addWidget(treeView);
+
+
+    QTextEdit * edit = new QTextEdit();
+    edit->setReadOnly(true);
+    edit->setFixedSize((centralWidget()->geometry().width()/5)*2,centralWidget()->geometry().height());
+    layout->addWidget(edit);
+    edit->setText("TEST");
+
+
     setWindowTitle(title+fileName);
     printResolution();
 }

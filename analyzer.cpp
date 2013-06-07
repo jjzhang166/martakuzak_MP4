@@ -69,7 +69,7 @@ void Analyzer::setData(TreeItem* parent) {
     setData(array,parent);
 }
 
-void Analyzer:: setData(QByteArray& array, TreeItem* parent, long off) {
+void Analyzer::setData(QByteArray array, TreeItem *&parent, long off) {
     //qDebug()<<"Na pocz "<<(0+array[6025912])<<" "<<(0+array[6025913])<<" "<<(0+array[6025914])<<" "<<(0+array[6025915]);
     long offset= off;
     bool progress= true;
@@ -102,10 +102,10 @@ void Analyzer:: setData(QByteArray& array, TreeItem* parent, long off) {
         QVariant var3(QString::number(i+8));
         columnData<<var;
         columnData<<var2;
-        columnData<<(i+offset);
+        columnData<<QString::number(i+offset);
         qDebug()<<"typ "<<toQString(type,4)<< " "<<type<< " size "<<size<<" i+8 "<<(i+offset);
 
-        TreeItem* newItem= new TreeItem(columnData,parent,i+offset);
+        TreeItem *newItem= new TreeItem(columnData,parent,i+offset);
         if(newItem->isNull()) {
             qDebug()<<"Nulltyp "<<toQString(type,4)<< " "<<type<< " size "<<size<<" i+8 "<<(i+offset);
             parent->appendChild(newItem);

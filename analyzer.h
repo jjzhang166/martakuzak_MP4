@@ -58,7 +58,8 @@ private:
      * \param parent parent of the tree fragment that children are to be analyzed.
      * \param off offset
      */
-    void setData(QByteArray& arr, TreeItem* parent, long off=0);
+    void setData(QByteArray arr, TreeItem* &parent, long off=0);
+    //void setData(QByteArray& arr, TreeItem* parent, long off=0);
     /*!
      * \brief fileName
      *  name of the analyzed file
