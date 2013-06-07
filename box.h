@@ -46,6 +46,7 @@ public:
     Box(int s=0,QString t="", long int off=0, int e=0);
     virtual bool isContainer() { return false; }
     virtual unsigned int getOffset() { return 8; }
+    virtual QString getType() { return type; }
     //Box(Box& box);
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////

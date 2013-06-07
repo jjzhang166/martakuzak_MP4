@@ -31,6 +31,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     //!Destructor
     ~MainWindow();
+    void printResolution();
 
 private slots:
     /*!

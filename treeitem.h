@@ -85,10 +85,13 @@ public:
      * \brief isNull
      * \return
      */
-    bool isNull()
-    {
+    bool isNull() {
         if(box) return false;
         else return true;
+    }
+    QString getType() {
+        return box->getType();
+
     }
 
 private:

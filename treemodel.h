@@ -78,7 +78,7 @@ public:
      * \return the number of columns for the children of the given parent.
      */
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
-
+    TreeItem* getRootItem() { return rootItem; }
 private:
     //void setupModelData(const QStringList &lines, TreeItem *parent);
     /*!
