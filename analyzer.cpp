@@ -70,12 +70,24 @@ void Analyzer::setData(TreeItem* parent) {
 }
 
 void Analyzer:: setData(QByteArray& array, TreeItem* parent, long off) {
+    //qDebug()<<"Na pocz "<<(0+array[6025912])<<" "<<(0+array[6025913])<<" "<<(0+array[6025914])<<" "<<(0+array[6025915]);
     long offset= off;
     bool progress= true;
     int i=0;
     while(progress) {
+        /*QFile file(fileName);
+        if (!file.open(QIODevice::ReadOnly)) {
+            return ;
+        }
+        QByteArray array_ = file.readAll();
+
+        for(int k=0; k<44; k++) {
+            qDebug()<<"k  "<<k<<" arr "<<(0+array_[k+i]);
+        }*/
         unsigned long int size;
         unsigned long int type;
+        qDebug()<<"Heeee "<<(i+3+parent->getOffset()-8);
+        qDebug()<<"Mlee "<<i;
         if(offset) {
             size=valueOfGroupOfFields(array, i, i+3+parent->getOffset()-8);
             type= valueOfGroupOfFields(array, i+4, i+7+parent->getOffset()-8);
@@ -95,6 +107,7 @@ void Analyzer:: setData(QByteArray& array, TreeItem* parent, long off) {
 
         TreeItem* newItem= new TreeItem(columnData,parent,i+offset);
         if(newItem->isNull()) {
+            qDebug()<<"Nulltyp "<<toQString(type,4)<< " "<<type<< " size "<<size<<" i+8 "<<(i+offset);
             parent->appendChild(newItem);
             i+=size;
             i+=offset;

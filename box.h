@@ -564,18 +564,23 @@ class MP4VisualSampleEntry : public VisualSampleEntry
 {
 public:
     MP4VisualSampleEntry(int s=0,QString t="", long int off=0, int e=0);
+    virtual bool isContainer() { return true; }
+    virtual unsigned int getOffset() { return 78; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class AudioVisualSampleEntry : public AudioSampleEntry
 {
 public:
     AudioVisualSampleEntry(int s=0,QString t="", long int off=0, int e=0);
+    virtual bool isContainer() { return true; }
+    virtual unsigned int getOffset() { return 44; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MpegSampleEntry : public SampleEntry
 {
 public:
     MpegSampleEntry(int s=0,QString t="", long int off=0, int e=0);
+    virtual bool isContainer() { return true; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 #endif // BOX_H

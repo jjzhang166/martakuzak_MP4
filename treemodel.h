@@ -79,6 +79,7 @@ public:
      */
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     TreeItem* getRootItem() { return rootItem; }
+    TreeItem *getChild(TreeItem *parent, QString type);
 private:
     //void setupModelData(const QStringList &lines, TreeItem *parent);
     /*!

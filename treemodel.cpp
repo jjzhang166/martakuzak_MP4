@@ -104,6 +104,15 @@ int TreeModel::rowCount(const QModelIndex &parent) const
     return parentItem->childCount();
 }
 
+TreeItem* TreeModel:: getChild(TreeItem *parent, QString type) {
+    int number= parent->childCount();
+    for(int i=0; i<number; i++) {
+        if(parent->child(i)->getType()==type) {
+            return parent->child(i);
+        }
+    }
+    return NULL;
+}
 
 /*void TreeModel::setupModelData(const QStringList &lines, TreeItem *parent)
 {
