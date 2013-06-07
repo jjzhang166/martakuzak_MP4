@@ -75,7 +75,7 @@ DegradationPriorityBox::DegradationPriorityBox(int s,QString t, long int off, in
 ///////////////
 PaddingBitsBox::PaddingBitsBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
 ///////////////
-FreeSpaceBox::FreeSpaceBox(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+FreeSpaceBox::FreeSpaceBox(bool c,int s,QString t, long int off, int e): Box(s,t,off,e), container(c) {}
 ///////////////
 EditBox::EditBox(int s,QString t, long int off, int e): Box(s,t,off,e) {}
 ///////////////
@@ -173,8 +173,6 @@ MP4VisualSampleEntry::MP4VisualSampleEntry(int s,QString t, long int off, int e)
 AudioVisualSampleEntry::AudioVisualSampleEntry(int s,QString t, long int off, int e): AudioSampleEntry(s,t,off,e) {}
 ///////////////
 MpegSampleEntry::MpegSampleEntry(int s,QString t, long int off, int e): SampleEntry(s,t,off,e) {}
-///////////////
-Avc1SampleEntry::Avc1SampleEntry(int s,QString t, long int off, int e): SampleEntry(s,t,off,e) {}
 ///////////////
 
 

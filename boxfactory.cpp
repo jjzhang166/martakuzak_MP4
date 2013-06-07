@@ -127,11 +127,11 @@ std::shared_ptr<Box> BoxFactory::getBox(int size,QString type, long int off, int
         return ret;
     }
     else if(type=="free"){
-        std::shared_ptr<Box> ret(new FreeSpaceBox(size,type,off,e));
+        std::shared_ptr<Box> ret(new FreeSpaceBox(false,size,type,off,e));
         return ret;
     }
     else if(type=="skip"){
-        std::shared_ptr<Box> ret(new FreeSpaceBox(size,type,off,e));
+        std::shared_ptr<Box> ret(new FreeSpaceBox(true,size,type,off,e));
         return ret;
     }
     else if(type=="edts"){
@@ -322,9 +322,6 @@ std::shared_ptr<Box> BoxFactory::getBox(int size,QString type, long int off, int
     }
     else if(type=="mp4s"){
         return std::shared_ptr<Box>(new MpegSampleEntry(size,type,off,e));
-    }
-    else if(type=="avc1"){
-        return std::shared_ptr<Box>(new Avc1SampleEntry(size,type,off,e));
     }
     else{
         throw NoSuchABoxException();

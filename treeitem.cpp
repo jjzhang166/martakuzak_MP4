@@ -6,9 +6,12 @@ TreeItem::TreeItem(const QList<QVariant> &data, TreeItem *parent, int off)
     parentItem = parent;
     itemData = data;
     BoxFactory bf;
-    if(!(data.value(0).toString()=="Name"))
-    box= bf.getBox( data.value(1).toUInt(),data.value(0).toString(),off ) ;
-
+    if(!(data.value(0).toString()=="Name")) {
+        try {
+            box= bf.getBox( data.value(1).toUInt(),data.value(0).toString(),off ) ;
+        }
+        catch(NoSuchABoxException) {}
+    }
 }
 
 TreeItem::~TreeItem()
@@ -52,4 +55,5 @@ int TreeItem::row() const
         return parentItem->childItems.indexOf(const_cast<TreeItem*>(this));
     return 0;
 }
+
 

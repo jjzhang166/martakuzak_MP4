@@ -91,20 +91,23 @@ void Analyzer:: setData(QByteArray& array, TreeItem* parent, long off) {
         columnData<<var;
         columnData<<var2;
         columnData<<(i+offset);
-        //qDebug()<<"typ "<<toQString(type,4)<< " "<<type<< " size "<<size<<" i+8 "<<(i+offset);
-        TreeItem* newItem= new TreeItem(columnData,parent,i+offset);
-        parent->appendChild(newItem);
+        qDebug()<<"typ "<<toQString(type,4)<< " "<<type<< " size "<<size<<" i+8 "<<(i+offset);
 
-        if(newItem->isContainer()){
-            try {
+        TreeItem* newItem= new TreeItem(columnData,parent,i+offset);
+        if(newItem->isNull()) {
+            parent->appendChild(newItem);
+            i+=size;
+            i+=offset;
+        }
+        else {
+            parent->appendChild(newItem);
+            if(newItem->isContainer()){
                 setData(array.mid(i+8,size-8),newItem,offset+i+newItem->getOffset());
             }
-            catch(NoSuchABoxException) {
-
-            }
+             i+=size;
         }
 
-        i+=size;
+
         if(i>=array.size()) {
             progress=false;
         }

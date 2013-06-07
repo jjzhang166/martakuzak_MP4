@@ -273,9 +273,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class FreeSpaceBox : public Box
 {
+private:
+    bool container;
 public:
-    FreeSpaceBox(int s=0,QString t="", long int off=0, int e=0);
-    virtual bool isContainer() { return true; }
+    FreeSpaceBox(bool container=false,int s=0,QString t="", long int off=0, int e=0);
+    virtual bool isContainer() { return container; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class EditBox : public Box
@@ -573,14 +575,6 @@ class MpegSampleEntry : public SampleEntry
 {
 public:
     MpegSampleEntry(int s=0,QString t="", long int off=0, int e=0);
-};
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-class Avc1SampleEntry : public SampleEntry
-{
-public:
-    Avc1SampleEntry(int s=0,QString t="", long int off=0, int e=0);
-    virtual bool isContainer() { return true; }
-    virtual unsigned int getOffset() { return (86); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 #endif // BOX_H

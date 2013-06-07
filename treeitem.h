@@ -69,12 +69,27 @@ public:
      * \brief isContainer Tests if represented box is container
      * \return If box is container.
      */
-    bool isContainer() { return box->isContainer(); }
+    bool isContainer() {
+        if(box) return box->isContainer();
+        else return false;
+    }
     /*!
      * \brief getOffset
      * \return
      */
-    int getOffset() { return box->getOffset(); }
+    int getOffset() {
+        if(box) return box->getOffset();
+        else return 8;
+    }
+    /*!
+     * \brief isNull
+     * \return
+     */
+    bool isNull()
+    {
+        if(box) return false;
+        else return true;
+    }
 
 private:
     /*!
