@@ -4,6 +4,7 @@
 #include <QString>
 #include <qDebug>
 #include <QMap>
+#include <iostream>
 
 /*!
  * \brief The Box class
@@ -44,6 +45,7 @@ public:
      */
     Box(int s=0,QString t="", long int off=0, int e=0);
     virtual bool isContainer() { return false; }
+    virtual unsigned int getOffset() { return 8; }
     //Box(Box& box);
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -192,6 +194,8 @@ public:
 class VisualSampleEntry: public SampleEntry {
 public:
     VisualSampleEntry(int s=0,QString t="", long int off=0, int e=0);
+    virtual bool isContainer() { return true; }
+    virtual unsigned int getOffset() { return (16); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class AudioSampleEntry: public SampleEntry{
@@ -215,6 +219,8 @@ class SampleDescriptionBox : public Box
 {
 public:
     SampleDescriptionBox(int s=0,QString t="", long int off=0, int e=0);
+    virtual bool isContainer() { return true; }
+    virtual unsigned int getOffset() { return (16); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class SampleSizeBox : public FullBox
@@ -567,6 +573,14 @@ class MpegSampleEntry : public SampleEntry
 {
 public:
     MpegSampleEntry(int s=0,QString t="", long int off=0, int e=0);
+};
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+class Avc1SampleEntry : public SampleEntry
+{
+public:
+    Avc1SampleEntry(int s=0,QString t="", long int off=0, int e=0);
+    virtual bool isContainer() { return true; }
+    virtual unsigned int getOffset() { return (86); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 #endif // BOX_H

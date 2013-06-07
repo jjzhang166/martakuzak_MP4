@@ -70,6 +70,11 @@ public:
      * \return If box is container.
      */
     bool isContainer() { return box->isContainer(); }
+    /*!
+     * \brief getOffset
+     * \return
+     */
+    int getOffset() { return box->getOffset(); }
 
 private:
     /*!

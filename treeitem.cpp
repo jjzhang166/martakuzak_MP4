@@ -7,10 +7,7 @@ TreeItem::TreeItem(const QList<QVariant> &data, TreeItem *parent, int off)
     itemData = data;
     BoxFactory bf;
     if(!(data.value(0).toString()=="Name"))
-    try{
-        box= bf.getBox( data.value(1).toUInt(),data.value(0).toString(),off ) ;
-    }
-    catch(NoSuchABoxException) {}
+    box= bf.getBox( data.value(1).toUInt(),data.value(0).toString(),off ) ;
 
 }
 

@@ -174,5 +174,8 @@ AudioVisualSampleEntry::AudioVisualSampleEntry(int s,QString t, long int off, in
 ///////////////
 MpegSampleEntry::MpegSampleEntry(int s,QString t, long int off, int e): SampleEntry(s,t,off,e) {}
 ///////////////
+Avc1SampleEntry::Avc1SampleEntry(int s,QString t, long int off, int e): SampleEntry(s,t,off,e) {}
+///////////////
+
 
 

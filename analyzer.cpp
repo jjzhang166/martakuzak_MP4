@@ -74,9 +74,16 @@ void Analyzer:: setData(QByteArray& array, TreeItem* parent, long off) {
     bool progress= true;
     int i=0;
     while(progress) {
-        unsigned long int size=valueOfGroupOfFields(array, i, i+3);
-        unsigned long int type= valueOfGroupOfFields(array, i+4, i+7);
-
+        unsigned long int size;
+        unsigned long int type;
+        if(offset) {
+            size=valueOfGroupOfFields(array, i, i+3+parent->getOffset()-8);
+            type= valueOfGroupOfFields(array, i+4, i+7+parent->getOffset()-8);
+        }
+        else {
+            size=valueOfGroupOfFields(array, i, i+3);
+            type= valueOfGroupOfFields(array, i+4, i+7);
+        }
         QList<QVariant> columnData;
         QVariant var(toQString(type,4));
         QVariant var2(QString::number(size));
@@ -84,11 +91,17 @@ void Analyzer:: setData(QByteArray& array, TreeItem* parent, long off) {
         columnData<<var;
         columnData<<var2;
         columnData<<(i+offset);
+        //qDebug()<<"typ "<<toQString(type,4)<< " "<<type<< " size "<<size<<" i+8 "<<(i+offset);
         TreeItem* newItem= new TreeItem(columnData,parent,i+offset);
         parent->appendChild(newItem);
 
         if(newItem->isContainer()){
-            setData(array.mid(i+8,size-8),newItem,offset+i+8);
+            try {
+                setData(array.mid(i+8,size-8),newItem,offset+i+newItem->getOffset());
+            }
+            catch(NoSuchABoxException) {
+
+            }
         }
 
         i+=size;
