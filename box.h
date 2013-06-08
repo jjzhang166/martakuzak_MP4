@@ -558,6 +558,7 @@ class ESDBox : public FullBox
 {
 public:
     ESDBox(int s=0,QString t="", long int off=0, int e=0);
+    virtual unsigned int getOffset() { return 0; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MP4VisualSampleEntry : public VisualSampleEntry

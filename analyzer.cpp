@@ -80,14 +80,14 @@ void Analyzer::setData(QByteArray array, TreeItem *&parent, long off) {
             return ;
         }
         QByteArray array_ = file.readAll();
-
-        for(int k=0; k<44; k++) {
+        //qDebug()<<" hh "<<i<<" "<<(static_cast<unsigned int>(array_[i]) & 0xFF);
+        /*for(int k=0; k<44; k++) {
             qDebug()<<"k  "<<k<<" arr "<<(0+array_[k+i]);
         }*/
         unsigned long int size;
         unsigned long int type;
-        qDebug()<<"Heeee "<<(i+3+parent->getOffset()-8);
-        qDebug()<<"Mlee "<<i;
+        //qDebug()<<"Heeee "<<(i+3+parent->getOffset()-8);
+        //qDebug()<<"Mlee "<<i;
         if(offset) {
             size=valueOfGroupOfFields(array, i, i+3+parent->getOffset()-8);
             type= valueOfGroupOfFields(array, i+4, i+7+parent->getOffset()-8);
@@ -107,17 +107,30 @@ void Analyzer::setData(QByteArray array, TreeItem *&parent, long off) {
 
         TreeItem *newItem= new TreeItem(columnData,parent,i+offset);
         if(newItem->isNull()) {
-            qDebug()<<"Nulltyp "<<toQString(type,4)<< " "<<type<< " size "<<size<<" i+8 "<<(i+offset);
-            parent->appendChild(newItem);
+            //qDebug()<<"Nulltyp "<<toQString(type,4)<< " "<<type<< " size "<<size<<" i+8 "<<(i+offset);
+            QList<QVariant> colDat;
+            QVariant v1(toQString(type,4));
+            QVariant v2(QString::number(size));
+            QVariant v3(QString::number(i+8));
+            colDat<<var;
+            colDat<<var2;
+            colDat<<QString::number(i+offset-8);
+            qDebug()<<"typ "<<toQString(type,4)<< " "<<type<< " size "<<size<<" i+8 "<<(i+offset-8);
+            TreeItem *newIt= new TreeItem(colDat,parent,i+offset-8);
+           // QVariant v(QString::number(i+offset-8));
+            //columnData.replace(3,v);
+            parent->appendChild(newIt);
             i+=size;
-            i+=offset;
+            i+=(offset-8);
+            qDebug()<<"jakie kurwa i "<<i;
         }
         else {
             parent->appendChild(newItem);
             if(newItem->isContainer()){
-                setData(array.mid(i+8,size-8),newItem,offset+i+newItem->getOffset());
+                setData(array.mid(i+8,size-8),newItem,offset+i+8+newItem->getOffset()-8);
             }
-             i+=size;
+            i+=size;
+            qDebug()<<"jakie kurwa i "<<i;
         }
 
 

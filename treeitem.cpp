@@ -12,6 +12,7 @@ TreeItem::TreeItem(const QList<QVariant> &data, TreeItem *parent, int off)
         }
         catch(NoSuchABoxException) {}
     }
+
 }
 
 TreeItem::~TreeItem()

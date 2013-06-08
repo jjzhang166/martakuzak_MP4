@@ -79,6 +79,5 @@ void MainWindow::printResolution() {
     TreeItem *stbl= model->getChild(minf, QString("stbl"));
     TreeItem *stsd= model->getChild(stbl, QString("stsd"));
     TreeItem *itemWl= stsd->child(0);
-    qDebug()<<"nana "<<itemWl->getType();
 }
 
