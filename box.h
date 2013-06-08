@@ -22,13 +22,13 @@ private:
      */
     QString type;
     /*!
-     * \brief extended_type indicates whether the box has extended type (1) or not (0)
-     */
-    int extended_type;
-    /*!
      * \brief offset bit offset of the box location
      */
     long int offset;
+    /*!
+     * \brief extended_type indicates whether the box has extended type (1) or not (0)
+     */
+    int extended_type;
     /*!
      * \brief otherBoxOffset bit byte distance between begin of box and the begin of boxes from the box
      * (for boxes who are containers)
@@ -565,13 +565,13 @@ class MP4VisualSampleEntry : public VisualSampleEntry
 public:
     MP4VisualSampleEntry(int s=0,QString t="", long int off=0, int e=0);
     virtual bool isContainer() { return true; }
-    virtual unsigned int getOffset() { return 78; }
+    virtual unsigned int getOffset() { return 94; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-class AudioVisualSampleEntry : public AudioSampleEntry
+class MP4AudioSampleEntry : public AudioSampleEntry
 {
 public:
-    AudioVisualSampleEntry(int s=0,QString t="", long int off=0, int e=0);
+    MP4AudioSampleEntry(int s=0,QString t="", long int off=0, int e=0);
     virtual bool isContainer() { return true; }
     virtual unsigned int getOffset() { return 44; }
 };

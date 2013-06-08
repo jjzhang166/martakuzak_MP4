@@ -318,7 +318,7 @@ std::shared_ptr<Box> BoxFactory::getBox(int size,QString type, long int off, int
         return std::shared_ptr<Box>(new MP4VisualSampleEntry(size,type,off,e));
     }
     else if(type=="mp4a"){
-        return std::shared_ptr<Box>(new AudioVisualSampleEntry(size,type,off,e));
+        return std::shared_ptr<Box>(new MP4AudioSampleEntry(size,type,off,e));
     }
     else if(type=="mp4s"){
         return std::shared_ptr<Box>(new MpegSampleEntry(size,type,off,e));

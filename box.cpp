@@ -170,7 +170,7 @@ ESDBox::ESDBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
 ///////////////
 MP4VisualSampleEntry::MP4VisualSampleEntry(int s,QString t, long int off, int e): VisualSampleEntry(s,t,off,e) {}
 ///////////////
-AudioVisualSampleEntry::AudioVisualSampleEntry(int s,QString t, long int off, int e): AudioSampleEntry(s,t,off,e) {}
+MP4AudioSampleEntry::MP4AudioSampleEntry(int s,QString t, long int off, int e): AudioSampleEntry(s,t,off,e) {}
 ///////////////
 MpegSampleEntry::MpegSampleEntry(int s,QString t, long int off, int e): SampleEntry(s,t,off,e) {}
 ///////////////
