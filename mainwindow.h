@@ -21,7 +21,7 @@
 #include <QTextEdit>
 #include <qDebug>
 #include <QMessageBox>
-
+#include <QDirModel>
 
 /*!
  * \brief The MainWindow class defines a mind window of the application
@@ -38,7 +38,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     //!Destructor
     ~MainWindow();
-    void printResolution();
+    //void printResolution();
     /*void resizeEvent ( QResizeEvent * event )
         {
           QMessageBox* msg = new QMessageBox(this);
@@ -52,6 +52,7 @@ private slots:
      * \brief openFile opens QFileDialog to choose file that is to analyzed
      */
     void openFile();
+    void printResolution();
 
 private:
     /*!
@@ -74,6 +75,7 @@ private:
      * \brief openAct
      */
     QAction *openAct;
+    QAction * tmp;
     /*!
      * \brief exitAct
      */

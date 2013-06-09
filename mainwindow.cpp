@@ -30,11 +30,13 @@ MainWindow::~MainWindow()
 
 void MainWindow::createActions()
 {
-
     openAct = new QAction(tr("&Open..."), this);
     openAct->setShortcuts(QKeySequence::Open);
     connect(openAct, SIGNAL(triggered()), this, SLOT(openFile()));
 
+    tmp= new QAction(tr("&TMP"),this);
+
+    //connect(tmp, SIGNAL(QItemSelectionModel::selectionChanged(const QItemSelection & selected, const QItemSelection & deselected) ),this, SLOT(printResolution()));
     exitAct = new QAction(tr("E&xit"), this);
     exitAct->setShortcuts(QKeySequence::Quit);
     connect(exitAct, SIGNAL(triggered()), this, SLOT(close()));
@@ -44,6 +46,7 @@ void MainWindow::createMenu()
 {
     fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(openAct);
+    //fileMenu->addAction(tmp);
     fileMenu->addSeparator();
     fileMenu->addAction(exitAct);
 
@@ -74,27 +77,20 @@ void MainWindow::openFile()
         edit->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
         QModelIndexList Items = model->match(model->index(0,0), Qt::DisplayRole,
-                                             QVariant::fromValue(QString("mdia")),-1, Qt::MatchRecursive);
+                                             QVariant::fromValue(QString("moov")),-1, Qt::MatchRecursive);
         while (!Items.isEmpty()) {
-            // Information: with this code, expands ONLY first level in QTreeView
             treeView->setExpanded(Items.back(), true);
             Items.pop_back();
         }
 
-        /*for(int i=0; i<10; i++) {
 
-            for(int k=0; k<10; k++) {
-                QString ri= QString::number(i);
-                QString rk= QString::number(k);
-                QString row= QString::number( model->rowCount(model->index(i,k)));
-                QString col= QString::number( model->columnCount(model->index(i,k)));
-                qDebug()<<" rowcount "<<ri<<" "<<rk<<" "<<row;
-                qDebug()<<" colcount "<<ri<<" "<<rk<<" "<<col;
-            }
-        }*/
+        connect(treeView->selectionModel(),
+                SIGNAL(selectionChanged(const QItemSelection &,
+                                        const QItemSelection &)),
+                this, SLOT(printResolution()));
+
 
         setWindowTitle(title+fileName);
-        //printResolution();
     }
 }
 
@@ -106,5 +102,25 @@ void MainWindow::printResolution() {
     TreeItem *stbl= model->getChild(minf, QString("stbl"));
     TreeItem *stsd= model->getChild(stbl, QString("stsd"));
     TreeItem *itemWl= stsd->child(0);
+    qDebug()<<"printresoluto";
+
+    QModelIndex index = treeView->selectionModel()->currentIndex();
+    //model->data(index,Qt::DisplayRole);
+    qDebug()<<treeView->selectionModel()->selectedRows();
+
+
+    qDebug()<<treeView->selectionModel()->selectedRows();
+    qDebug()<<model->data(index,Qt::DisplayRole);
+    //edit->setText(model->data(index,Qt::DisplayRole));
+
+   // if (!model->insertRow(index.row()+1, index.parent()))
+     //   return;
+
+    //updateActions();
+
+    /*for (int column = 0; column < model->columnCount(index.parent()); ++column) {
+        QModelIndex child = model->index(index.row()+1, column, index.parent());
+        model->setData(child, QVariant("[No data]"), Qt::EditRole);
+    }*/
 }
 

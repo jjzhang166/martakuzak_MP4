@@ -47,6 +47,7 @@ public:
     virtual bool isContainer() { return false; }
     virtual unsigned int getOffset() { return 8; }
     virtual QString getType() { return type; }
+    virtual QString getFullName() { return QString("Box"); }
     //Box(Box& box);
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,12 +55,16 @@ class FullBox : public Box
 {
 public:
     FullBox(int s=0,QString t="", long int off=0, int e=0);
+    virtual QString getFullName() { return QString("Full Box"); }
+
 };
 //////////////////////////////////////////////////////////////////////////////////////////////////
 class FileTypeBox : public Box
 {
 public:
     FileTypeBox(int s=0,QString t="", long int off=0, int e=0);
+    virtual QString getFullName() { return QString("File Type Box"); }
+
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 class MediaBox : public Box
@@ -67,18 +72,21 @@ class MediaBox : public Box
 public:
     MediaBox(int s=0,QString t="", long int off=0, int e=0);
     virtual bool isContainer() { return true; }
+    virtual QString getFullName() { return QString("Media Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 class MediaDataBox : public Box
 {
 public:
     MediaDataBox(int s=0,QString t="", long int off=0, int e=0);
+    virtual QString getFullName() { return QString("Media Data Box"); }
 };
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 class MediaHeaderBox : public FullBox
 {
 public:
     MediaHeaderBox(int s=0,QString t="", long int off=0, int e=0);
+    virtual QString getFullName() { return QString("Media Header Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MovieBox : public Box
@@ -86,6 +94,7 @@ class MovieBox : public Box
 public:
     MovieBox(int s=0,QString t="", long int off=0, int e=0);
     virtual bool isContainer() { return true; }
+    virtual QString getFullName() { return QString("Movie Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MovieHeaderBox : public FullBox
@@ -99,6 +108,7 @@ class TrackBox : public Box
 public:
     TrackBox(int s=0,QString t="", long int off=0, int e=0);
     virtual bool isContainer() { return true; }
+    virtual QString getFullName() { return QString("Track Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class TrackHeaderBox : public FullBox
