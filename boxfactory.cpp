@@ -167,7 +167,7 @@ std::shared_ptr<Box> BoxFactory::getBox(int size,QString type, long int off, int
         return ret;
     }
     else if(type=="mfhd"){
-        std::shared_ptr<Box> ret(new MovieFragmentHeadreBox(size,type,off,e));
+        std::shared_ptr<Box> ret(new MovieFragmentHeaderBox(size,type,off,e));
         return ret;
     }
     else if(type=="traf"){

@@ -93,7 +93,7 @@ TrackExtendsBox::TrackExtendsBox(int s,QString t, long int off, int e): FullBox(
 ///////////////
 MovieFragmentBox::MovieFragmentBox(int s,QString t, long int off, int e): Box(s,t,off,e) {}
 ///////////////
-MovieFragmentHeadreBox::MovieFragmentHeadreBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+MovieFragmentHeaderBox::MovieFragmentHeaderBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
 ///////////////
 TrackFragmentBox::TrackFragmentBox(int s,QString t, long int off, int e): Box(s,t,off,e) {}
 ///////////////
