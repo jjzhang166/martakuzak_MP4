@@ -10,6 +10,7 @@ Analyzer::Analyzer(const QString &fileName)
 unsigned long int Analyzer:: valueOfGroupOfFields(QByteArray array, int begin, int end) {
     unsigned long int num=0;
     for(int i=begin; i<(end+1); i++) {
+        qDebug()<<"valueof "<<(static_cast<unsigned int>(array[i]) & 0xFF);
         num |= static_cast<unsigned int>(array[i]) & 0xFF;
             if(begin!=end && i!=end) {
            num=(num<<8);
@@ -70,6 +71,7 @@ void Analyzer::setData(TreeItem* parent) {
 }
 
 void Analyzer::setData(QByteArray array, TreeItem *&parent, long off) {
+    qDebug()<<"start "<<off;
     long offset= off;//offset tej array w pliku
     bool progress= true;
     int i=0; //cos jak offset w arrayu
@@ -113,10 +115,10 @@ void Analyzer::setData(QByteArray array, TreeItem *&parent, long off) {
         else {
             parent->appendChild(newItem);
             if(newItem->isContainer()){
-                setData(array.mid(i+8,size-8),newItem,offset+i+newItem->getOffset());
+                setData(array.mid(i+newItem->getOffset(),size-newItem->getOffset()),newItem,offset+i+newItem->getOffset());
             }
             i+=size;
-            qDebug()<<"jakies kurwa i "<<i;
+            qDebug()<<"jakies kurwa i "<<(offset+i);
         }
 
 

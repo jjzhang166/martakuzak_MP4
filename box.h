@@ -566,7 +566,7 @@ class MP4VisualSampleEntry : public VisualSampleEntry
 public:
     MP4VisualSampleEntry(int s=0,QString t="", long int off=0, int e=0);
     virtual bool isContainer() { return true; }
-    virtual unsigned int getOffset() { return 50; }
+    virtual unsigned int getOffset() { return 86; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MP4AudioSampleEntry : public AudioSampleEntry
@@ -574,7 +574,7 @@ class MP4AudioSampleEntry : public AudioSampleEntry
 public:
     MP4AudioSampleEntry(int s=0,QString t="", long int off=0, int e=0);
     virtual bool isContainer() { return true; }
-    virtual unsigned int getOffset() { return 44; }
+    virtual unsigned int getOffset() { return 36; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MpegSampleEntry : public SampleEntry
