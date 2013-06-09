@@ -52,8 +52,9 @@ void MainWindow::openFile()
 {
     QFileDialog dialog(this);
     dialog.setFileMode(QFileDialog::AnyFile);
-    QString fileName = QFileDialog::getOpenFileName(this,
-        tr("Open File"), "/", tr("MP4 Files (*.mp4)"));
+    /*QString fileName = QFileDialog::getOpenFileName(this,
+        tr("Open File"), "/", tr("MP4 Files (*.mp4)"));*/
+    QString fileName("F:/Uczelnia/Samples/Euro 2012.mp4" );
     model= new TreeModel(fileName);
     treeView = new QTreeView(this);
     treeView->setModel(model);

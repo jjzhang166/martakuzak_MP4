@@ -70,27 +70,15 @@ void Analyzer::setData(TreeItem* parent) {
 }
 
 void Analyzer::setData(QByteArray array, TreeItem *&parent, long off) {
-    //qDebug()<<"Na pocz "<<(0+array[6025912])<<" "<<(0+array[6025913])<<" "<<(0+array[6025914])<<" "<<(0+array[6025915]);
-    long offset= off;
+    long offset= off;//offset tej array w pliku
     bool progress= true;
-    int i=0;
+    int i=0; //cos jak offset w arrayu
     while(progress) {
-        /*QFile file(fileName);
-        if (!file.open(QIODevice::ReadOnly)) {
-            return ;
-        }
-        QByteArray array_ = file.readAll();
-        //qDebug()<<" hh "<<i<<" "<<(static_cast<unsigned int>(array_[i]) & 0xFF);
-        /*for(int k=0; k<44; k++) {
-            qDebug()<<"k  "<<k<<" arr "<<(0+array_[k+i]);
-        }*/
-        unsigned long int size;
-        unsigned long int type;
-        //qDebug()<<"Heeee "<<(i+3+parent->getOffset()-8);
-        //qDebug()<<"Mlee "<<i;
-        if(offset) {
-            size=valueOfGroupOfFields(array, i, i+3+parent->getOffset()-8);
-            type= valueOfGroupOfFields(array, i+4, i+7+parent->getOffset()-8);
+        unsigned long int size; //rozmiar boxa
+        unsigned long int type; //typ boxa
+        if(offset) { //jesli box nie jest pierwszy
+            size=valueOfGroupOfFields(array, i, i+3);
+            type= valueOfGroupOfFields(array, i+4, i+7);
         }
         else {
             size=valueOfGroupOfFields(array, i, i+3);
@@ -99,7 +87,7 @@ void Analyzer::setData(QByteArray array, TreeItem *&parent, long off) {
         QList<QVariant> columnData;
         QVariant var(toQString(type,4));
         QVariant var2(QString::number(size));
-        QVariant var3(QString::number(i+8));
+        QVariant var3(QString::number(i+offset));
         columnData<<var;
         columnData<<var2;
         columnData<<QString::number(i+offset);
@@ -114,23 +102,21 @@ void Analyzer::setData(QByteArray array, TreeItem *&parent, long off) {
             QVariant v3(QString::number(i+8));
             colDat<<var;
             colDat<<var2;
-            colDat<<QString::number(i+offset-8);
-            qDebug()<<"typ "<<toQString(type,4)<< " "<<type<< " size "<<size<<" i+8 "<<(i+offset-8);
-            TreeItem *newIt= new TreeItem(colDat,parent,i+offset-8);
-           // QVariant v(QString::number(i+offset-8));
-            //columnData.replace(3,v);
+            colDat<<QString::number(i+offset);
+            qDebug()<<"nulltyp "<<toQString(type,4)<< " "<<type<< " size "<<size<<" i+8 "<<(i+offset);
+            TreeItem *newIt= new TreeItem(colDat,parent,i+offset);
             parent->appendChild(newIt);
             i+=size;
-            i+=(offset-8);
+            i+=(offset);
             qDebug()<<"jakie kurwa i "<<i;
         }
         else {
             parent->appendChild(newItem);
             if(newItem->isContainer()){
-                setData(array.mid(i+8,size-8),newItem,offset+i+8+newItem->getOffset()-8);
+                setData(array.mid(i+8,size-8),newItem,offset+i+newItem->getOffset());
             }
             i+=size;
-            qDebug()<<"jakie kurwa i "<<i;
+            qDebug()<<"jakies kurwa i "<<i;
         }
 
 

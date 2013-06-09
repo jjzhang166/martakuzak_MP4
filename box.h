@@ -558,7 +558,7 @@ class ESDBox : public FullBox
 {
 public:
     ESDBox(int s=0,QString t="", long int off=0, int e=0);
-    virtual unsigned int getOffset() { return 0; }
+    virtual unsigned int getOffset() { return 8; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MP4VisualSampleEntry : public VisualSampleEntry
@@ -566,7 +566,7 @@ class MP4VisualSampleEntry : public VisualSampleEntry
 public:
     MP4VisualSampleEntry(int s=0,QString t="", long int off=0, int e=0);
     virtual bool isContainer() { return true; }
-    virtual unsigned int getOffset() { return 94; }
+    virtual unsigned int getOffset() { return 50; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MP4AudioSampleEntry : public AudioSampleEntry
