@@ -64,19 +64,35 @@ void MainWindow::openFile()
         treeView = new QTreeView(this);
         treeView->setModel(model);
         layout->addWidget(treeView);
-
+        treeView->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
         edit = new QTextEdit();
         edit->setReadOnly(true);
         edit->setFixedSize((centralWidget()->geometry().width()/5)*2,centralWidget()->geometry().height());
         layout->addWidget(edit);
         edit->setText("TEST");
+        edit->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
-        QModelIndexList Items = model->match(model->index(0,0), Qt::DisplayRole, QVariant::fromValue(QString("moof")));
-        if (!Items.isEmpty()) {
+        QModelIndexList Items = model->match(model->index(0,0), Qt::DisplayRole,
+                                             QVariant::fromValue(QString("mdia")),-1, Qt::MatchRecursive);
+        while (!Items.isEmpty()) {
             // Information: with this code, expands ONLY first level in QTreeView
-            treeView->setExpanded(Items.first(), true);
+            treeView->setExpanded(Items.back(), true);
+            Items.pop_back();
         }
+
+        /*for(int i=0; i<10; i++) {
+
+            for(int k=0; k<10; k++) {
+                QString ri= QString::number(i);
+                QString rk= QString::number(k);
+                QString row= QString::number( model->rowCount(model->index(i,k)));
+                QString col= QString::number( model->columnCount(model->index(i,k)));
+                qDebug()<<" rowcount "<<ri<<" "<<rk<<" "<<row;
+                qDebug()<<" colcount "<<ri<<" "<<rk<<" "<<col;
+            }
+        }*/
+
         setWindowTitle(title+fileName);
         //printResolution();
     }

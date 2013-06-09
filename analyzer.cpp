@@ -29,36 +29,6 @@ QString Analyzer:: toQString(unsigned int num, int bytes) {
     return result;
 }
 
-/*QString Analyzer:: getData() {
-
-    QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly)) {
-        return list;
-    }
-    QByteArray array = file.readAll();
-    bool progress= true;
-    int i=0;
-
-    while(progress) {
-
-        unsigned int size=valueOfGroupOfFields(array, i, i+3);
-        //unsigned int ftype= valueOfGroupOfFields(array, i+4, i+7);
-        QByteArray &arr= array;
-        QString siz= arr.mid(i,4);
-        QString type=arr.mid(i+4, 4);
-        list.append(type);
-        list.append("\t");
-        list.append(siz);
-        list.append("\n\t");
-        //QString type= toQString(ftype,4);
-        //vector.append(Box(size, type));
-        i+=size;
-        if(i>=array.size()) {
-            progress=false;
-        }
-    }
-    return list;
-}*/
 
 void Analyzer::setData(TreeItem* parent) {
     QFile file(fileName);
