@@ -76,46 +76,37 @@ void Analyzer::setData(QByteArray array, TreeItem *&parent, long off) {
     while(progress) {
         unsigned long int size; //rozmiar boxa
         unsigned long int type; //typ boxa
-        if(offset) { //jesli box nie jest pierwszy
-            size=valueOfGroupOfFields(array, i, i+3);
-            type= valueOfGroupOfFields(array, i+4, i+7);
-        }
-        else {
-            size=valueOfGroupOfFields(array, i, i+3);
-            type= valueOfGroupOfFields(array, i+4, i+7);
-        }
-        QList<QVariant> columnData;
-        QVariant var(toQString(type,4));
-        QVariant var2(QString::number(size));
-        QVariant var3(QString::number(i+offset));
-        columnData<<var;
-        columnData<<var2;
+
+        size=valueOfGroupOfFields(array, i, i+3); //obliczenie wartosci rozmiaru i typu
+        type= valueOfGroupOfFields(array, i+4, i+7); //w zadanej tablicy: zawsze na poczatku
+
+        QList<QVariant> columnData; //konstrukcja danych, ktore beda wyswietlane w drzewie
+        columnData<<toQString(type,4);
+        columnData<<QString::number(size);
         columnData<<QString::number(i+offset);
 
-        TreeItem *newItem= new TreeItem(columnData,parent,i+offset);
-        if(newItem->isNull()) {
-            QList<QVariant> colDat;
-            QVariant v1(toQString(type,4));
-            QVariant v2(QString::number(size));
-            QVariant v3(QString::number(i+8));
-            colDat<<var;
-            colDat<<var2;
+        TreeItem *newItem= new TreeItem(columnData,parent,i+offset);//tworzymy treeitem
+        /*if(newItem->isNull()) {// gdy box jest nieznany
+            /*QList<QVariant> colDat; //????
+            colDat<<toQString(type,4);
+            colDat<<QString::number(size);
             colDat<<QString::number(i+offset);
             TreeItem *newIt= new TreeItem(colDat,parent,i+offset);
-            parent->appendChild(newIt);
-            i+=size;
-            i+=(offset);
-        }
-        else {
             parent->appendChild(newItem);
-            if(newItem->isContainer()){
+            i+=size;
+            //i+=(offset);//przesuwamy i o rozmiar, i offset(??)
+        }*/
+        //else {
+            parent->appendChild(newItem);
+            if(newItem->isContainer()){//gdy treeitem zawiera inne boxy, tworzymy subarray wycinajac offset na atrybuty
+                                        //offset powiekszamy o offset atrybutowy i i
                 setData(array.mid(i+newItem->getOffset(),size-newItem->getOffset()),newItem,offset+i+newItem->getOffset());
             }
             i+=size;
-        }
+        //}
 
 
-        if(i>=array.size()) {
+        if(i>=array.size()) {//poki i jest nie wieksze od rozmiaru tablicy
             progress=false;
         }
     }

@@ -20,6 +20,7 @@
 #include <QLabel>
 #include <QTextEdit>
 #include <qDebug>
+#include <QMessageBox>
 
 /*!
  * \brief The MainWindow class defines a mind window of the application
@@ -37,6 +38,13 @@ public:
     //!Destructor
     ~MainWindow();
     void printResolution();
+    /*void resizeEvent ( QResizeEvent * event )
+        {
+          QMessageBox* msg = new QMessageBox(this);
+          msg->setText("Mainwindow has been resized!");
+          msg->show();
+        };*/
+
 
 private slots:
     /*!
