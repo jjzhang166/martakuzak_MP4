@@ -10,7 +10,6 @@ Analyzer::Analyzer(const QString &fileName)
 unsigned long int Analyzer:: valueOfGroupOfFields(QByteArray array, int begin, int end) {
     unsigned long int num=0;
     for(int i=begin; i<(end+1); i++) {
-        qDebug()<<"valueof "<<(static_cast<unsigned int>(array[i]) & 0xFF);
         num |= static_cast<unsigned int>(array[i]) & 0xFF;
             if(begin!=end && i!=end) {
            num=(num<<8);
@@ -71,7 +70,6 @@ void Analyzer::setData(TreeItem* parent) {
 }
 
 void Analyzer::setData(QByteArray array, TreeItem *&parent, long off) {
-    qDebug()<<"start "<<off;
     long offset= off;//offset tej array w pliku
     bool progress= true;
     int i=0; //cos jak offset w arrayu
@@ -93,11 +91,9 @@ void Analyzer::setData(QByteArray array, TreeItem *&parent, long off) {
         columnData<<var;
         columnData<<var2;
         columnData<<QString::number(i+offset);
-        qDebug()<<"typ "<<toQString(type,4)<< " "<<type<< " size "<<size<<" i+8 "<<(i+offset);
 
         TreeItem *newItem= new TreeItem(columnData,parent,i+offset);
         if(newItem->isNull()) {
-            //qDebug()<<"Nulltyp "<<toQString(type,4)<< " "<<type<< " size "<<size<<" i+8 "<<(i+offset);
             QList<QVariant> colDat;
             QVariant v1(toQString(type,4));
             QVariant v2(QString::number(size));
@@ -105,12 +101,10 @@ void Analyzer::setData(QByteArray array, TreeItem *&parent, long off) {
             colDat<<var;
             colDat<<var2;
             colDat<<QString::number(i+offset);
-            qDebug()<<"nulltyp "<<toQString(type,4)<< " "<<type<< " size "<<size<<" i+8 "<<(i+offset);
             TreeItem *newIt= new TreeItem(colDat,parent,i+offset);
             parent->appendChild(newIt);
             i+=size;
             i+=(offset);
-            qDebug()<<"jakie kurwa i "<<i;
         }
         else {
             parent->appendChild(newItem);
@@ -118,7 +112,6 @@ void Analyzer::setData(QByteArray array, TreeItem *&parent, long off) {
                 setData(array.mid(i+newItem->getOffset(),size-newItem->getOffset()),newItem,offset+i+newItem->getOffset());
             }
             i+=size;
-            qDebug()<<"jakies kurwa i "<<(offset+i);
         }
 
 

@@ -55,13 +55,17 @@ void MainWindow::openFile()
     QString fileName = QFileDialog::getOpenFileName(this,
         tr("Open File"), "/", tr("MP4 Files (*.mp4)"));
     //QString fileName("F:/Uczelnia/Samples/Euro 2012.mp4" );
+    if(layout->count()) {
+        layout->removeWidget(treeView);
+        layout->removeWidget(edit);
+    }
     model= new TreeModel(fileName);
     treeView = new QTreeView(this);
     treeView->setModel(model);
     layout->addWidget(treeView);
 
 
-    QTextEdit * edit = new QTextEdit();
+    edit = new QTextEdit();
     edit->setReadOnly(true);
     edit->setFixedSize((centralWidget()->geometry().width()/5)*2,centralWidget()->geometry().height());
     layout->addWidget(edit);

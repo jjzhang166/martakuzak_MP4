@@ -79,6 +79,7 @@ private:
     QString title;
 
     QHBoxLayout * layout;
+    QTextEdit * edit;
 
 };
 
