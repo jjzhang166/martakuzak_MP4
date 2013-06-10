@@ -7,7 +7,9 @@ Analyzer::Analyzer(const QString &fileName)
     this->fileName=fileName;
 }
 
-unsigned long int Analyzer:: valueOfGroupOfFields(QByteArray array, int begin, int end) {
+unsigned long int Analyzer:: valueOfGroupOfFields(int begin, int end, QByteArray array) {
+    if(!array.size())
+        array= tempArray;
     unsigned long int num=0;
     for(int i=begin; i<(end+1); i++) {
         num |= static_cast<unsigned int>(array[i]) & 0xFF;
@@ -36,10 +38,12 @@ void Analyzer::setData(TreeItem* parent, QHash<long,TreeItem*>* items) {
         return ;
     }
     QByteArray array = file.readAll();
+    tempArray= array;
     setData(array,parent,items, 0);
 }
 
 void Analyzer::setData(QByteArray array, TreeItem *&parent, QHash<long, TreeItem *> *items, long off) {
+    tempArray= array;
     long offset= off;//offset tej array w pliku
     bool progress= true;
     int i=0; //cos jak offset w arrayu
@@ -47,18 +51,19 @@ void Analyzer::setData(QByteArray array, TreeItem *&parent, QHash<long, TreeItem
         unsigned long int size; //rozmiar boxa
         unsigned long int type; //typ boxa
 
-        size=valueOfGroupOfFields(array, i, i+3); //obliczenie wartosci rozmiaru i typu
-        type= valueOfGroupOfFields(array, i+4, i+7); //w zadanej tablicy: zawsze na poczatku
+        size=valueOfGroupOfFields(i, i+3, array); //obliczenie wartosci rozmiaru i typu
+        type= valueOfGroupOfFields(i+4, i+7, array); //w zadanej tablicy: zawsze na poczatku
 
         QList<QVariant> columnData; //konstrukcja danych, ktore beda wyswietlane w drzewie
         columnData<<toQString(type,4);
         columnData<<QString::number(size);
         columnData<<QString::number(i+offset);
 
-        TreeItem *newItem= new TreeItem(columnData,parent,i+offset);//tworzymy treeitem
+        TreeItem *newItem= new TreeItem(this,columnData,parent,i+offset);//tworzymy treeitem
 
         parent->appendChild(newItem);
         items->insert(i+offset, newItem);
+        //qDebug()<<"Insert "<<toQString(type,4)<<" "<<(i+offset);
         if(newItem->isContainer()){//gdy treeitem zawiera inne boxy, tworzymy subarray wycinajac offset na atrybuty
                                         //offset powiekszamy o offset atrybutowy i i
             setData(array.mid(i+newItem->getOffset(),size-newItem->getOffset()),

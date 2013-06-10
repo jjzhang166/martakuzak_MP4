@@ -101,6 +101,8 @@ class MovieHeaderBox : public FullBox
 {
 public:
     MovieHeaderBox(int s=0,QString t="", long int off=0, int e=0);
+    virtual QString getFullName() { return QString("Movie Header Box "); }
+
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class TrackBox : public Box
@@ -202,6 +204,7 @@ class SampleTableBox : public Box
 public:
     SampleTableBox(int s=0,QString t="", long int off=0, int e=0);
     virtual bool isContainer() { return true; }
+    virtual QString getFullName() { return QString("Sample Table Box "); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class SampleEntry: public Box {
@@ -246,6 +249,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class SampleDescriptionBox : public Box
 {
+private:
+    int i;
+    int entry;
 public:
     SampleDescriptionBox(int s=0,QString t="", long int off=0, int e=0);
     virtual bool isContainer() { return true; }

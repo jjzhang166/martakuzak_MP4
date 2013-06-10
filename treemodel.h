@@ -12,7 +12,7 @@
 #include <qDebug>
 //using namespace std;
 
-//class TreeItem;
+class TreeItem;
 /*!
  * \brief The TreeModel class
  * represents tree model for TreeView

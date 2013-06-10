@@ -67,14 +67,14 @@ void MainWindow::openFile()
         treeView = new QTreeView(this);
         treeView->setModel(model);
         layout->addWidget(treeView);
-        treeView->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+        //treeView->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
         edit = new QTextEdit();
         edit->setReadOnly(true);
         edit->setFixedSize((centralWidget()->geometry().width()/5)*2,centralWidget()->geometry().height());
         layout->addWidget(edit);
-        edit->setText("TEST");
-        edit->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+        //edit->setText();
+        //edit->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
         QModelIndexList Items = model->match(model->index(0,0), Qt::DisplayRole,
                                              QVariant::fromValue(QString("moov")),-1, Qt::MatchRecursive);
@@ -97,7 +97,9 @@ void MainWindow::openFile()
 void MainWindow::printSelectedBox() {
     QModelIndex index = treeView->selectionModel()->currentIndex();
     QModelIndex child = model->index(index.row(), 2, index.parent());
+    //qDebug()<<"a "<< model->data(child,Qt::DisplayRole).toInt();
     QString text= model->getChild(model->data(child,Qt::DisplayRole).toInt())->fullName();
+    //qDebug()<<text;
     if(text!=NULL)
         edit->setText(text);
 }

@@ -1,11 +1,11 @@
 #include "treeitem.h"
 
 using namespace std;
-TreeItem::TreeItem(const QList<QVariant> &data, TreeItem *parent, int off)
+TreeItem::TreeItem(Analyzer *an, const QList<QVariant> &data, TreeItem *parent, int off)
 {
     parentItem = parent;
     itemData = data;
-    BoxFactory bf;
+    BoxFactory bf(an);
     if(!(data.value(0).toString()=="Name")) {
         try {
             box= bf.getBox( data.value(1).toUInt(),data.value(0).toString(),off ) ;

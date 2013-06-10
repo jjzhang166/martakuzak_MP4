@@ -8,7 +8,7 @@ TreeModel::TreeModel(const QString &fileName, QObject *parent)
     //qDebug()<<data;
     QList<QVariant> rootData;
     rootData << "Name" << "Size"<<"Offset";
-    rootItem = new TreeItem(rootData);
+    rootItem = new TreeItem(analyzer,rootData);
     items= new QHash<long,TreeItem*>();
     analyzer->setData(rootItem, items);
     //setupModelData(data.split(QString("\n")), rootItem);

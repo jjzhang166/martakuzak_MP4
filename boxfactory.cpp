@@ -1,7 +1,7 @@
 #include "boxfactory.h"
 #include "exceptions.h"
 
-BoxFactory::BoxFactory()
+BoxFactory::BoxFactory(Analyzer *an): analyzer(an)
 {}
 
 std::shared_ptr<Box> BoxFactory::getBox(int size,QString type, long int off, int e) {
@@ -80,6 +80,7 @@ std::shared_ptr<Box> BoxFactory::getBox(int size,QString type, long int off, int
     }
     else if(type=="stbl"){
         std::shared_ptr<Box> ret(new SampleTableBox(size,type,off,e));
+        qDebug()<<ret->getFullName();
         return ret;
     }
     else if(type=="stts"){
@@ -315,6 +316,7 @@ std::shared_ptr<Box> BoxFactory::getBox(int size,QString type, long int off, int
             return std::shared_ptr<Box>(new ESDBox(size,type,off,e));
     }
     else if(type=="mp4v"){
+        qDebug()<<analyzer->valueOfGroupOfFields(0,3);
         return std::shared_ptr<Box>(new MP4VisualSampleEntry(size,type,off,e));
     }
     else if(type=="mp4a"){

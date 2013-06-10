@@ -12,6 +12,7 @@
 #include "treeitem.h"
 #include <qDebug>
 
+class TreeItem;
 /*!
  * \brief The Analyzer class - provides with tools to analyze MP4 file.
  */
@@ -34,7 +35,6 @@ public:
      */
     void setData(TreeItem* parent, QHash<long,TreeItem*> *items);
 
-private:
     /*!
      * \brief valueOfGroupOfFields converts subarray of QByteArray to unsigned long int
      * \param array array which fragment is to be converted
@@ -42,7 +42,7 @@ private:
      * \param end number of the last element of subarray
      * \return unsigned long int value of the subarray
      */
-    unsigned long int valueOfGroupOfFields(QByteArray array, int begin, int end);
+    unsigned long int valueOfGroupOfFields(int begin, int end, QByteArray array= QByteArray());
     /*!
      * \brief toQString
      *  converts unsigned int to QString
@@ -58,6 +58,7 @@ private:
      * \param parent parent of the tree fragment that children are to be analyzed.
      * \param off offset
      */
+private:
     void setData(QByteArray arr, TreeItem* &parent, QHash<long,TreeItem*>* items, long off=0);
     //void setData(QByteArray& arr, TreeItem* parent, long off=0);
     /*!
@@ -70,6 +71,10 @@ private:
      * QString that contains data formatted in a way suitable for treemodel
      */
     QString list;
+    /*!
+     * \brief tempArray
+     */
+    QByteArray tempArray;
 };
 
 

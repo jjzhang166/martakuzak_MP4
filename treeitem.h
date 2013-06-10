@@ -25,7 +25,7 @@ public:
      * \param parent parent of the item
      * \param off offset
      */
-    explicit TreeItem(const QList<QVariant> &data, TreeItem *parent = 0,int off=0);
+    explicit TreeItem(Analyzer *an,const QList<QVariant> &data, TreeItem *parent = 0, int off=0);
     //!Destructor
     ~TreeItem();
     /*!
