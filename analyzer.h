@@ -2,7 +2,6 @@
 #define ANALYZER_H
 #include <QString>
 #include <QStringList>
-#include <QDebug>
 #include <QString>
 #include <QByteArray>
 #include <QFile>

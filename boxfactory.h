@@ -1,7 +1,7 @@
 #ifndef BOXFACTORY_H
 #define BOXFACTORY_H
-#include <QDebug>
 #include "box.h"
+#include "sampleentry.h"
 #include <iostream>
 #include <qDebug>
 #include <memory>

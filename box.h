@@ -207,32 +207,6 @@ public:
     virtual QString getFullName() { return QString("Sample Table Box "); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-class SampleEntry: public Box {
-public:
-    SampleEntry(int s=0,QString t="", long int off=0, int e=0);
-    virtual QString getFullName() { return QString("Sample Entry"); }
-};
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-class HintSampleEntry: public SampleEntry {
-public:
-    HintSampleEntry(int s=0,QString t="", long int off=0, int e=0);
-    virtual QString getFullName() { return QString("Hint Sample Entry"); }
-};
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-class VisualSampleEntry: public SampleEntry {
-public:
-    VisualSampleEntry(int s=0,QString t="", long int off=0, int e=0);
-    virtual bool isContainer() { return true; }
-    virtual unsigned int getOffset() { return (16); }
-    virtual QString getFullName() { return QString("Visual Sample Entry"); }
-};
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-class AudioSampleEntry: public SampleEntry{
-public:
-    AudioSampleEntry(int s=0,QString t="", long int off=0, int e=0);
-    virtual QString getFullName() { return QString("Audio Sample Entry"); }
-};
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
 class TimeToSampleBox : public FullBox
 {
 public:
@@ -634,47 +608,6 @@ public:
     virtual QString getFullName() { return QString("Hint Statistics Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////MP4//////
-class ObjectDescriptorBox : public FullBox
-{
-public:
-    ObjectDescriptorBox(int s=0,QString t="", long int off=0, int e=0);
-    virtual QString getFullName() { return QString("Object Descriptor Box"); }
-};
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-class ESDBox : public FullBox
-{
-public:
-    ESDBox(int s=0,QString t="", long int off=0, int e=0);
-    virtual unsigned int getOffset() { return 8; }
-    virtual QString getFullName() { return QString("ESD Box"); }
-};
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-class MP4VisualSampleEntry : public VisualSampleEntry
-{
-public:
-    MP4VisualSampleEntry(int s=0,QString t="", long int off=0, int e=0);
-    virtual bool isContainer() { return true; }
-    virtual unsigned int getOffset() { return 86; }
-    virtual QString getFullName() { return QString("MP4 Visual Sample Entry"); }
-};
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-class MP4AudioSampleEntry : public AudioSampleEntry
-{
-public:
-    MP4AudioSampleEntry(int s=0,QString t="", long int off=0, int e=0);
-    virtual bool isContainer() { return true; }
-    virtual unsigned int getOffset() { return 36; }
-    virtual QString getFullName() { return QString("MP4 Audio Sample Entry"); }
-};
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-class MpegSampleEntry : public SampleEntry
-{
-public:
-    MpegSampleEntry(int s=0,QString t="", long int off=0, int e=0);
-    virtual bool isContainer() { return true; }
-    virtual QString getFullName() { return QString("Mpeg Sample Entry"); }
-};
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 #endif // BOX_H
 

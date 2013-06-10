@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     resize(0.8*m_width, 0.8*m_height);
     layout = new QHBoxLayout();
     QWidget *window = new QWidget();
+    //window->setStyleSheet("background-image: url(./tlo.png)");
     setCentralWidget(window);
     window->setLayout(layout);
 }
@@ -97,10 +98,8 @@ void MainWindow::openFile()
 void MainWindow::printSelectedBox() {
     QModelIndex index = treeView->selectionModel()->currentIndex();
     QModelIndex child = model->index(index.row(), 2, index.parent());
-    //qDebug()<<"a "<< model->data(child,Qt::DisplayRole).toInt();
     QString text= model->getChild(model->data(child,Qt::DisplayRole).toInt())->fullName();
-    //qDebug()<<text;
     if(text!=NULL)
-        edit->setText(text);
+        edit->setHtml("<body><font color=\"DeepPink\">"+text+"</font></body>");
 }
 
