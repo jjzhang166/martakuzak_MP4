@@ -9,50 +9,52 @@ private:
     unsigned int* reserved;
     unsigned int data_reference_index;
 public:
-    SampleEntry(int s=0,QString t="", long int off=0, int e=0);
+    SampleEntry(const int &s=0, const QString &t="", const long &off=0, int e=0, const unsigned int &dri=0);
     virtual QString getFullName() { return QString("Sample Entry"); }
   //  void setReserved(cons)
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class HintSampleEntry: public SampleEntry {
 public:
-    HintSampleEntry(int s=0,QString t="", long int off=0, int e=0);
+    HintSampleEntry(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
     virtual QString getFullName() { return QString("Hint Sample Entry"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class VisualSampleEntry: public SampleEntry {
 private:
-    unsigned int* reserved;
-    unsigned int data_reference_index;
-    unsigned int* pre_defined1 = 0;
-    unsigned int reserved1 = 0;
-    unsigned int pre_defined2;
+    unsigned int pre_defined = 0;
+    unsigned int reserved2 = 0;
+    unsigned int pre_defined1;
     unsigned int width;
     unsigned int height;
-    unsigned int horizresolution = 0x00480000; // 72 dpi
-    unsigned int vertresolution = 0x00480000; // 72 dpi
-    unsigned int reserved2 = 0;
+    unsigned int horizresolution; // 72 dpi
+    unsigned int vertresolution; // 72 dpi
+    unsigned int reserved3 = 0;
     unsigned int frame_count = 1;
     QString compressorname;
-    unsigned int depth = 0x0018;
-    int pre_defined3 = -1;
+    unsigned int depth;
+    int pre_defined2 = -1;
 public:
-    VisualSampleEntry(int s=0,QString t="", long int off=0, int e=0);
+    VisualSampleEntry(const int &s=0, const QString &t="", const long &off=0, const int& e=0, const unsigned int& dri=0,
+                      const unsigned int pd=0, const unsigned int& r2=0, const unsigned int & pd1=0,
+                      const unsigned int&wdth=0, const unsigned int& hght=0, const unsigned int& hr=0x00480000,
+                      const unsigned int& vr=0x00480000, const unsigned int& r3=0, const unsigned int& fc=1,
+                      QString csn="", const unsigned int& dpth=0x0018, int pd2=-1);
     virtual bool isContainer() { return true; }
-    virtual unsigned int getOffset() { return (16); }
+    //virtual unsigned int getOffset() { return (16); }
     virtual QString getFullName() { return QString("Visual Sample Entry"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class AudioSampleEntry: public SampleEntry{
 public:
-    AudioSampleEntry(int s=0,QString t="", long int off=0, int e=0);
+    AudioSampleEntry(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
     virtual QString getFullName() { return QString("Audio Sample Entry"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MP4VisualSampleEntry : public VisualSampleEntry
 {
 public:
-    MP4VisualSampleEntry(int s=0,QString t="", long int off=0, int e=0);
+    MP4VisualSampleEntry(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
     virtual bool isContainer() { return true; }
     virtual unsigned int getOffset() { return 86; }
     virtual QString getFullName() { return QString("MP4 Visual Sample Entry"); }
@@ -61,7 +63,7 @@ public:
 class MP4AudioSampleEntry : public AudioSampleEntry
 {
 public:
-    MP4AudioSampleEntry(int s=0,QString t="", long int off=0, int e=0);
+    MP4AudioSampleEntry(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
     virtual bool isContainer() { return true; }
     virtual unsigned int getOffset() { return 36; }
     virtual QString getFullName() { return QString("MP4 Audio Sample Entry"); }
@@ -70,7 +72,7 @@ public:
 class MpegSampleEntry : public SampleEntry
 {
 public:
-    MpegSampleEntry(int s=0,QString t="", long int off=0, int e=0);
+    MpegSampleEntry(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
     virtual bool isContainer() { return true; }
     virtual QString getFullName() { return QString("Mpeg Sample Entry"); }
 };
@@ -78,14 +80,14 @@ public:
 class ObjectDescriptorBox : public FullBox
 {
 public:
-    ObjectDescriptorBox(int s=0,QString t="", long int off=0, int e=0);
+    ObjectDescriptorBox(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
     virtual QString getFullName() { return QString("Object Descriptor Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class ESDBox : public FullBox
 {
 public:
-    ESDBox(int s=0,QString t="", long int off=0, int e=0);
+    ESDBox(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
     virtual unsigned int getOffset() { return 8; }
     virtual QString getFullName() { return QString("ESD Box"); }
 };

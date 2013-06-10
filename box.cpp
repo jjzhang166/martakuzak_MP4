@@ -1,135 +1,135 @@
 #include "box.h"
 
 
-Box::Box(int s,QString t, long int off, int e): size(s),type(t),offset(off), extended_type(e) {}
+Box::Box(const int &s, const QString &t, const long &off, const int & e): size(s),type(t),offset(off), extended_type(e) {}
 /////////////
-FullBox::FullBox(int s,QString t, long int off, int e):Box(s,t,off,e) {}
+FullBox::FullBox(const int& s, const QString& t, const long int& off, const int &  e):Box(s,t,off,e) {}
 /////////////
-FileTypeBox::FileTypeBox(int s, QString t, long off, int e): Box(s,t,off,e) {}
+FileTypeBox::FileTypeBox(const int& s, const QString& t, const long int& off, const int & e): Box(s,t,off,e) {}
 /////////////
-MediaBox::MediaBox(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+MediaBox::MediaBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 /////////////
-MediaDataBox::MediaDataBox(int s,QString t, long int off, int e):Box(s,t,off,e) {}
+MediaDataBox::MediaDataBox(const int& s, const QString& t, const long int& off, const int &  e):Box(s,t,off,e) {}
 /////////////
-MediaHeaderBox::MediaHeaderBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+MediaHeaderBox::MediaHeaderBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 /////////////
-MovieBox::MovieBox(int s,QString t, long int off, int e):Box(s,t,off,e) {}
+MovieBox::MovieBox(const int& s, const QString& t, const long int& off, const int &  e):Box(s,t,off,e) {}
 /////////////
-MovieHeaderBox::MovieHeaderBox(int s,QString t, long int off, int e):FullBox(s,t,off,e) {}
+MovieHeaderBox::MovieHeaderBox(const int& s, const QString& t, const long int& off, const int &  e):FullBox(s,t,off,e) {}
 /////////////
-TrackBox::TrackBox(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+TrackBox::TrackBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 /////////////
-TrackHeaderBox::TrackHeaderBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+TrackHeaderBox::TrackHeaderBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 /////////////
-TrackReferenceBox::TrackReferenceBox(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+TrackReferenceBox::TrackReferenceBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 /////////////
-HandlerBox::HandlerBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+HandlerBox::HandlerBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 /////////////
-MediaInformationBox::MediaInformationBox(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+MediaInformationBox::MediaInformationBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 /////////////
-VideoMediaHeaderBox::VideoMediaHeaderBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+VideoMediaHeaderBox::VideoMediaHeaderBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 /////////////
-SoundMediaHeaderBox::SoundMediaHeaderBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+SoundMediaHeaderBox::SoundMediaHeaderBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 /////////////
-HintMediaHeaderBox::HintMediaHeaderBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+HintMediaHeaderBox::HintMediaHeaderBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 /////////////
-NullMediaHeaderBox::NullMediaHeaderBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+NullMediaHeaderBox::NullMediaHeaderBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 /////////////
-DataInformationBox::DataInformationBox(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+DataInformationBox::DataInformationBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 /////////////
-DataEntryUrnBox::DataEntryUrnBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+DataEntryUrnBox::DataEntryUrnBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 /////////////
-DataEntryUrlBox::DataEntryUrlBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+DataEntryUrlBox::DataEntryUrlBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 /////////////
-DataReferenceBox::DataReferenceBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+DataReferenceBox::DataReferenceBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-FreeSpaceBox::FreeSpaceBox(bool c,int s,QString t, long int off, int e): Box(s,t,off,e), container(c) {}
+FreeSpaceBox::FreeSpaceBox(bool c,const int& s, const QString& t, const long int& off, const int & e): Box(s,t,off,e), container(c) {}
 ///////////////
-EditBox::EditBox(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+EditBox::EditBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 ///////////////
-EditListBox::EditListBox(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+EditListBox::EditListBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 ///////////////
-UserDataBox::UserDataBox(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+UserDataBox::UserDataBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 ///////////////
-CopyRightBox::CopyRightBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+CopyRightBox::CopyRightBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-MovieExtendsBox::MovieExtendsBox(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+MovieExtendsBox::MovieExtendsBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 ///////////////
-MovieExtendsHeaderBox::MovieExtendsHeaderBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+MovieExtendsHeaderBox::MovieExtendsHeaderBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-TrackExtendsBox::TrackExtendsBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+TrackExtendsBox::TrackExtendsBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-MovieFragmentBox::MovieFragmentBox(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+MovieFragmentBox::MovieFragmentBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 ///////////////
-MovieFragmentHeaderBox::MovieFragmentHeaderBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+MovieFragmentHeaderBox::MovieFragmentHeaderBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-TrackFragmentBox::TrackFragmentBox(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+TrackFragmentBox::TrackFragmentBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 ///////////////
-TrackFragmentHeaderBox::TrackFragmentHeaderBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+TrackFragmentHeaderBox::TrackFragmentHeaderBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-TrackRunBox::TrackRunBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+TrackRunBox::TrackRunBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-MovieFragmentRandomAccessBox::MovieFragmentRandomAccessBox(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+MovieFragmentRandomAccessBox::MovieFragmentRandomAccessBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 ///////////////
-TrackFragmentRandomAccessBox::TrackFragmentRandomAccessBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+TrackFragmentRandomAccessBox::TrackFragmentRandomAccessBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-MovieFragmentRandomAccessOffsetBox::MovieFragmentRandomAccessOffsetBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+MovieFragmentRandomAccessOffsetBox::MovieFragmentRandomAccessOffsetBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-SampleDependencyTypeBox::SampleDependencyTypeBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+SampleDependencyTypeBox::SampleDependencyTypeBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-SampleToGroupBox::SampleToGroupBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+SampleToGroupBox::SampleToGroupBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-SampleGroupDescriptionBox::SampleGroupDescriptionBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+SampleGroupDescriptionBox::SampleGroupDescriptionBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-SampleScaleBox::SampleScaleBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+SampleScaleBox::SampleScaleBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-SubSampleInformationBox::SubSampleInformationBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+SubSampleInformationBox::SubSampleInformationBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-ProgressiveDownloadInfoBox::ProgressiveDownloadInfoBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+ProgressiveDownloadInfoBox::ProgressiveDownloadInfoBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-MetaBox::MetaBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+MetaBox::MetaBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-XMLBox::XMLBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+XMLBox::XMLBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-BinaryXMLBox::BinaryXMLBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+BinaryXMLBox::BinaryXMLBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-ItemLocationBox::ItemLocationBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+ItemLocationBox::ItemLocationBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-PrimaryItemBox::PrimaryItemBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+PrimaryItemBox::PrimaryItemBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-ItemProtectionBox::ItemProtectionBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+ItemProtectionBox::ItemProtectionBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-ItemInfoEntry::ItemInfoEntry(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+ItemInfoEntry::ItemInfoEntry(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-ItemInfoBox::ItemInfoBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+ItemInfoBox::ItemInfoBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-ProtectionSchemeInfoBox::ProtectionSchemeInfoBox(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+ProtectionSchemeInfoBox::ProtectionSchemeInfoBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 ///////////////
-OriginalFormatBox::OriginalFormatBox(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+OriginalFormatBox::OriginalFormatBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 ///////////////
-IPMPInfoBox::IPMPInfoBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+IPMPInfoBox::IPMPInfoBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-IPMPControlBox::IPMPControlBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+IPMPControlBox::IPMPControlBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-SchemeTypeBox::SchemeTypeBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+SchemeTypeBox::SchemeTypeBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-SchemeInformationBox::SchemeInformationBox(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+SchemeInformationBox::SchemeInformationBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 ///////////////
-TimeScaleEntry::TimeScaleEntry(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+TimeScaleEntry::TimeScaleEntry(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 ///////////////
-TimeOffset::TimeOffset(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+TimeOffset::TimeOffset(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 ///////////////
-SequenceOffset::SequenceOffset(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+SequenceOffset::SequenceOffset(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 ///////////////
-SRTPProcessBox::SRTPProcessBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+SRTPProcessBox::SRTPProcessBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-MovieHintInformation::MovieHintInformation(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+MovieHintInformation::MovieHintInformation(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 ///////////////
-RTPMovieHintInformation::RTPMovieHintInformation(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+RTPMovieHintInformation::RTPMovieHintInformation(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 ///////////////
-RTPTrackSDPHintInformation::RTPTrackSDPHintInformation(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+RTPTrackSDPHintInformation::RTPTrackSDPHintInformation(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 ///////////////
-HintStatisticsBox::HintStatisticsBox(int s,QString t, long int off, int e): Box(s,t,off,e) {}
+HintStatisticsBox::HintStatisticsBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 ///////////////
 
 

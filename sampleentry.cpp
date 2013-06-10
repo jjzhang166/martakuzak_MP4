@@ -1,26 +1,46 @@
 #include "sampleentry.h"
 
 /////////////
-SampleEntry::SampleEntry(int s, QString t, long int off, int e):
-    Box(s,t,off,e)
+SampleEntry::SampleEntry(const int& s, const QString& t, const long int& off, int e, const unsigned int& dri):
+    Box(s,t,off,e),
+    data_reference_index(dri)
 {
 }
 /////////////
-VisualSampleEntry::VisualSampleEntry(int s,QString t, long int off, int e): SampleEntry(s,t,off,e) {}
+VisualSampleEntry::VisualSampleEntry(const int& s, const QString& t, const long int& off, const int& e, const unsigned int& dri,
+                                     const unsigned int pd, const unsigned int& r2, const unsigned int& pd1,
+                                     const unsigned int& wdth, const unsigned int& hght, const unsigned int& hr,
+                                     const unsigned int& vr, const unsigned int& r3, const unsigned int& fc,
+                                     QString csn, const unsigned int& dpth, int pd2):
+    SampleEntry(s,t,off,e, dri),
+    pre_defined(pd),
+    reserved2(r2),
+    pre_defined1(pd1),
+    width(wdth),
+    height(hght),
+    horizresolution(hr),
+    vertresolution(vr),
+    reserved3(r3),
+    frame_count(fc),
+    compressorname(csn),
+    depth(dpth),
+    pre_defined2(pd2)
+{
+}
 /////////////
-AudioSampleEntry::AudioSampleEntry(int s,QString t, long int off, int e): SampleEntry(s,t,off,e) {}
+AudioSampleEntry::AudioSampleEntry(const int& s, const QString& t, const long int& off, const int &  e): SampleEntry(s,t,off,e) {}
 /////////////
-HintSampleEntry::HintSampleEntry(int s,QString t, long int off, int e): SampleEntry(s,t,off,e) {}
+HintSampleEntry::HintSampleEntry(const int& s, const QString& t, const long int& off, const int &  e): SampleEntry(s,t,off,e) {}
 /////////////
-MP4VisualSampleEntry::MP4VisualSampleEntry(int s,QString t, long int off, int e): VisualSampleEntry(s,t,off,e) {}
+MP4VisualSampleEntry::MP4VisualSampleEntry(const int& s, const QString& t, const long int& off, const int &  e): VisualSampleEntry(s,t,off,e) {}
 ///////////////
-MP4AudioSampleEntry::MP4AudioSampleEntry(int s,QString t, long int off, int e): AudioSampleEntry(s,t,off,e) {}
+MP4AudioSampleEntry::MP4AudioSampleEntry(const int& s, const QString& t, const long int& off, const int &  e): AudioSampleEntry(s,t,off,e) {}
 ///////////////
-MpegSampleEntry::MpegSampleEntry(int s,QString t, long int off, int e): SampleEntry(s,t,off,e) {}
+MpegSampleEntry::MpegSampleEntry(const int& s, const QString& t, const long int& off, const int &  e): SampleEntry(s,t,off,e) {}
 ///////////////
 /////MP4///////
-ObjectDescriptorBox::ObjectDescriptorBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+ObjectDescriptorBox::ObjectDescriptorBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
-ESDBox::ESDBox(int s,QString t, long int off, int e): FullBox(s,t,off,e) {}
+ESDBox::ESDBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
 ///////////////
 
