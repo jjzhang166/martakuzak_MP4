@@ -118,6 +118,10 @@ std::shared_ptr<Box> BoxFactory::getBox(int size,QString type, long int off, int
         std::shared_ptr<Box> ret(new SyncSampleBox(size,type,off,e));
         return ret;
     }
+    else if(type=="stsh"){
+        std::shared_ptr<Box> ret(new ShadowSyncSampleBox(size,type,off,e));
+        return ret;
+    }
     else if(type=="stdp"){
         std::shared_ptr<Box> ret(new DegradationPriorityBox(size,type,off,e));
         return ret;

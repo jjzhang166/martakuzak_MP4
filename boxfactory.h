@@ -2,6 +2,7 @@
 #define BOXFACTORY_H
 #include "box.h"
 #include "sampleentry.h"
+#include "sampletablebox.h"
 #include <iostream>
 #include <qDebug>
 #include <memory>
