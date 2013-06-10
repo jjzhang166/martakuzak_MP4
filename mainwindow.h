@@ -52,7 +52,7 @@ private slots:
      * \brief openFile opens QFileDialog to choose file that is to analyzed
      */
     void openFile();
-    void printResolution();
+    void printSelectedBox();
 
 private:
     /*!

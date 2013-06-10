@@ -93,6 +93,9 @@ public:
         return box->getType();
 
     }
+    QString fullName() {
+        return box->getFullName();
+    }
 
 
 private:

@@ -47,7 +47,7 @@ public:
     virtual bool isContainer() { return false; }
     virtual unsigned int getOffset() { return 8; }
     virtual QString getType() { return type; }
-    virtual QString getFullName() { return QString("Box"); }
+    virtual QString getFullName() { return QString(" "); }
     //Box(Box& box);
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,7 +55,7 @@ class FullBox : public Box
 {
 public:
     FullBox(int s=0,QString t="", long int off=0, int e=0);
-    virtual QString getFullName() { return QString("Full Box"); }
+    virtual QString getFullName() { return QString(" "); }
 
 };
 //////////////////////////////////////////////////////////////////////////////////////////////////

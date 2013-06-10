@@ -9,7 +9,8 @@ TreeModel::TreeModel(const QString &fileName, QObject *parent)
     QList<QVariant> rootData;
     rootData << "Name" << "Size"<<"Offset";
     rootItem = new TreeItem(rootData);
-    analyzer->setData(rootItem);
+    items= new QHash<long,TreeItem*>();
+    analyzer->setData(rootItem, items);
     //setupModelData(data.split(QString("\n")), rootItem);
 }
 
@@ -113,6 +114,16 @@ TreeItem* TreeModel:: getChild(TreeItem *parent, QString type) {
     }
     return NULL;
 }
+
+TreeItem * TreeModel::getChild(int offset) {
+    try {
+        return items->value(offset);
+    }
+    catch(QException) {
+        return NULL;
+    }
+}
+
 
 /*void TreeModel::setupModelData(const QStringList &lines, TreeItem *parent)
 {

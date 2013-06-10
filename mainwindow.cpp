@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setMinimumSize(160, 160);
     const int m_width = QApplication::desktop()->width();
     const int m_height = QApplication::desktop()->height();
-    resize(0.9*m_width, 0.8*m_height);
+    resize(0.8*m_width, 0.8*m_height);
     layout = new QHBoxLayout();
     QWidget *window = new QWidget();
     setCentralWidget(window);
@@ -87,40 +87,18 @@ void MainWindow::openFile()
         connect(treeView->selectionModel(),
                 SIGNAL(selectionChanged(const QItemSelection &,
                                         const QItemSelection &)),
-                this, SLOT(printResolution()));
+                this, SLOT(printSelectedBox()));
 
 
         setWindowTitle(title+fileName);
     }
 }
 
-void MainWindow::printResolution() {
-    TreeItem *moov= model->getChild(model->getRootItem(), QString("moov"));
-    TreeItem *trak= model->getChild(moov, QString("trak"));
-    TreeItem *mdia= model->getChild(trak, QString("mdia"));
-    TreeItem *minf= model->getChild(mdia, QString("minf"));
-    TreeItem *stbl= model->getChild(minf, QString("stbl"));
-    TreeItem *stsd= model->getChild(stbl, QString("stsd"));
-    TreeItem *itemWl= stsd->child(0);
-    qDebug()<<"printresoluto";
-
+void MainWindow::printSelectedBox() {
     QModelIndex index = treeView->selectionModel()->currentIndex();
-    //model->data(index,Qt::DisplayRole);
-    qDebug()<<treeView->selectionModel()->selectedRows();
-
-
-    qDebug()<<treeView->selectionModel()->selectedRows();
-    qDebug()<<model->data(index,Qt::DisplayRole);
-    //edit->setText(model->data(index,Qt::DisplayRole));
-
-   // if (!model->insertRow(index.row()+1, index.parent()))
-     //   return;
-
-    //updateActions();
-
-    /*for (int column = 0; column < model->columnCount(index.parent()); ++column) {
-        QModelIndex child = model->index(index.row()+1, column, index.parent());
-        model->setData(child, QVariant("[No data]"), Qt::EditRole);
-    }*/
+    QModelIndex child = model->index(index.row(), 2, index.parent());
+    QString text= model->getChild(model->data(child,Qt::DisplayRole).toInt())->fullName();
+    if(text!=NULL)
+        edit->setText(text);
 }
 

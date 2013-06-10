@@ -32,7 +32,7 @@ public:
      * \brief setData adds children to the parent.
      * \param parent parent of the tree fragment that children are to be analyzed.
      */
-    void setData(TreeItem* parent);
+    void setData(TreeItem* parent, QHash<long,TreeItem*> *items);
 
 private:
     /*!
@@ -58,7 +58,7 @@ private:
      * \param parent parent of the tree fragment that children are to be analyzed.
      * \param off offset
      */
-    void setData(QByteArray arr, TreeItem* &parent, long off=0);
+    void setData(QByteArray arr, TreeItem* &parent, QHash<long,TreeItem*>* items, long off=0);
     //void setData(QByteArray& arr, TreeItem* parent, long off=0);
     /*!
      * \brief fileName

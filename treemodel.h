@@ -8,6 +8,7 @@
 #include <QStringList>
 #include "treeitem.h"
 #include "analyzer.h"
+#include <QHash>
 #include <qDebug>
 //using namespace std;
 
@@ -80,13 +81,14 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     TreeItem* getRootItem() { return rootItem; }
     TreeItem *getChild(TreeItem *parent, QString type);
+    TreeItem *getChild(int offset);
 private:
     //void setupModelData(const QStringList &lines, TreeItem *parent);
     /*!
      * \brief rootItem root of the tree model
      */
     TreeItem *rootItem;
-
+    QHash<long,TreeItem*> *items;
 };
 
 

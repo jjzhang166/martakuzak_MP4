@@ -324,6 +324,7 @@ std::shared_ptr<Box> BoxFactory::getBox(int size,QString type, long int off, int
         return std::shared_ptr<Box>(new MpegSampleEntry(size,type,off,e));
     }
     else{
+        return std::shared_ptr<Box>(new Box(size,type,off,e));
         throw NoSuchABoxException();
     }
 

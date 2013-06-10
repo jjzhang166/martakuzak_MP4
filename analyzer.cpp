@@ -30,16 +30,16 @@ QString Analyzer:: toQString(unsigned int num, int bytes) {
 }
 
 
-void Analyzer::setData(TreeItem* parent) {
+void Analyzer::setData(TreeItem* parent, QHash<long,TreeItem*>* items) {
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
         return ;
     }
     QByteArray array = file.readAll();
-    setData(array,parent);
+    setData(array,parent,items, 0);
 }
 
-void Analyzer::setData(QByteArray array, TreeItem *&parent, long off) {
+void Analyzer::setData(QByteArray array, TreeItem *&parent, QHash<long, TreeItem *> *items, long off) {
     long offset= off;//offset tej array w pliku
     bool progress= true;
     int i=0; //cos jak offset w arrayu
@@ -56,24 +56,17 @@ void Analyzer::setData(QByteArray array, TreeItem *&parent, long off) {
         columnData<<QString::number(i+offset);
 
         TreeItem *newItem= new TreeItem(columnData,parent,i+offset);//tworzymy treeitem
-        /*if(newItem->isNull()) {// gdy box jest nieznany
-            /*QList<QVariant> colDat; //????
-            colDat<<toQString(type,4);
-            colDat<<QString::number(size);
-            colDat<<QString::number(i+offset);
-            TreeItem *newIt= new TreeItem(colDat,parent,i+offset);
-            parent->appendChild(newItem);
-            i+=size;
-            //i+=(offset);//przesuwamy i o rozmiar, i offset(??)
-        }*/
-        //else {
-            parent->appendChild(newItem);
-            if(newItem->isContainer()){//gdy treeitem zawiera inne boxy, tworzymy subarray wycinajac offset na atrybuty
+
+        parent->appendChild(newItem);
+        items->insert(i+offset, newItem);
+        if(newItem->isContainer()){//gdy treeitem zawiera inne boxy, tworzymy subarray wycinajac offset na atrybuty
                                         //offset powiekszamy o offset atrybutowy i i
-                setData(array.mid(i+newItem->getOffset(),size-newItem->getOffset()),newItem,offset+i+newItem->getOffset());
-            }
-            i+=size;
-        //}
+            setData(array.mid(i+newItem->getOffset(),size-newItem->getOffset()),
+                newItem,
+                items,
+                offset+i+newItem->getOffset());
+        }
+        i+=size;
 
 
         if(i>=array.size()) {//poki i jest nie wieksze od rozmiaru tablicy
