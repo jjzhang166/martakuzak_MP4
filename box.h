@@ -48,6 +48,7 @@ public:
     virtual unsigned int getOffset() { return 8; }
     virtual QString getType() { return type; }
     virtual QString getFullName() { return QString(" "); }
+    virtual QString getInfo() {return QString(" "); }
     //Box(Box& box);
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////

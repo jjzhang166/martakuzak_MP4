@@ -25,14 +25,33 @@ VisualSampleEntry::VisualSampleEntry(const int& s, const QString& t, const long 
     compressorname(csn),
     depth(dpth),
     pre_defined2(pd2)
-{
+{}
+QString VisualSampleEntry::getInfo() {
+    QString tmp("");
+    tmp.append("\n\twidth\t\t");
+    tmp.append(QString::number(width));
+    tmp.append("\n\theight\t\t");
+    tmp.append(QString::number(height));
+    tmp.append("\n\thorizonresolution\t");
+    tmp.append(QString::number(horizresolution));
+    tmp.append("\n\tvertresolution\t");
+    tmp.append(QString::number(vertresolution));
+    return tmp;
 }
+
 /////////////
 AudioSampleEntry::AudioSampleEntry(const int& s, const QString& t, const long int& off, const int &  e): SampleEntry(s,t,off,e) {}
 /////////////
 HintSampleEntry::HintSampleEntry(const int& s, const QString& t, const long int& off, const int &  e): SampleEntry(s,t,off,e) {}
 /////////////
-MP4VisualSampleEntry::MP4VisualSampleEntry(const int& s, const QString& t, const long int& off, const int &  e): VisualSampleEntry(s,t,off,e) {}
+MP4VisualSampleEntry::MP4VisualSampleEntry(const int& s, const QString& t, const long int& off, const int& e, const unsigned int& dri,
+                                           const unsigned int pd, const unsigned int& r2, const unsigned int& pd1,
+                                           const unsigned int& wdth, const unsigned int& hght, const unsigned int& hr,
+                                           const unsigned int& vr, const unsigned int& r3, const unsigned int& fc,
+                                           QString csn, const unsigned int& dpth, int pd2): VisualSampleEntry(s,t,off,e,dri,pd,r2,pd1, wdth,
+                                                                                                               hght, hr,vr, r3, fc, csn, dpth,
+                                                                                                               pd2)
+{}
 ///////////////
 MP4AudioSampleEntry::MP4AudioSampleEntry(const int& s, const QString& t, const long int& off, const int &  e): AudioSampleEntry(s,t,off,e) {}
 ///////////////

@@ -15,7 +15,11 @@ MainWindow::MainWindow(QWidget *parent) :
     resize(0.8*m_width, 0.8*m_height);
     layout = new QHBoxLayout();
     QWidget *window = new QWidget();
-    //window->setStyleSheet("background-image: url(./tlo.png)");
+    //window->setStyleSheet(" background-image: url(./icon.png);background-repeat: no-repeat;");
+    setWindowIcon(QIcon("icon2.png"));
+    //setPalette( QPalette( Qt::green));
+    //setStyleSheet("MainWindow {background-color: rgb(209,231,219); }");
+    //setStyleSheet("MainWindow {background-color: rgb(208,218,230); }");
     setCentralWidget(window);
     window->setLayout(layout);
 }
@@ -100,6 +104,11 @@ void MainWindow::printSelectedBox() {
     QModelIndex child = model->index(index.row(), 2, index.parent());
     QString text= model->getChild(model->data(child,Qt::DisplayRole).toInt())->fullName();
     if(text!=NULL)
-        edit->setHtml("<body><font color=\"DeepPink\">"+text+"</font></body>");
+        edit->setFont(QFont( "Calibri", 13 ) );
+        //edit->setStyleSheet("h1{font-size: 1px; color: rgb(209,205,121); } h2{font-size: 14px color: rgb(149,25,121); }");
+        //edit->setHtml("<body><font color=\"DeepPink\">"+text+"</font></body>");
+        //edit->setText("<h1> "+text+"</h1> <h2> Aaaa </h2>");
+        //edit->setText("<head><title>Moja pierwsza strona ze stylami</title><style type=\"text/css\">body {color: purple;background-color: #d8da3d }</style> </head><body>"+text+"</body>");
+        edit->setText(text+"\n"+model->getChild(model->data(child,Qt::DisplayRole).toInt())->getInfo());
 }
 

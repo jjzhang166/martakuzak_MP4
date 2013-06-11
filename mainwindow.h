@@ -22,6 +22,7 @@
 #include <qDebug>
 #include <QMessageBox>
 #include <QDirModel>
+#include <QIcon>
 
 /*!
  * \brief The MainWindow class defines a mind window of the application

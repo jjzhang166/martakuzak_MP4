@@ -37,12 +37,17 @@ private:
 public:
     VisualSampleEntry(const int &s=0, const QString &t="", const long &off=0, const int& e=0, const unsigned int& dri=0,
                       const unsigned int pd=0, const unsigned int& r2=0, const unsigned int & pd1=0,
-                      const unsigned int&wdth=0, const unsigned int& hght=0, const unsigned int& hr=0x00480000,
-                      const unsigned int& vr=0x00480000, const unsigned int& r3=0, const unsigned int& fc=1,
+                      const unsigned int&wdth=0, const unsigned int& hght=0, const unsigned int& hr=72,
+                      const unsigned int& vr=72, const unsigned int& r3=0, const unsigned int& fc=1,
                       QString csn="", const unsigned int& dpth=0x0018, int pd2=-1);
     virtual bool isContainer() { return true; }
-    //virtual unsigned int getOffset() { return (16); }
+    unsigned int getWidth() { return width; }
+    QString getQStringWidth() { return QString::number(width); }
+    unsigned int getHeight() { return height; }
+    unsigned int hResolution() { return horizresolution; }
+    unsigned int vResolution() { return vertresolution; }
     virtual QString getFullName() { return QString("Visual Sample Entry"); }
+    virtual QString getInfo();
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class AudioSampleEntry: public SampleEntry{
@@ -54,7 +59,11 @@ public:
 class MP4VisualSampleEntry : public VisualSampleEntry
 {
 public:
-    MP4VisualSampleEntry(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    MP4VisualSampleEntry(const int &s=0, const QString &t="", const long &off=0, const int& e=0, const unsigned int& dri=0,
+                         const unsigned int pd=0, const unsigned int& r2=0, const unsigned int & pd1=0,
+                         const unsigned int&wdth=0, const unsigned int& hght=0, const unsigned int& hr=72,
+                         const unsigned int& vr=72, const unsigned int& r3=0, const unsigned int& fc=1,
+                         QString csn="", const unsigned int& dpth=0x0018, int pd2=-1);
     virtual bool isContainer() { return true; }
     virtual unsigned int getOffset() { return 86; }
     virtual QString getFullName() { return QString("MP4 Visual Sample Entry"); }
