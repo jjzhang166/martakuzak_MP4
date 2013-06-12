@@ -44,9 +44,9 @@ AudioSampleEntry::AudioSampleEntry(const int& s, const QString& t, const long in
 /////////////
 HintSampleEntry::HintSampleEntry(const int& s, const QString& t, const long int& off, const int &  e): SampleEntry(s,t,off,e) {}
 /////////////
-MP4VisualSampleEntry::MP4VisualSampleEntry(const int& s, const QString& t, const long int& off, const int& e, const unsigned int& dri,
-                                           const unsigned int pd, const unsigned int& r2, const unsigned int& pd1,
-                                           const unsigned int& wdth, const unsigned int& hght, const unsigned int& hr,
+MP4VisualSampleEntry::MP4VisualSampleEntry(const int& s, const QString& t, const long int& off, const int& e, const int& dri,
+                                           const int pd, const int& r2, const int& pd1,
+                                           const unsigned long &wdth, const long &hght, const unsigned int& hr,
                                            const unsigned int& vr, const unsigned int& r3, const unsigned int& fc,
                                            QString csn, const unsigned int& dpth, int pd2): VisualSampleEntry(s,t,off,e,dri,pd,r2,pd1, wdth,
                                                                                                                hght, hr,vr, r3, fc, csn, dpth,
