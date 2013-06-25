@@ -318,13 +318,10 @@ std::shared_ptr<Box> BoxFactory::getBox(int size,QString type, long int off, int
     else if(type=="esds"){
             return std::shared_ptr<Box>(new ESDBox(size,type,off,e));
     }
-    else if(type=="mp4v" /*|| type == "avc1"*/){
-        return std::shared_ptr<Box>(new MP4VisualSampleEntry(size,type,off,e,0,0,0,0,analyzer->valueOfGroupOfFields(32,33),analyzer->valueOfGroupOfFields(34,35)));
-
+    else if(type=="mp4v"){
+        return std::shared_ptr<Box>(new MP4VisualSampleEntry(size,type,off,e));
     }
     else if(type=="mp4a"){
-        //33
-
         return std::shared_ptr<Box>(new MP4AudioSampleEntry(size,type,off,e));
     }
     else if(type=="mp4s"){

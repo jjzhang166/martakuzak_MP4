@@ -59,9 +59,9 @@ public:
 class MP4VisualSampleEntry : public VisualSampleEntry
 {
 public:
-    MP4VisualSampleEntry(const int &s=0, const QString &t="", const long &off=0, const int& e=0, const int& dri=0,
-                         const int pd=0, const int& r2=0, const int & pd1=0,
-                         const unsigned long int&wdth=0, const long int& hght=0, const unsigned int& hr=72,
+    MP4VisualSampleEntry(const int &s=0, const QString &t="", const long &off=0, const int& e=0, const unsigned int& dri=0,
+                         const unsigned int pd=0, const unsigned int& r2=0, const unsigned int & pd1=0,
+                         const unsigned int&wdth=0, const unsigned int& hght=0, const unsigned int& hr=72,
                          const unsigned int& vr=72, const unsigned int& r3=0, const unsigned int& fc=1,
                          QString csn="", const unsigned int& dpth=0x0018, int pd2=-1);
     virtual bool isContainer() { return true; }
