@@ -22,18 +22,18 @@ public:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class VisualSampleEntry: public SampleEntry {
 private:
-    unsigned int pre_defined = 0;
-    unsigned int reserved2 = 0;
+    unsigned int pre_defined;
+    unsigned int reserved2;
     unsigned int pre_defined1;
     unsigned int width;
     unsigned int height;
     unsigned int horizresolution; // 72 dpi
     unsigned int vertresolution; // 72 dpi
-    unsigned int reserved3 = 0;
-    unsigned int frame_count = 1;
+    unsigned int reserved3;
+    unsigned int frame_count;
     QString compressorname;
     unsigned int depth;
-    int pre_defined2 = -1;
+    int pre_defined2;
 public:
     VisualSampleEntry(const int &s=0, const QString &t="", const long &off=0, const int& e=0, const unsigned int& dri=0,
                       const unsigned int pd=0, const unsigned int& r2=0, const unsigned int & pd1=0,
