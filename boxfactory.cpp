@@ -318,14 +318,45 @@ std::shared_ptr<Box> BoxFactory::getBox(int size,QString type, long int off, int
     else if(type=="esds"){
             return std::shared_ptr<Box>(new ESDBox(size,type,off,e));
     }
-    else if(type=="mp4v"){
-        return std::shared_ptr<Box>(new MP4VisualSampleEntry(size,type,off,e));
+    /*else if(type == "avc1"){
+        return std::shared_ptr<Box>(new VisualSampleEntry(size,type,off,e,0,0,0,0,analyzer->valueOfGroupOfFields(32,33),analyzer->valueOfGroupOfFields(34,35)));
+
+    }*/
+    else if(type=="mp4v" /*|| type == "avc1"*/){
+        return std::shared_ptr<Box>(new MP4VisualSampleEntry(size,type,off,e,0,0,0,0,analyzer->valueOfGroupOfFields(32,33),analyzer->valueOfGroupOfFields(34,35)));
+
     }
     else if(type=="mp4a"){
+        //33
+
         return std::shared_ptr<Box>(new MP4AudioSampleEntry(size,type,off,e));
     }
     else if(type=="mp4s"){
         return std::shared_ptr<Box>(new MpegSampleEntry(size,type,off,e));
+    }
+    else if(type=="saiz"){
+        return std::shared_ptr<Box>(new SampleAuxiliaryInformationSizesBox(size,type,off,e));
+    }
+    else if(type=="saio"){
+        return std::shared_ptr<Box>(new SampleAuxiliaryInformationOffsetsBox(size,type,off,e));
+    }
+    else if(type=="trun"){
+        return std::shared_ptr<Box>(new TrackRunBox(size,type,off,e));
+    }
+    else if(type=="tfdt"){
+        return std::shared_ptr<Box>(new TrackFragmentBaseMediaDecodeTimeBox(size,type,off,e));
+    }
+    else if(type=="leva"){
+        return std::shared_ptr<Box>(new LevelAssignmentBox(size,type,off,e));
+    }
+    else if(type=="sidx"){
+        return std::shared_ptr<Box>(new SegmentIndexBox(size,type,off,e));
+    }
+    else if(type=="ssix"){
+        return std::shared_ptr<Box>(new SubsegmentIndexBox(size,type,off,e));
+    }
+    else if(type=="prft"){
+        return std::shared_ptr<Box>(new ProducerReferenceTimeBox(size,type,off,e));
     }
     else{
         return std::shared_ptr<Box>(new Box(size,type,off,e));

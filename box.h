@@ -11,7 +11,8 @@
  * is represantion of MP4 Box
  */
 
-class Box {
+class Box
+{
 private:
     /*!
      * \brief size size of the box
@@ -518,6 +519,57 @@ class HintStatisticsBox : public Box
 public:
     HintStatisticsBox(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
     virtual QString getFullName() { return QString("Hint Statistics Box"); }
+};
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+///mpeg dash
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+class SampleAuxiliaryInformationSizesBox : public FullBox
+{
+public:
+    SampleAuxiliaryInformationSizesBox(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    virtual QString getFullName() { return QString("Sample Auxiliary Information Sizes Box"); }
+};
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+class SampleAuxiliaryInformationOffsetsBox : public FullBox
+{
+public:
+    SampleAuxiliaryInformationOffsetsBox(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    virtual QString getFullName() { return QString("Sample Auxiliary Information Offsets Box"); }
+};
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+class TrackFragmentBaseMediaDecodeTimeBox : public FullBox
+{
+public:
+    TrackFragmentBaseMediaDecodeTimeBox(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    virtual QString getFullName() { return QString("Track Fragment Base Media Decode Time Box"); }
+};
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+class LevelAssignmentBox : public FullBox
+{
+public:
+    LevelAssignmentBox(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    virtual QString getFullName() { return QString("Level Assignment Box"); }
+};
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+class SegmentIndexBox : public FullBox
+{
+public:
+    SegmentIndexBox(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    virtual QString getFullName() { return QString("Segment Index Box"); }
+};
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+class SubsegmentIndexBox : public FullBox
+{
+public:
+    SubsegmentIndexBox(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    virtual QString getFullName() { return QString("Subsegment Index Box"); }
+};
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+class ProducerReferenceTimeBox : public FullBox
+{
+public:
+    ProducerReferenceTimeBox(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    virtual QString getFullName() { return QString("Producer Reference Time Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 

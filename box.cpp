@@ -131,7 +131,19 @@ RTPTrackSDPHintInformation::RTPTrackSDPHintInformation(const int& s, const QStri
 ///////////////
 HintStatisticsBox::HintStatisticsBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 ///////////////
-
-
-
-
+///mpeg dash
+//////////////
+SampleAuxiliaryInformationSizesBox::SampleAuxiliaryInformationSizesBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
+///////////////
+SampleAuxiliaryInformationOffsetsBox::SampleAuxiliaryInformationOffsetsBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
+///////////////
+TrackFragmentBaseMediaDecodeTimeBox::TrackFragmentBaseMediaDecodeTimeBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
+///////////////
+LevelAssignmentBox::LevelAssignmentBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
+///////////////
+SegmentIndexBox::SegmentIndexBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
+///////////////
+SubsegmentIndexBox::SubsegmentIndexBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
+///////////////
+ProducerReferenceTimeBox::ProducerReferenceTimeBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
+///////////////
