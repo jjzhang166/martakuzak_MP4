@@ -88,20 +88,21 @@ void MainWindow::openFile()
             mainLayout->addWidget(searchBoxGroup);
         }
 
-        if(boxInfoLayout->count()) {
-            mainLayout->removeWidget(boxInfoGroupBox);
+        if(!boxInfoLayout->count()) {
+            boxInfoGroupBox = new QGroupBox(tr(""));
+            treeView = new QTreeView(this);
+            boxInfo = new QTextEdit();
+            boxInfo->setReadOnly(true);
+            boxInfo->setFixedSize((centralWidget()->geometry().width()/5)*2,centralWidget()->geometry().height());
         }
-        boxInfoGroupBox = new QGroupBox(tr(""));
+
 
         model= new TreeModel(fileName);
-        treeView = new QTreeView(this);
+
         treeView->setModel(model);
         boxInfoLayout->addWidget(treeView);
         //treeView->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
-        boxInfo = new QTextEdit();
-        boxInfo->setReadOnly(true);
-        boxInfo->setFixedSize((centralWidget()->geometry().width()/5)*2,centralWidget()->geometry().height());
         boxInfoLayout->addWidget(boxInfo);
         //edit->setText();
         //edit->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -121,7 +122,7 @@ void MainWindow::openFile()
                                         const QItemSelection &)),
                 this, SLOT(printSelectedBox()));
 
-
+        mainLayout->update();
         setWindowTitle(title+fileName);
     }
 }
