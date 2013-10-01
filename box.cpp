@@ -5,7 +5,26 @@ Box::Box(const int &s, const QString &t, const long &off, const int & e): size(s
 /////////////
 FullBox::FullBox(const int& s, const QString& t, const long int& off, const int &  e):Box(s,t,off,e) {}
 /////////////
-FileTypeBox::FileTypeBox(const int& s, const QString& t, const long int& off, const int & e): Box(s,t,off,e) {}
+FileTypeBox::FileTypeBox(const int& s, const QString& t, const long int& off, const int & e, const QString& mb, const QString& mv, const QList<QString>& cb):
+    Box(s,t,off,e),
+    majorBrand(mb),
+    minorVersion(mv),
+    compatibleBrands(cb) {}
+
+QString FileTypeBox::getInfo() {
+    QString tmp("");
+    tmp.append("\n\tMajor brand\t\t");
+    tmp.append(majorBrand);
+    tmp.append("\n\tMinor version\t\t");
+    tmp.append(minorVersion);
+    tmp.append("\n\tcompatibleBrands\t");
+    QList<QString>::iterator i;
+    for (i = compatibleBrands.begin(); i !=compatibleBrands.end(); ++i) {
+        tmp.append(*i);
+        tmp.append(" , ");
+    }
+    return tmp;
+}
 /////////////
 MediaBox::MediaBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 /////////////

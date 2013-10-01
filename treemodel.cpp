@@ -124,6 +124,18 @@ TreeItem * TreeModel::getChild(int offset) {
     }
 }
 
+TreeItem* TreeModel:: getChild(QString type) {
+    items;
+    QHashIterator<long, TreeItem*> i(*items);
+    while (i.hasNext()) {
+        i.next();
+        if(i.value()->getType() == type) {
+            qDebug() << i.key() << ": " << i.value();
+        }
+    }
+    return NULL;
+}
+
 
 /*void TreeModel::setupModelData(const QStringList &lines, TreeItem *parent)
 {

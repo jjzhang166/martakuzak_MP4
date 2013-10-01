@@ -10,6 +10,7 @@
 #include "analyzer.h"
 #include <QHash>
 #include <qDebug>
+#include <QHashIterator>
 //using namespace std;
 
 class TreeItem;
@@ -82,13 +83,14 @@ public:
     TreeItem* getRootItem() { return rootItem; }
     TreeItem *getChild(TreeItem *parent, QString type);
     TreeItem *getChild(int offset);
+    TreeItem* getChild(QString type);
 private:
     //void setupModelData(const QStringList &lines, TreeItem *parent);
     /*!
      * \brief rootItem root of the tree model
      */
     TreeItem *rootItem;
-    QHash<long,TreeItem*> *items;
+    QHash<long,TreeItem*>* items;
 };
 
 

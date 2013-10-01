@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setMinimumSize(160, 160);
     const int m_width = QApplication::desktop()->width();
     const int m_height = QApplication::desktop()->height();
-    resize(0.8*m_width, 0.8*m_height);
+    resize(0.8*m_width, 0.5*m_height);
     mainLayout = new QVBoxLayout();
     boxInfoLayout = new QHBoxLayout();
     searchBoxLayout = new QGridLayout();
@@ -72,20 +72,24 @@ void MainWindow::openFile()
             searchBoxGroup = new QGroupBox();
 
             searchLabel = new QLabel("Find box: ");
-            searchLabel->setMaximumSize(200,50);
+            searchLabel->setMaximumSize(200,40);
             lineEdit = new QLineEdit();
             lineEdit->setMaximumWidth(50);
             lineEdit->setMaxLength(4);
             nextSearchButton = new QPushButton("Next");
-
-
-            //searchBoxLayout = new QHBoxLayout();
+            nextSearchButton->addAction(searchBoxAct);
+            connect(nextSearchButton,
+                    SIGNAL(clicked()),
+                    this, SLOT(searchBox()));
             searchBoxLayout->addWidget(searchLabel, 1, 0);
             searchBoxLayout->addWidget(lineEdit, 1, 1);
             searchBoxLayout->addWidget(nextSearchButton, 1, 2);
             searchBoxGroup->setLayout(searchBoxLayout);
             searchBoxLayout->setColumnStretch(10, 1);
-            mainLayout->addWidget(searchBoxGroup);
+            vSplitter = new QSplitter();
+            vSplitter->addWidget(searchBoxGroup);
+            mainLayout->addWidget(vSplitter);
+
         }
 
         if(!boxInfoLayout->count()) {
@@ -93,24 +97,33 @@ void MainWindow::openFile()
             treeView = new QTreeView(this);
             boxInfo = new QTextEdit();
             boxInfo->setReadOnly(true);
-            boxInfo->setFixedSize((centralWidget()->geometry().width()/5)*2,centralWidget()->geometry().height());
+            hSplitter = new QSplitter();
+           // boxInfo->setFixedSize((centralWidget()->geometry().width()/5)*2,centralWidget()->geometry().height());
         }
 
 
         model= new TreeModel(fileName);
 
         treeView->setModel(model);
-        boxInfoLayout->addWidget(treeView);
-        //treeView->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+        treeView->setSizePolicy(QSizePolicy::Expanding,
+                                QSizePolicy::Expanding);
+        boxInfo->setSizePolicy(QSizePolicy::Expanding,
+                               QSizePolicy::Expanding);
+        boxInfo->setText("");
+        hSplitter->addWidget(treeView);
+        hSplitter->addWidget(boxInfo);
+        boxInfoLayout->addWidget(hSplitter);
 
-        boxInfoLayout->addWidget(boxInfo);
-        //edit->setText();
-        //edit->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         boxInfoGroupBox->setLayout(boxInfoLayout);
+        boxInfoGroupBox->setSizePolicy(QSizePolicy::Expanding,
+                                       QSizePolicy::Expanding);
 
-        mainLayout->addWidget(boxInfoGroupBox);
-        QModelIndexList Items = model->match(model->index(0,0), Qt::DisplayRole,
-                                             QVariant::fromValue(QString("moov")),-1, Qt::MatchRecursive);
+        vSplitter->addWidget(boxInfoGroupBox);
+        QModelIndexList Items = model->match(model->index(0,0),
+                                             Qt::DisplayRole,
+                                             QVariant::fromValue(QString("moov")),
+                                             -1,
+                                             Qt::MatchRecursive);
         while (!Items.isEmpty()) {
             treeView->setExpanded(Items.back(), true);
             Items.pop_back();
@@ -121,7 +134,8 @@ void MainWindow::openFile()
                 SIGNAL(selectionChanged(const QItemSelection &,
                                         const QItemSelection &)),
                 this, SLOT(printSelectedBox()));
-
+        vSplitter->setOrientation(Qt::Vertical);
+        hSplitter->setOrientation(Qt::Horizontal);
         mainLayout->update();
         setWindowTitle(title+fileName);
     }
@@ -129,8 +143,10 @@ void MainWindow::openFile()
 
 void MainWindow::printSelectedBox() {
     QModelIndex index = treeView->selectionModel()->currentIndex();
+
     QModelIndex child = model->index(index.row(), 2, index.parent());
-    QString text= model->getChild(model->data(child,Qt::DisplayRole).toInt())->fullName();
+    QString text= model->getChild(model->data(child,
+                                              Qt::DisplayRole).toInt())->fullName();
     if(text!=NULL)
         boxInfo->setFont(QFont( "Calibri", 13 ) );
         //edit->setStyleSheet("h1{font-size: 1px; color: rgb(209,205,121); } h2{font-size: 14px color: rgb(149,25,121); }");
@@ -142,5 +158,18 @@ void MainWindow::printSelectedBox() {
 
 void MainWindow::searchBox() {
     QString boxType = lineEdit->text();
-    qDebug()<<boxType;
+    //model->getChild(boxType);
+    //QModelIndex index = treewView->selectionModel()->
+    //treeView->setExpanded(QModelIndex(5), true);
+    QModelIndexList itemIndexes = model->match(
+                model->index(0, 0),
+                Qt::DisplayRole,
+                QVariant::fromValue(boxType),
+                0, // look *
+                Qt::MatchRecursive);
+    QModelIndex id = itemIndexes.at(5);
+        qDebug()<<id.row()<<" "<<id.column();
+    //QModelIndex child = model->index(id.row(), 1, id.parent());
+    //QString text= model->getChild(model->data(child,Qt::DisplayRole).toInt())->fullName();
+    //qDebug()<<text;
 }

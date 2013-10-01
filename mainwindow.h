@@ -27,6 +27,8 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QPushButton>
+#include <QPoint>
+#include <QSplitter>
 
 
 /*!
@@ -110,7 +112,8 @@ private:
     QPushButton * nextSearchButton;
     QGroupBox * boxInfoGroupBox;
     QGroupBox * searchBoxGroup;
-
+    QSplitter * vSplitter;
+    QSplitter * hSplitter;
 };
 
 

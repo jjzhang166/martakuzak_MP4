@@ -5,6 +5,7 @@
 #include <qDebug>
 #include <QMap>
 #include <iostream>
+#include <QList>
 
 /*!
  * \brief The Box class
@@ -64,9 +65,12 @@ public:
 class FileTypeBox : public Box
 {
 public:
-    FileTypeBox(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    FileTypeBox(const int& s, const QString& t, const long int& off, const int& e, const QString& mb, const QString& mv, const QList<QString>& cb);
     virtual QString getFullName() { return QString("File Type Box"); }
-
+    virtual QString getInfo();
+    QString majorBrand;
+    QString minorVersion;
+    QList<QString> compatibleBrands;
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 class MediaBox : public Box

@@ -32,7 +32,7 @@ public:
      * \brief setData adds children to the parent.
      * \param parent parent of the tree fragment that children are to be analyzed.
      */
-    void setData(TreeItem* parent, QHash<long,TreeItem*> *items);
+    void setData(TreeItem* parent, QHash<long,TreeItem*>* items);
 
     /*!
      * \brief valueOfGroupOfFields converts subarray of QByteArray to unsigned long int

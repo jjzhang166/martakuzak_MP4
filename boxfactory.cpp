@@ -6,7 +6,17 @@ BoxFactory::BoxFactory(Analyzer *an): analyzer(an)
 
 std::shared_ptr<Box> BoxFactory::getBox(int size,QString type, long int off, int e) {
     if(type=="ftyp") {
-        return std::shared_ptr<Box>(new FileTypeBox(size,type,off,e));
+        QString majorBrand = analyzer->toQString((analyzer->valueOfGroupOfFields(8, 11)),4);
+        QString minorVersion = QString::number((analyzer->valueOfGroupOfFields(12, 15)),4);
+        QList<QString> compatibleBrands;
+        int index = 16;
+        while(index <= size) {
+            QString brand =  analyzer->toQString((analyzer->valueOfGroupOfFields(index, index+3)),4);
+            compatibleBrands.append(brand);
+            index+=4;
+        }
+
+        return std::shared_ptr<Box>(new FileTypeBox(size,type,off,e, majorBrand, minorVersion, compatibleBrands));
     }
     else if(type== "moov"){
         return std::shared_ptr<Box>(new MovieBox(size,type,off,e));

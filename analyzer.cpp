@@ -32,7 +32,7 @@ QString Analyzer:: toQString(unsigned int num, int bytes) {
 }
 
 
-void Analyzer::setData(TreeItem* parent, QHash<long,TreeItem*>* items) {
+void Analyzer::setData(TreeItem* parent, QHash<long, TreeItem *>* items) {
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
         return ;
@@ -42,7 +42,7 @@ void Analyzer::setData(TreeItem* parent, QHash<long,TreeItem*>* items) {
     setData(array,parent,items, 0);
 }
 
-void Analyzer::setData(QByteArray array, TreeItem *&parent, QHash<long, TreeItem *> *items, long off) {
+void Analyzer::setData(QByteArray array, TreeItem *&parent, QHash<long, TreeItem *>* items, long off) {
     tempArray= array;
     long offset= off;//offset tej array w pliku
     bool progress= true;
