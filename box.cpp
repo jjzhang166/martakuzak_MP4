@@ -21,7 +21,7 @@ QString FileTypeBox::getInfo() {
     QList<QString>::iterator i;
     for (i = compatibleBrands.begin(); i !=compatibleBrands.end(); ++i) {
         tmp.append(*i);
-        tmp.append(" , ");
+        tmp.append(" | ");
     }
     return tmp;
 }

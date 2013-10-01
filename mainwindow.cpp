@@ -47,7 +47,7 @@ void MainWindow::createActions()
     exitAct = new QAction(tr("E&xit"), this);
     exitAct->setShortcuts(QKeySequence::Quit);
     connect(exitAct, SIGNAL(triggered()), this, SLOT(close()));
-    searchBoxAct = new QAction(tr("Next"), this);
+    searchBoxAct = new QAction(tr("OK"), this);
 }
 
 void MainWindow::createMenu()
@@ -105,6 +105,7 @@ void MainWindow::openFile()
         model= new TreeModel(fileName);
 
         treeView->setModel(model);
+        //treeView->expandAll();
         treeView->setSizePolicy(QSizePolicy::Expanding,
                                 QSizePolicy::Expanding);
         boxInfo->setSizePolicy(QSizePolicy::Expanding,
@@ -119,16 +120,6 @@ void MainWindow::openFile()
                                        QSizePolicy::Expanding);
 
         vSplitter->addWidget(boxInfoGroupBox);
-        QModelIndexList Items = model->match(model->index(0,0),
-                                             Qt::DisplayRole,
-                                             QVariant::fromValue(QString("moov")),
-                                             -1,
-                                             Qt::MatchRecursive);
-        while (!Items.isEmpty()) {
-            treeView->setExpanded(Items.back(), true);
-            Items.pop_back();
-        }
-
 
         connect(treeView->selectionModel(),
                 SIGNAL(selectionChanged(const QItemSelection &,
@@ -143,7 +134,7 @@ void MainWindow::openFile()
 
 void MainWindow::printSelectedBox() {
     QModelIndex index = treeView->selectionModel()->currentIndex();
-
+    //treeView->setCurrentIndex(treeView->topLe);
     QModelIndex child = model->index(index.row(), 2, index.parent());
     QString text= model->getChild(model->data(child,
                                               Qt::DisplayRole).toInt())->fullName();
@@ -158,17 +149,47 @@ void MainWindow::printSelectedBox() {
 
 void MainWindow::searchBox() {
     QString boxType = lineEdit->text();
+    QModelIndex index = treeView->selectionModel()->currentIndex();
+    int row;
+    int col;
+    if(index.isValid()) {
+        row = index.row();
+        col = index.column();
+    }
+    else {
+        row = 0;
+        col = 0;
+    }
+    QModelIndexList Items = model->match(model->index(row,col),
+                                         Qt::DisplayRole,
+                                         QVariant::fromValue(QString(boxType)),
+                                         -1,
+                                         Qt::MatchRecursive);
+
+    treeView->clearSelection();
+    if(Items.size()==0) {
+        treeView->clearSelection();
+        QMessageBox *infoBox = new QMessageBox(this);
+        infoBox->setIcon(QMessageBox::Warning);
+        infoBox->setText("No box found");
+        infoBox->show();
+        return;
+
+    }
+    while (!Items.isEmpty()) {
+        //treeView->setExpanded(Items.back(), true);
+        QModelIndex backId = Items.back();
+        treeView->selectionModel()->select(backId, QItemSelectionModel::Select | QItemSelectionModel::Rows);
+        boxInfo->clear();
+        mainLayout->update();
+        Items.pop_back();
+    }
+
     //model->getChild(boxType);
     //QModelIndex index = treewView->selectionModel()->
     //treeView->setExpanded(QModelIndex(5), true);
-    QModelIndexList itemIndexes = model->match(
-                model->index(0, 0),
-                Qt::DisplayRole,
-                QVariant::fromValue(boxType),
-                0, // look *
-                Qt::MatchRecursive);
-    QModelIndex id = itemIndexes.at(5);
-        qDebug()<<id.row()<<" "<<id.column();
+    //idx = treeview->model()->index(0);
+    //selection->select(idx, QItemSelectionModel::Select | QItemSelectionModel::Rows);
     //QModelIndex child = model->index(id.row(), 1, id.parent());
     //QString text= model->getChild(model->data(child,Qt::DisplayRole).toInt())->fullName();
     //qDebug()<<text;

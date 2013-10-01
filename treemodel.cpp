@@ -77,6 +77,7 @@ QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent)
         return QModelIndex();
 }
 
+
 QModelIndex TreeModel::parent(const QModelIndex &index) const
 {
     if (!index.isValid())

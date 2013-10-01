@@ -29,6 +29,7 @@
 #include <QPushButton>
 #include <QPoint>
 #include <QSplitter>
+#include <QMessageBox>
 
 
 /*!
