@@ -23,6 +23,11 @@
 #include <QMessageBox>
 #include <QDirModel>
 #include <QIcon>
+#include <QLineEdit>
+#include <QGroupBox>
+#include <QLabel>
+#include <QPushButton>
+
 
 /*!
  * \brief The MainWindow class defines a mind window of the application
@@ -54,6 +59,7 @@ private slots:
      */
     void openFile();
     void printSelectedBox();
+    void searchBox();
 
 private:
     /*!
@@ -82,6 +88,11 @@ private:
      */
     QAction *exitAct;
     /*!
+     * \brief searchBoxAct
+     */
+    QAction * searchBoxAct;
+
+    /*!
      * \brief model
      */
     TreeModel *model;
@@ -90,8 +101,15 @@ private:
      */
     QString title;
 
-    QHBoxLayout * layout;
-    QTextEdit * edit;
+    QHBoxLayout * boxInfoLayout;
+    QGridLayout * searchBoxLayout;
+    QVBoxLayout * mainLayout;
+    QTextEdit * boxInfo;
+    QLabel * searchLabel;
+    QLineEdit * lineEdit;
+    QPushButton * nextSearchButton;
+    QGroupBox * boxInfoGroupBox;
+    QGroupBox * searchBoxGroup;
 
 };
 

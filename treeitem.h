@@ -77,7 +77,7 @@ public:
      * \brief getOffset
      * \return
      */
-    int getOffset() {
+    int unsigned getOffset() {
         if(box) return box->getOffset();
         else return 8;
     }
