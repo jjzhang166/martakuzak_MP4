@@ -71,12 +71,12 @@ void MainWindow::openFile()
 
             searchBoxGroup = new QGroupBox();
 
-            searchLabel = new QLabel("Find box: ");
+            searchLabel = new QLabel("Type box typ: ");
             searchLabel->setMaximumSize(200,40);
             lineEdit = new QLineEdit();
             lineEdit->setMaximumWidth(50);
             lineEdit->setMaxLength(4);
-            nextSearchButton = new QPushButton("Next");
+            nextSearchButton = new QPushButton("Find");
             nextSearchButton->addAction(searchBoxAct);
             connect(nextSearchButton,
                     SIGNAL(clicked()),
@@ -105,6 +105,8 @@ void MainWindow::openFile()
         model= new TreeModel(fileName);
 
         treeView->setModel(model);
+        treeView->header()->setStretchLastSection(false);
+        treeView->header()->setSectionResizeMode(0, QHeaderView::Stretch);
         //treeView->expandAll();
         treeView->setSizePolicy(QSizePolicy::Expanding,
                                 QSizePolicy::Expanding);
@@ -139,7 +141,7 @@ void MainWindow::printSelectedBox() {
     QString text= model->getChild(model->data(child,
                                               Qt::DisplayRole).toInt())->fullName();
     if(text!=NULL)
-        boxInfo->setFont(QFont( "Calibri", 13 ) );
+        //boxInfo->setFont(QFont( "Calibri", 13 ) );
         //edit->setStyleSheet("h1{font-size: 1px; color: rgb(209,205,121); } h2{font-size: 14px color: rgb(149,25,121); }");
         //edit->setHtml("<body><font color=\"DeepPink\">"+text+"</font></body>");
         //edit->setText("<h1> "+text+"</h1> <h2> Aaaa </h2>");
@@ -149,6 +151,14 @@ void MainWindow::printSelectedBox() {
 
 void MainWindow::searchBox() {
     QString boxType = lineEdit->text();
+    if(boxType.size()!=4) {
+        QMessageBox *infoBox = new QMessageBox(this);
+        infoBox->setIcon(QMessageBox::Warning);
+        infoBox->setText("Box type should have 4 characters.");
+        infoBox->show();
+        boxInfo->clear();
+        return;
+    }
     QModelIndex index = treeView->selectionModel()->currentIndex();
     int row;
     int col;
@@ -173,24 +183,31 @@ void MainWindow::searchBox() {
         infoBox->setIcon(QMessageBox::Warning);
         infoBox->setText("No box found");
         infoBox->show();
+        boxInfo->clear();
         return;
 
     }
     while (!Items.isEmpty()) {
         //treeView->setExpanded(Items.back(), true);
         QModelIndex backId = Items.back();
+//        qDebug()<<backId.row()<<" "<<backId.column();
+//        QString text= model->getChild(model->data(backId,
+//                                                  Qt::DisplayRole).toInt())->fullName();
+//        if(text!=NULL) {
+//            boxInfo->setFont(QFont( "Calibri", 13 ) );
+//            qDebug()<<(text);
+//            boxInfo->setText(text+"\n"+model->getChild(model->data(backId,Qt::DisplayRole).toInt())->getInfo());
+//        }
+        QModelIndex tmpId = backId;
+        QModelIndex tmpParent = tmpId.parent();
+        while(tmpParent.isValid()) {
+            treeView->setExpanded(tmpParent, true);
+            tmpParent = tmpParent.parent();
+        }
         treeView->selectionModel()->select(backId, QItemSelectionModel::Select | QItemSelectionModel::Rows);
-        boxInfo->clear();
-        mainLayout->update();
         Items.pop_back();
     }
+    mainLayout->update();
 
-    //model->getChild(boxType);
-    //QModelIndex index = treewView->selectionModel()->
-    //treeView->setExpanded(QModelIndex(5), true);
-    //idx = treeview->model()->index(0);
-    //selection->select(idx, QItemSelectionModel::Select | QItemSelectionModel::Rows);
-    //QModelIndex child = model->index(id.row(), 1, id.parent());
-    //QString text= model->getChild(model->data(child,Qt::DisplayRole).toInt())->fullName();
-    //qDebug()<<text;
 }
+

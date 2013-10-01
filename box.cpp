@@ -80,8 +80,18 @@ TrackExtendsBox::TrackExtendsBox(const int& s, const QString& t, const long int&
 ///////////////
 MovieFragmentBox::MovieFragmentBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 ///////////////
-MovieFragmentHeaderBox::MovieFragmentHeaderBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
+MovieFragmentHeaderBox::MovieFragmentHeaderBox(const int& s, const QString& t, const long int& off, const int &  e, const long &sn): FullBox(s,t,off,e),
+    sequenceNumber(sn){}
+QString MovieFragmentHeaderBox::getInfo() {
+    QString tmp("");
+    tmp.append("\n\tSequence number\t\t");
+    tmp.append(QString::number(sequenceNumber));
+    qDebug()<<sequenceNumber;
+    return tmp;
+}
+
 ///////////////
+
 TrackFragmentBox::TrackFragmentBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 ///////////////
 TrackFragmentHeaderBox::TrackFragmentHeaderBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}

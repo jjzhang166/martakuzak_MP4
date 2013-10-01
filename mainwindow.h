@@ -30,6 +30,7 @@
 #include <QPoint>
 #include <QSplitter>
 #include <QMessageBox>
+#include <QHeaderView>
 
 
 /*!

@@ -10,7 +10,7 @@ std::shared_ptr<Box> BoxFactory::getBox(int size,QString type, long int off, int
         QString minorVersion = QString::number((analyzer->valueOfGroupOfFields(12, 15)),4);
         QList<QString> compatibleBrands;
         int index = 16;
-        while(index <= size) {
+        while(index <= (size-4)) {
             QString brand =  analyzer->toQString((analyzer->valueOfGroupOfFields(index, index+3)),4);
             compatibleBrands.append(brand);
             index+=4;
@@ -181,7 +181,8 @@ std::shared_ptr<Box> BoxFactory::getBox(int size,QString type, long int off, int
         return ret;
     }
     else if(type=="mfhd"){
-        std::shared_ptr<Box> ret(new MovieFragmentHeaderBox(size,type,off,e));
+        int sn = analyzer->valueOfGroupOfFields(8,11);
+        std::shared_ptr<Box> ret(new MovieFragmentHeaderBox(size,type,off,e, sn));
         return ret;
     }
     else if(type=="traf"){
