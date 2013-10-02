@@ -2,37 +2,28 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QAction>
 #include <QMenu>
 #include <QTreeView>
-#include <QStandardItemModel>
-#include <QStandardItem>
-#include <QApplication>
-#include <QDesktopWidget>
+#include <QHeaderView>
 #include <QMenuBar>
-#include <QFileDialog>
-#include "treemodel.h"
-#include "treeitem.h"
-#include <QStringList>
+#include <QLabel>
+#include <QTextEdit>
+#include <QPushButton>
+#include <QGroupBox>
+#include <QSplitter>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QGridLayout>
-#include <QLabel>
-#include <QTextEdit>
-#include <qDebug>
+#include <QFileDialog>
 #include <QMessageBox>
 #include <QDirModel>
-#include <QIcon>
 #include <QLineEdit>
-#include <QGroupBox>
-#include <QLabel>
-#include <QPushButton>
-#include <QPoint>
-#include <QSplitter>
-#include <QMessageBox>
-#include <QHeaderView>
-
-
+#include <qDebug>
+#include "treemodel.h"
+#include "treeitem.h"
 /*!
  * \brief The MainWindow class defines a mind window of the application
  */
@@ -40,6 +31,40 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+private:
+    //Actions
+    QAction *openAct;
+    QAction *exitAct;
+    QAction * searchBoxAct;
+    /*!
+     * \brief title
+     */
+    QString title;
+    //Layouts
+    QHBoxLayout * boxInfoLayout;
+    QGridLayout * searchBoxLayout;
+    QVBoxLayout * mainLayout;
+    //Splitters
+    QSplitter * vSplitter;
+    QSplitter * hSplitter;
+    //Group boxes
+    QGroupBox * boxInfoGroupBox;
+    QGroupBox * searchBoxGroup;
+    //search box content
+    QLabel * searchLabel;
+    QLineEdit * typeBoxType;
+    QPushButton * nextSearchButton;
+    //info box content
+    QTextEdit * boxInfo;
+    QTreeView *treeView;
+    /*!
+     * \brief model
+     */
+    TreeModel *model;
+    /*!
+     * \brief fileMenu
+     */
+    QMenu *fileMenu;
 public:
     //!Constructor
     /*!
@@ -48,21 +73,25 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     //!Destructor
     ~MainWindow();
-    //void printResolution();
-    /*void resizeEvent ( QResizeEvent * event )
-        {
-          QMessageBox* msg = new QMessageBox(this);
-          msg->setText("Mainwindow has been resized!");
-          msg->show();
-        };*/
 
 
 private slots:
     /*!
-     * \brief openFile opens QFileDialog to choose file that is to analyzed
+     * \brief openFile opens QFileDialog to choose file that is to analyzed.
+     * \info After choosing apropiate file, file is analyzed and treemodel is built. Application creates infoBox section
+     * (and searchBox section, if it doesn't exist).
      */
     void openFile();
+    /*!
+     * \brief printSelectedBox prints info about selected Box in boxInfo->
+     */
     void printSelectedBox();
+    /*!
+     * \brief searchBox searches for all boxes with type given in typeBoxType .
+     * \info Found boxes are selected and all their predecessors are expanded. Application launches QMessageBox when:
+     * - typed boxType hasn't 4 characters
+     * - no box was found
+     */
     void searchBox();
 
 private:
@@ -75,47 +104,16 @@ private:
      */
     void createMenu();
     /*!
-     * \brief fileMenu
+     * \brief setBoxInfoSection creates treeView and boxInfo and adds it to window
+     * \param fileName name of the currently analyzed file
      */
-    QMenu *fileMenu;
+    void setBoxInfoSection(const QString& fileName);
     /*!
-     * \brief treeView
+     * \brief setSearchBoxSection creates search box section.
+     * \info search box section enables searching for boxes by typing typename
      */
-    QTreeView *treeView;
-    /*!
-     * \brief openAct
-     */
-    QAction *openAct;
-    QAction * tmp;
-    /*!
-     * \brief exitAct
-     */
-    QAction *exitAct;
-    /*!
-     * \brief searchBoxAct
-     */
-    QAction * searchBoxAct;
+    void setSearchBoxSection();
 
-    /*!
-     * \brief model
-     */
-    TreeModel *model;
-    /*!
-     * \brief title
-     */
-    QString title;
-
-    QHBoxLayout * boxInfoLayout;
-    QGridLayout * searchBoxLayout;
-    QVBoxLayout * mainLayout;
-    QTextEdit * boxInfo;
-    QLabel * searchLabel;
-    QLineEdit * lineEdit;
-    QPushButton * nextSearchButton;
-    QGroupBox * boxInfoGroupBox;
-    QGroupBox * searchBoxGroup;
-    QSplitter * vSplitter;
-    QSplitter * hSplitter;
 };
 
 
