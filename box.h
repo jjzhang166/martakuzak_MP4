@@ -3,9 +3,6 @@
 
 #include <QString>
 #include <qDebug>
-#include <QMap>
-#include <iostream>
-#include <QList>
 
 /*!
  * \brief The Box class
@@ -46,12 +43,31 @@ public:
      * \param e extended_type (0 or 1)
      */
     Box(const int& s, const QString& t, const long int& off, const int& e);
+    /*!
+     * \brief isContainer
+     * \return true when box contains other boxes, false otherwise
+     */
     virtual bool isContainer() { return false; }
+    /*!
+     * \brief getOffset
+     * \return offset of child boxes
+     */
     virtual unsigned int getOffset() { return 8; }
+    /*!
+     * \brief getType
+     * \return type of the box
+     */
     virtual QString getType() { return type; }
+    /*!
+     * \brief getFullName
+     * \return fullName of the box, e.g. "Media Data Box"
+     */
     virtual QString getFullName() { return QString(" "); }
+    /*!
+     * \brief getInfo
+     * \return all the attributes fields in one formatted QString.
+     */
     virtual QString getInfo() {return QString(" "); }
-    //Box(Box& box);
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////
 class FullBox : public Box
@@ -64,13 +80,14 @@ public:
 //////////////////////////////////////////////////////////////////////////////////////////////////
 class FileTypeBox : public Box
 {
+private:
+    QString majorBrand;
+    QString minorVersion;
+    QList<QString> compatibleBrands;
 public:
     FileTypeBox(const int& s, const QString& t, const long int& off, const int& e, const QString& mb, const QString& mv, const QList<QString>& cb);
     virtual QString getFullName() { return QString("File Type Box"); }
     virtual QString getInfo();
-    QString majorBrand;
-    QString minorVersion;
-    QList<QString> compatibleBrands;
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 class MediaBox : public Box

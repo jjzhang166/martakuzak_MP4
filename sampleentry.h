@@ -11,7 +11,6 @@ private:
 public:
     SampleEntry(const int &s=0, const QString &t="", const long &off=0, int e=0, const unsigned int &dri=0);
     virtual QString getFullName() { return QString("Sample Entry"); }
-  //  void setReserved(cons)
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class HintSampleEntry: public SampleEntry {

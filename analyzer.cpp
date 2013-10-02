@@ -1,11 +1,12 @@
 #include "analyzer.h"
 
-using namespace std;
+////////////////////////////////////////////////////////////////////////////////////////////
 
 Analyzer::Analyzer(const QString &fileName)
 {
     this->fileName=fileName;
 }
+////////////////////////////////////////////////////////////////////////////////////////////
 
 unsigned long int Analyzer:: valueOfGroupOfFields(int begin, int end, QByteArray array) {
     if(!array.size())
@@ -13,13 +14,13 @@ unsigned long int Analyzer:: valueOfGroupOfFields(int begin, int end, QByteArray
     unsigned long int num=0;
     for(int i=begin; i<(end+1); i++) {
         num |= static_cast<unsigned int>(array[i]) & 0xFF;
-            if(begin!=end && i!=end) {
-           num=(num<<8);
+        if(begin!=end && i!=end) {
+            num=(num<<8);
         }
     }
     return num;
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////
 
 QString Analyzer:: toQString(unsigned int num, int bytes) {
     QString result;
@@ -31,6 +32,7 @@ QString Analyzer:: toQString(unsigned int num, int bytes) {
     return result;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////
 
 void Analyzer::setData(TreeItem* parent, QHash<long, TreeItem *>* items) {
     QFile file(fileName);
@@ -41,6 +43,7 @@ void Analyzer::setData(TreeItem* parent, QHash<long, TreeItem *>* items) {
     tempArray= array;
     setData(array,parent,items, 0);
 }
+////////////////////////////////////////////////////////////////////////////////////////////
 
 void Analyzer::setData(QByteArray array, TreeItem *&parent, QHash<long, TreeItem *>* items, long off) {
     tempArray= array;
@@ -63,13 +66,12 @@ void Analyzer::setData(QByteArray array, TreeItem *&parent, QHash<long, TreeItem
 
         parent->appendChild(newItem);
         items->insert(i+offset, newItem);
-        //qDebug()<<"Insert "<<toQString(type,4)<<" "<<(i+offset);
         if(newItem->isContainer()){//gdy treeitem zawiera inne boxy, tworzymy subarray wycinajac offset na atrybuty
-                                        //offset powiekszamy o offset atrybutowy i i
+            //offset powiekszamy o offset atrybutowy i i
             setData(array.mid(i+newItem->getOffset(),size-newItem->getOffset()),
-                newItem,
-                items,
-                offset+i+newItem->getOffset());
+                    newItem,
+                    items,
+                    offset+i+newItem->getOffset());
         }
         i+=size;
 

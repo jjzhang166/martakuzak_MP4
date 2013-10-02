@@ -4,8 +4,7 @@
 SampleEntry::SampleEntry(const int& s, const QString& t, const long int& off, int e, const unsigned int& dri):
     Box(s,t,off,e),
     data_reference_index(dri)
-{
-}
+{}
 /////////////
 VisualSampleEntry::VisualSampleEntry(const int& s, const QString& t, const long int& off, const int& e, const unsigned int& dri,
                                      const unsigned int pd, const unsigned int& r2, const unsigned int& pd1,
@@ -49,8 +48,8 @@ MP4VisualSampleEntry::MP4VisualSampleEntry(const int& s, const QString& t, const
                                            const unsigned int& wdth, const unsigned int& hght, const unsigned int& hr,
                                            const unsigned int& vr, const unsigned int& r3, const unsigned int& fc,
                                            QString csn, const unsigned int& dpth, int pd2): VisualSampleEntry(s,t,off,e,dri,pd,r2,pd1, wdth,
-                                                                                                               hght, hr,vr, r3, fc, csn, dpth,
-                                                                                                               pd2)
+                                                                                                              hght, hr,vr, r3, fc, csn, dpth,
+                                                                                                              pd2)
 {}
 ///////////////
 MP4AudioSampleEntry::MP4AudioSampleEntry(const int& s, const QString& t, const long int& off, const int &  e): AudioSampleEntry(s,t,off,e) {}

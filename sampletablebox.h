@@ -20,6 +20,7 @@
 #define SAMPLETABLEBOX_H
 
 #include "box.h"
+
 class SampleTableBox : public Box
 {
 public:
@@ -60,6 +61,10 @@ public:
     virtual bool isContainer() { return true; }
     virtual unsigned int getOffset() { return (16); }
     virtual QString getFullName() { return QString("Sample Description Box"); }
+    /*!
+     * \brief getEntryCount
+     * \return entry_count
+     */
     unsigned int getEntryCount() { return entry_count; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////

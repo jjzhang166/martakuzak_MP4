@@ -8,6 +8,7 @@ std::shared_ptr<Box> BoxFactory::getBox(int size,QString type, long int off, int
     if(type=="ftyp") {
         QString majorBrand = analyzer->toQString((analyzer->valueOfGroupOfFields(8, 11)),4);
         QString minorVersion = QString::number((analyzer->valueOfGroupOfFields(12, 15)),4);
+
         QList<QString> compatibleBrands;
         int index = 16;
         while(index <= (size-4)) {
@@ -324,10 +325,10 @@ std::shared_ptr<Box> BoxFactory::getBox(int size,QString type, long int off, int
     }
     //MP4
     else if(type=="iods"){
-            return std::shared_ptr<Box>(new ObjectDescriptorBox(size,type,off,e));
-        }
+        return std::shared_ptr<Box>(new ObjectDescriptorBox(size,type,off,e));
+    }
     else if(type=="esds"){
-            return std::shared_ptr<Box>(new ESDBox(size,type,off,e));
+        return std::shared_ptr<Box>(new ESDBox(size,type,off,e));
     }
     /*else if(type == "avc1"){
         return std::shared_ptr<Box>(new VisualSampleEntry(size,type,off,e,0,0,0,0,analyzer->valueOfGroupOfFields(32,33),analyzer->valueOfGroupOfFields(34,35)));

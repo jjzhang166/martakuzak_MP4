@@ -1,8 +1,6 @@
 #include "treeitem.h"
 
-using namespace std;
-TreeItem::TreeItem(Analyzer *an, const QList<QVariant> &data, TreeItem *parent, int off)
-{
+TreeItem::TreeItem(Analyzer *an, const QList<QVariant> &data, TreeItem *parent, int off){
     parentItem = parent;
     itemData = data;
     BoxFactory bf(an);
@@ -12,46 +10,38 @@ TreeItem::TreeItem(Analyzer *an, const QList<QVariant> &data, TreeItem *parent, 
         }
         catch(NoSuchABoxException) {}
     }
-
 }
-
-TreeItem::~TreeItem()
-{
+////////////////////////////////////////////////////////////////////////////////////////////
+TreeItem::~TreeItem(){
     qDeleteAll(childItems);
+    delete parentItem;
 }
-
-void TreeItem::appendChild(TreeItem *item)
-{
+////////////////////////////////////////////////////////////////////////////////////////////
+void TreeItem::appendChild(TreeItem *item){
     childItems.append(item);
 }
-
-TreeItem *TreeItem::child(int row)
-{
+////////////////////////////////////////////////////////////////////////////////////////////
+TreeItem *TreeItem::child(int row){
     return childItems.value(row);
 }
-
-int TreeItem::childCount() const
-{
+////////////////////////////////////////////////////////////////////////////////////////////
+int TreeItem::childCount() const{
     return childItems.count();
 }
-
-int TreeItem::columnCount() const
-{
+////////////////////////////////////////////////////////////////////////////////////////////
+int TreeItem::columnCount() const{
     return itemData.count();
 }
-
-QVariant TreeItem::data(int column) const
-{
+////////////////////////////////////////////////////////////////////////////////////////////
+QVariant TreeItem::data(int column) const{
     return itemData.value(column);
 }
-
-TreeItem *TreeItem::parent()
-{
+////////////////////////////////////////////////////////////////////////////////////////////
+TreeItem *TreeItem::parent(){
     return parentItem;
 }
-
-int TreeItem::row() const
-{
+////////////////////////////////////////////////////////////////////////////////////////////
+int TreeItem::row() const {
     if (parentItem)
         return parentItem->childItems.indexOf(const_cast<TreeItem*>(this));
     return 0;

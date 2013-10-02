@@ -1,15 +1,14 @@
 #ifndef ANALYZER_H
 #define ANALYZER_H
 #include <QString>
-#include <QStringList>
 #include <QString>
 #include <QByteArray>
 #include <QFile>
-#include <QList>
 #include <QVariant>
+#include <qDebug>
 #include "treemodel.h"
 #include "treeitem.h"
-#include <qDebug>
+
 
 class TreeItem;
 /*!
@@ -59,7 +58,6 @@ public:
      */
 private:
     void setData(QByteArray arr, TreeItem* &parent, QHash<long,TreeItem*>* items, long off=0);
-    //void setData(QByteArray& arr, TreeItem* parent, long off=0);
     /*!
      * \brief fileName
      *  name of the analyzed file

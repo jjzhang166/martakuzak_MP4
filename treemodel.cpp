@@ -1,34 +1,30 @@
 #include "treemodel.h"
 
 TreeModel::TreeModel(const QString &fileName, QObject *parent)
-    : QAbstractItemModel(parent)
-{
+    : QAbstractItemModel(parent) {
     Analyzer* analyzer= new Analyzer(fileName);
-    //QString data= an.getData();
-    //qDebug()<<data;
     QList<QVariant> rootData;
     rootData << "Name" << "Size"<<"Offset";
     rootItem = new TreeItem(analyzer,rootData);
-    items= new QHash<long,TreeItem*>();
-    analyzer->setData(rootItem, items);
-    //setupModelData(data.split(QString("\n")), rootItem);
+    treeItems= new QHash<long,TreeItem*>();
+    analyzer->setData(rootItem, treeItems);
 }
+////////////////////////////////////////////////////////////////////////////////////////////
 
-TreeModel::~TreeModel()
-{
+TreeModel::~TreeModel() {
+    treeItems->clear();
+    delete treeItems;
     delete rootItem;
 }
-
-int TreeModel::columnCount(const QModelIndex &parent) const
-{
+////////////////////////////////////////////////////////////////////////////////////////////
+int TreeModel::columnCount(const QModelIndex &parent) const {
     if (parent.isValid())
         return static_cast<TreeItem*>(parent.internalPointer())->columnCount();
     else
         return rootItem->columnCount();
 }
-
-QVariant TreeModel::data(const QModelIndex &index, int role) const
-{
+////////////////////////////////////////////////////////////////////////////////////////////
+QVariant TreeModel::data(const QModelIndex &index, int role) const {
     if (!index.isValid())
         return QVariant();
 
@@ -39,27 +35,23 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
 
     return item->data(index.column());
 }
-
-Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
-{
+////////////////////////////////////////////////////////////////////////////////////////////
+Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const {
     if (!index.isValid())
         return 0;
 
     return QAbstractItemModel::flags(index);
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////
 QVariant TreeModel::headerData(int section, Qt::Orientation orientation,
-                               int role) const
-{
+                               int role) const {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
         return rootItem->data(section);
 
     return QVariant();
 }
-
-QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent)
-            const
-{
+////////////////////////////////////////////////////////////////////////////////////////////
+QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent) const {
     if (!hasIndex(row, column, parent))
         return QModelIndex();
 
@@ -76,10 +68,9 @@ QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent)
     else
         return QModelIndex();
 }
+////////////////////////////////////////////////////////////////////////////////////////////
 
-
-QModelIndex TreeModel::parent(const QModelIndex &index) const
-{
+QModelIndex TreeModel::parent(const QModelIndex &index) const {
     if (!index.isValid())
         return QModelIndex();
 
@@ -91,9 +82,8 @@ QModelIndex TreeModel::parent(const QModelIndex &index) const
 
     return createIndex(parentItem->row(), 0, parentItem);
 }
-
-int TreeModel::rowCount(const QModelIndex &parent) const
-{
+////////////////////////////////////////////////////////////////////////////////////////////
+int TreeModel::rowCount(const QModelIndex &parent) const {
     TreeItem *parentItem;
     if (parent.column() > 0)
         return 0;
@@ -105,7 +95,7 @@ int TreeModel::rowCount(const QModelIndex &parent) const
 
     return parentItem->childCount();
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////
 TreeItem* TreeModel:: getChild(TreeItem *parent, QString type) {
     int number= parent->childCount();
     for(int i=0; i<number; i++) {
@@ -115,26 +105,14 @@ TreeItem* TreeModel:: getChild(TreeItem *parent, QString type) {
     }
     return NULL;
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////
 TreeItem * TreeModel::getChild(int offset) {
     try {
-        return items->value(offset);
+        return treeItems->value(offset);
     }
     catch(QException) {
         return NULL;
     }
-}
-
-TreeItem* TreeModel:: getChild(QString type) {
-    items;
-    QHashIterator<long, TreeItem*> i(*items);
-    while (i.hasNext()) {
-        i.next();
-        if(i.value()->getType() == type) {
-            qDebug() << i.key() << ": " << i.value();
-        }
-    }
-    return NULL;
 }
 
 

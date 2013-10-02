@@ -1,15 +1,12 @@
 #ifndef TREEITEM_H
 #define TREEITEM_H
 
-#include <QList>
 #include <QVariant>
 #include <QStringList>
 #include <QByteArray>
-#include <iostream>
 #include "box.h"
 #include "boxfactory.h"
 #include "exceptions.h"
-//#include "analyzer.h"
 
 class Analyzer;
 /*!
@@ -17,6 +14,24 @@ class Analyzer;
  */
 class TreeItem
 {
+
+private:
+    /*!
+     * \brief childItems children of the item
+     */
+    QList<TreeItem*> childItems;
+    /*!
+     * \brief itemData data of the item
+     */
+    QList<QVariant> itemData;
+    /*!
+     * \brief parentItem parent of the item
+     */
+    TreeItem *parentItem;
+    /*!
+     * \brief box corresponding box
+     */
+    std::shared_ptr<Box> box;
 public:
     /*!
      * \brief TreeItem
@@ -83,41 +98,35 @@ public:
     }
     /*!
      * \brief isNull
-     * \return
+     * \return true if box was unknown
      */
     bool isNull() {
         if(box) return false;
         else return true;
     }
+    /*!
+     * \brief getType
+     * \return type of the box
+     */
     QString getType() {
         return box->getType();
 
     }
+    /*!
+     * \brief fullName
+     * \return full name of the box
+     */
     QString fullName() {
         return box->getFullName();
     }
+    /*!
+     * \brief getInfo
+     * \return formated info about box (all the attributes)
+     */
     QString getInfo() {
         return box->getInfo();
     }
 
-
-private:
-    /*!
-     * \brief childItems children of the item
-     */
-    QList<TreeItem*> childItems;
-    /*!
-     * \brief itemData data of the item
-     */
-    QList<QVariant> itemData;
-    /*!
-     * \brief parentItem parent of the item
-     */
-    TreeItem *parentItem;
-    /*!
-     * \brief box corresponding box
-     */
-    std::shared_ptr<Box> box;
 };
 
 #endif // TREEITEM_H
