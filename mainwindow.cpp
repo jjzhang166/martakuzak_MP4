@@ -16,8 +16,9 @@ MainWindow::MainWindow(QWidget *parent) :
     resize(0.8*m_width, 0.5*m_height);
 
     mainLayout = new QVBoxLayout();
-    boxInfoLayout = new QHBoxLayout();
+    boxParseLayout = new QHBoxLayout();
     searchBoxLayout = new QGridLayout();
+    boxInfoLayout = new QVBoxLayout();
 
     QWidget *window = new QWidget();
     //setWindowIcon(QIcon("icon2.png"));
@@ -37,12 +38,12 @@ MainWindow::~MainWindow()
     delete nextSearchButton;
     delete typeBoxType;
     delete searchLabel;
-    delete searchBoxGroup;
-    delete boxInfoGroupBox;
+    delete searchBoxGroupBox;
+    delete boxParseGroupBox;
     delete hSplitter;
     delete vSplitter;
     delete mainLayout;
-    delete boxInfoLayout;
+    delete boxParseLayout;
     delete searchBoxLayout;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +72,7 @@ void MainWindow::createMenu()
 ////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::setSearchBoxSection() {
 
-    searchBoxGroup = new QGroupBox();
+    searchBoxGroupBox = new QGroupBox();
 
     searchLabel = new QLabel("Type box type: ");
     searchLabel->setMaximumSize(200,40);
@@ -86,17 +87,17 @@ void MainWindow::setSearchBoxSection() {
             SIGNAL(clicked()),
             this, SLOT(searchBox()));
 
-    searchBoxGroup->setMaximumHeight(50);
-    searchBoxGroup->setMinimumHeight(40);
+    searchBoxGroupBox->setMaximumHeight(50);
+    searchBoxGroupBox->setMinimumHeight(40);
 
     searchBoxLayout->addWidget(searchLabel, 1, 0);
     searchBoxLayout->addWidget(typeBoxType, 1, 1);
     searchBoxLayout->addWidget(nextSearchButton, 1, 2);
     searchBoxLayout->setColumnStretch(10, 1);
-    searchBoxGroup->setLayout(searchBoxLayout);
+    searchBoxGroupBox->setLayout(searchBoxLayout);
 
     vSplitter = new QSplitter();
-    vSplitter->addWidget(searchBoxGroup);
+    vSplitter->addWidget(searchBoxGroupBox);
     mainLayout->addWidget(vSplitter);
 
 }
@@ -104,20 +105,25 @@ void MainWindow::setSearchBoxSection() {
 void MainWindow::setBoxInfoSection(const QString& fileName) {
 
 
-    if(!boxInfoLayout->count()) {
-        boxInfoGroupBox = new QGroupBox(tr(""));
+    if(!boxParseLayout->count()) {
+        boxParseGroupBox = new QGroupBox();
+        boxInfoGroupBox = new QGroupBox();
         treeView = new QTreeView(this);
         boxInfo = new QTextEdit();
         boxInfo->setReadOnly(true);
         hSplitter = new QSplitter();
+        boxNameLabel = new QLabel();
+        boxNameLabel->setMaximumHeight(20);
+        boxNameLabel->setFont(QFont("Arial", 13));
     }
 
 
     model= new TreeModel(fileName);
 
     treeView->setModel(model);
-    treeView->header()->setStretchLastSection(false);
-    treeView->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    //treeView->setFont(QFont("Arial", 12));
+    //treeView->header()->setStretchLastSection(false);
+    //treeView->header()->setSectionResizeMode(0, QHeaderView::Stretch);
     treeView->setSizePolicy(QSizePolicy::Expanding,
                             QSizePolicy::Expanding);
     connect(treeView->selectionModel(),
@@ -125,20 +131,28 @@ void MainWindow::setBoxInfoSection(const QString& fileName) {
                                     const QItemSelection &)),
             this, SLOT(printSelectedBox()));
 
+    boxNameLabel->setSizePolicy(QSizePolicy::Expanding,
+                                QSizePolicy::Expanding);
+    boxNameLabel->clear();
+
     boxInfo->setSizePolicy(QSizePolicy::Expanding,
                            QSizePolicy::Expanding);
     boxInfo->setText("");
 
-    hSplitter->addWidget(treeView);
-    hSplitter->addWidget(boxInfo);
-    hSplitter->setOrientation(Qt::Horizontal);
-    boxInfoLayout->addWidget(hSplitter);
-
+    boxInfoLayout->addWidget(boxNameLabel);
+    boxInfoLayout->addWidget(boxInfo);
     boxInfoGroupBox->setLayout(boxInfoLayout);
-    boxInfoGroupBox->setSizePolicy(QSizePolicy::Expanding,
+
+    hSplitter->addWidget(treeView);
+    hSplitter->addWidget(boxInfoGroupBox);
+    hSplitter->setOrientation(Qt::Horizontal);
+    boxParseLayout->addWidget(hSplitter);
+
+    boxParseGroupBox->setLayout(boxParseLayout);
+    boxParseGroupBox->setSizePolicy(QSizePolicy::Expanding,
                                    QSizePolicy::Expanding);
 
-    vSplitter->addWidget(boxInfoGroupBox);
+    vSplitter->addWidget(boxParseGroupBox);
     vSplitter->setOrientation(Qt::Vertical);
 
     mainLayout->update();
@@ -166,8 +180,10 @@ void MainWindow::printSelectedBox() {
     QModelIndex child = model->index(index.row(), 2, index.parent());
     QString text= model->getChild(model->data(child,
                                               Qt::DisplayRole).toInt())->fullName();
-    if(text!=NULL)
-        boxInfo->setText(text+"\n"+model->getChild(model->data(child,Qt::DisplayRole).toInt())->getInfo());
+    if(text!=NULL) {
+        boxNameLabel->setText(text);
+        boxInfo->setText(model->getChild(model->data(child,Qt::DisplayRole).toInt())->getInfo());
+    }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::searchBox() {

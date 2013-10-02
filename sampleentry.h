@@ -15,7 +15,7 @@ public:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class HintSampleEntry: public SampleEntry {
 public:
-    HintSampleEntry(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    HintSampleEntry(const int& s, const QString& t, const long int& off, const int& e);
     virtual QString getFullName() { return QString("Hint Sample Entry"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,7 +51,7 @@ public:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class AudioSampleEntry: public SampleEntry{
 public:
-    AudioSampleEntry(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    AudioSampleEntry(const int& s, const QString& t, const long int& off, const int& e);
     virtual QString getFullName() { return QString("Audio Sample Entry"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +71,7 @@ public:
 class MP4AudioSampleEntry : public AudioSampleEntry
 {
 public:
-    MP4AudioSampleEntry(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    MP4AudioSampleEntry(const int& s, const QString& t, const long int& off, const int& e);
     virtual bool isContainer() { return true; }
     virtual unsigned int getOffset() { return 36; }
     virtual QString getFullName() { return QString("MP4 Audio Sample Entry"); }
@@ -80,22 +80,28 @@ public:
 class MpegSampleEntry : public SampleEntry
 {
 public:
-    MpegSampleEntry(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    MpegSampleEntry(const int& s, const QString& t, const long int& off, const int& e);
     virtual bool isContainer() { return true; }
     virtual QString getFullName() { return QString("Mpeg Sample Entry"); }
 };
 //////////////MP4//////
 class ObjectDescriptorBox : public FullBox
 {
+private:
+    int version;
+    QList<int> flags;
 public:
-    ObjectDescriptorBox(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    ObjectDescriptorBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
     virtual QString getFullName() { return QString("Object Descriptor Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class ESDBox : public FullBox
 {
+private:
+    int version;
+    QList<int> flags;
 public:
-    ESDBox(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    ESDBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
     virtual unsigned int getOffset() { return 8; }
     virtual QString getFullName() { return QString("ESD Box"); }
 };

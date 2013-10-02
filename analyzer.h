@@ -72,6 +72,10 @@ private:
      * \brief tempArray
      */
     QByteArray tempArray;
+    /*!
+     * \brief arraySize
+     */
+    int arraySize;
 };
 
 

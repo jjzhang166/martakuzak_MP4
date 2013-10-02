@@ -41,20 +41,23 @@ private:
      */
     QString title;
     //Layouts
-    QHBoxLayout * boxInfoLayout;
+    QHBoxLayout * boxParseLayout;
     QGridLayout * searchBoxLayout;
     QVBoxLayout * mainLayout;
+    QVBoxLayout * boxInfoLayout;
     //Splitters
     QSplitter * vSplitter;
     QSplitter * hSplitter;
     //Group boxes
+    QGroupBox * boxParseGroupBox;
+    QGroupBox * searchBoxGroupBox;
     QGroupBox * boxInfoGroupBox;
-    QGroupBox * searchBoxGroup;
     //search box content
     QLabel * searchLabel;
     QLineEdit * typeBoxType;
     QPushButton * nextSearchButton;
     //info box content
+    QLabel * boxNameLabel;
     QTextEdit * boxInfo;
     QTreeView *treeView;
     /*!

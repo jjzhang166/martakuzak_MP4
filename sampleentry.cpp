@@ -27,13 +27,13 @@ VisualSampleEntry::VisualSampleEntry(const int& s, const QString& t, const long 
 {}
 QString VisualSampleEntry::getInfo() {
     QString tmp("");
-    tmp.append("\n\twidth\t\t");
+    tmp.append("width\t\t");
     tmp.append(QString::number(width));
-    tmp.append("\n\theight\t\t");
+    tmp.append("\nheight\t\t");
     tmp.append(QString::number(height));
-    tmp.append("\n\thorizonresolution\t");
+    tmp.append("\nhorizonresolution\t");
     tmp.append(QString::number(horizresolution));
-    tmp.append("\n\tvertresolution\t");
+    tmp.append("\nvertresolution\t");
     tmp.append(QString::number(vertresolution));
     return tmp;
 }
@@ -57,8 +57,16 @@ MP4AudioSampleEntry::MP4AudioSampleEntry(const int& s, const QString& t, const l
 MpegSampleEntry::MpegSampleEntry(const int& s, const QString& t, const long int& off, const int &  e): SampleEntry(s,t,off,e) {}
 ///////////////
 /////MP4///////
-ObjectDescriptorBox::ObjectDescriptorBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
+ObjectDescriptorBox::ObjectDescriptorBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
+    FullBox(s,t,off,e, v, f) ,
+    version(v),
+    flags(f)
+{}
 ///////////////
-ESDBox::ESDBox(const int& s, const QString& t, const long int& off, const int &  e): FullBox(s,t,off,e) {}
+ESDBox::ESDBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
+    FullBox(s,t,off,e, v, f) ,
+    version(v),
+    flags(f)
+{}
 ///////////////
 

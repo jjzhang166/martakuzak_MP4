@@ -5,6 +5,7 @@
 Analyzer::Analyzer(const QString &fileName)
 {
     this->fileName=fileName;
+    this->arraySize = 0;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -41,6 +42,7 @@ void Analyzer::setData(TreeItem* parent, QHash<long, TreeItem *>* items) {
     }
     QByteArray array = file.readAll();
     tempArray= array;
+    arraySize = array.size();
     setData(array,parent,items, 0);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -53,9 +55,27 @@ void Analyzer::setData(QByteArray array, TreeItem *&parent, QHash<long, TreeItem
     while(progress) {
         unsigned long int size; //rozmiar boxa
         unsigned long int type; //typ boxa
+        //unsigned int [16] extendedType;//to-do
 
         size=valueOfGroupOfFields(i, i+3, array); //obliczenie wartosci rozmiaru i typu
         type= valueOfGroupOfFields(i+4, i+7, array); //w zadanej tablicy: zawsze na poczatku
+
+        if(size == 0) { //gdy size = 0, to box ciągnie się do końca pliku
+            size = arraySize - offset;  //nieprzetestowane!
+        }
+        else if(size == 1 ) { //dla size = 1, rozmiar przybiera wartość rozszerzoną int(64), po typie
+            size = valueOfGroupOfFields(i+8, i+15, array);
+        }
+
+        if(toQString(type, 4) == QString("uuid")) {
+            if(size == 1) {
+                    //to-do
+            }
+            else {
+
+            }
+        }
+
 
         QList<QVariant> columnData; //konstrukcja danych, ktore beda wyswietlane w drzewie
         columnData<<toQString(type,4);

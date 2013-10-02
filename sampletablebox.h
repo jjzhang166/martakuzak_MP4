@@ -31,15 +31,21 @@ public:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class TimeToSampleBox : public FullBox
 {
+private:
+    int version;
+    QList<int> flags;
 public:
-    TimeToSampleBox(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    TimeToSampleBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
     virtual QString getFullName() { return QString("Time To Sample Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class CompositionOffsetBox : public FullBox
 {
+private:
+    int version;
+    QList<int> flags;
 public:
-    CompositionOffsetBox(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    CompositionOffsetBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
     virtual QString getFullName() { return QString("Composition Offset Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,64 +76,91 @@ public:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class SampleSizeBox : public FullBox
 {
+private:
+    int version;
+    QList<int> flags;
 public:
-    SampleSizeBox(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    SampleSizeBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
     virtual QString getFullName() { return QString("Sample Size Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class CompactSampleSizeBox : public FullBox
 {
+private:
+    int version;
+    QList<int> flags;
 public:
-    CompactSampleSizeBox(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    CompactSampleSizeBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
     virtual QString getFullName() { return QString("Compact Sample Size Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class SampleToChunkBox : public FullBox
 {
+private:
+    int version;
+    QList<int> flags;
 public:
-    SampleToChunkBox(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    SampleToChunkBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
     virtual QString getFullName() { return QString("Sample To Chunk Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class ChunkOffsetBox : public FullBox
 {
+private:
+    int version;
+    QList<int> flags;
 public:
-    ChunkOffsetBox(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    ChunkOffsetBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
     virtual QString getFullName() { return QString("Chunk Offset Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class ChunkLargeOffsetBox : public FullBox
 {
+private:
+    int version;
+    QList<int> flags;
 public:
-    ChunkLargeOffsetBox(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    ChunkLargeOffsetBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
     virtual QString getFullName() { return QString("Chunk Large Offset Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class SyncSampleBox : public FullBox
 {
+private:
+    int version;
+    QList<int> flags;
 public:
-    SyncSampleBox(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    SyncSampleBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
     virtual QString getFullName() { return QString("Sync Sample Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class ShadowSyncSampleBox : public FullBox
 {
+private:
+    int version;
+    QList<int> flags;
 public:
-    ShadowSyncSampleBox(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    ShadowSyncSampleBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
     virtual QString getFullName() { return QString("Shadow Sync Sample Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class DegradationPriorityBox : public FullBox
 {
+private:
+    int version;
+    QList<int> flags;
 public:
-    DegradationPriorityBox(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    DegradationPriorityBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
     virtual QString getFullName() { return QString("Degradation Priority Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class PaddingBitsBox : public FullBox
 {
+private:
+    int version;
+    QList<int> flags;
 public:
-    PaddingBitsBox(const int& s=0, const QString& t="", const long int& off=0, const int& e=0);
+    PaddingBitsBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
     virtual QString getFullName() { return QString("Padding Bits Box"); }
 };
 #endif // SAMPLETABLEBOX_H
