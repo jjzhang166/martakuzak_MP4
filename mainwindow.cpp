@@ -153,7 +153,7 @@ void MainWindow::openFile()
     QFileDialog dialog(this);
     dialog.setFileMode(QFileDialog::AnyFile);
     QString fileName = QFileDialog::getOpenFileName(this,
-        tr("Open File"), "/", tr("MP4 Files (*.mp4)"));
+                                                    tr("Open File"), "/", tr("MP4 Files (*.mp4)"));
     if(fileName.length()) {
         if(!searchBoxLayout->count())
             setSearchBoxSection();
