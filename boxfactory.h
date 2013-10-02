@@ -32,7 +32,7 @@ public:
      * \param e
      * \return Box created according to the given and extra parametrs
      */
-    std::shared_ptr<Box> getBox(int size=0, QString type="", long int off=0, int e=0, int v=0, QList<int> f=QList<int>());
+    std::shared_ptr<Box> getBox(int size=0, QString type="", long int off=0, int e=0);
 };
 
 #endif // BOXFACTORY_H
