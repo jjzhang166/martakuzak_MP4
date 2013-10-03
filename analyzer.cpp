@@ -15,8 +15,8 @@ unsigned long int Analyzer:: valueOfGroupOfFields(int begin, int end, QByteArray
     unsigned long int num=0;
     for(int i=begin; i<(end+1); i++) {
         num |= static_cast<unsigned int>(array[i]) & 0xFF;
-        if(begin!=end && i!=end) {
-            num=(num<<8);
+            if(begin!=end && i!=end) {
+           num=(num<<8);
         }
     }
     return num;
@@ -76,7 +76,6 @@ void Analyzer::setData(QByteArray array, TreeItem *&parent, QHash<long, TreeItem
             }
         }
 
-
         QList<QVariant> columnData; //konstrukcja danych, ktore beda wyswietlane w drzewie
         columnData<<toQString(type,4);
         columnData<<QString::number(size);
@@ -95,7 +94,7 @@ void Analyzer::setData(QByteArray array, TreeItem *&parent, QHash<long, TreeItem
         }
         i+=size;
 
-
+        tempArray = array.mid(i);
         if(i>=array.size()) {//poki i jest nie wieksze od rozmiaru tablicy
             progress=false;
         }

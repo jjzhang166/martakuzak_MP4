@@ -34,8 +34,12 @@ class TimeToSampleBox : public FullBox
 private:
     int version;
     QList<int> flags;
+    int entryCount;
+    QList<int> sampleCount;
+    QList<int> sampleDelta;
 public:
-    TimeToSampleBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
+    TimeToSampleBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f,
+                    int ec, QList<int> sc, QList<int> sd);
     virtual QString getFullName() { return QString("Time To Sample Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////

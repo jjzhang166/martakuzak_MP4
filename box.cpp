@@ -8,6 +8,19 @@ FullBox::FullBox(const int& s, const QString& t, const long int& off, const int 
     version(v),
     flags(f)
 {}
+QString FullBox::getInfo() {
+    QString tmp("");
+    tmp.append("Version\t\t");
+    tmp.append(QString::number(version));
+    tmp.append("\nFlags\t\t");
+    tmp.append(QString::number(flags.at(0)));
+    tmp.append(" | ");
+    tmp.append(QString::number(flags.at(1)));
+    tmp.append(" | ");
+    tmp.append(QString::number(flags.at(2)));
+    tmp.append(" | ");
+    return tmp;
+}
 /////////////
 FileTypeBox::FileTypeBox(const int& s, const QString& t, const long int& off, const int & e, const QString& mb, const QString& mv, const QList<QString>& cb):
     Box(s,t,off,e),
@@ -42,11 +55,37 @@ MediaHeaderBox::MediaHeaderBox(const int& s, const QString& t, const long int& o
 /////////////
 MovieBox::MovieBox(const int& s, const QString& t, const long int& off, const int &  e):Box(s,t,off,e) {}
 /////////////
-MovieHeaderBox::MovieHeaderBox(const int& s, const QString& t, const long int& off, const int &  e, const int &v, const QList<int> &f):
+MovieHeaderBox::MovieHeaderBox(const int& s, const QString& t, const long int& off, const int &  e, const int &v, const QList<int> &f,
+                               int ct, int mt, int ts, int d, int r, int vl, int r16,
+                               int r32, QList<int> mx, QList<int> pr, int nid):
     FullBox(s,t,off,e, v, f) ,
     version(v),
-    flags(f)
+    flags(f),
+    creationTime(ct),
+    modificationTime(mt),
+    timeScale(ts),
+    duration(d),
+    rate(r),
+    volume(vl),
+    reserved16(r16),
+    reserved32(r32),
+    nextTrackId(nid),
+    matrix(mx),
+    predefined(pr)
 {}
+QString MovieHeaderBox::getInfo() {
+    QString tmp("");
+    tmp.append(FullBox::getInfo());
+    tmp.append("\nCreation time\t\t");
+    tmp.append(QString::number(creationTime));
+    tmp.append("\nModification time\t");
+    tmp.append(QString::number(modificationTime));
+    tmp.append("\nTime scale\t\t");
+    tmp.append(QString::number(timeScale));
+    tmp.append("\nDuration\t\t");
+    tmp.append(QString::number(duration));
+    return tmp;
+}
 /////////////
 TrackBox::TrackBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 /////////////
@@ -125,6 +164,7 @@ MovieFragmentHeaderBox::MovieFragmentHeaderBox(const int& s, const QString& t, c
     sequenceNumber(sn){}
 QString MovieFragmentHeaderBox::getInfo() {
     QString tmp("");
+    tmp.append(FullBox::getInfo());
     tmp.append("\n\tSequence number\t\t");
     tmp.append(QString::number(sequenceNumber));
     qDebug()<<sequenceNumber;

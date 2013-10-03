@@ -79,7 +79,7 @@ private:
 public:
     FullBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
     virtual QString getFullName() { return QString(" "); }
-
+    virtual QString getInfo();
 };
 //////////////////////////////////////////////////////////////////////////////////////////////////
 class FileTypeBox : public Box
@@ -132,9 +132,23 @@ class MovieHeaderBox : public FullBox
 private:
     int version;
     QList<int> flags;
+    int creationTime; //in seconds since midnight, Jan. 1, 1904, in UTC time
+    int modificationTime;
+    int timeScale; //ilosc jednostek w sekundzie
+    int duration; //liczba jednostek czasu wynikajacych ze skali czasu
+    int rate;
+    int volume;
+    int reserved16;
+    int reserved32;
+    QList<int> matrix;
+    QList<int> predefined;
+    int nextTrackId;
 public:
-    MovieHeaderBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
+    MovieHeaderBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f,
+                   int creationTime, int modificationTime, int timeScale, int duration, int rate=1, int volume=1, int reserved16=0,
+                   int reserved32=0, QList<int> mx=QList<int>(), QList<int> pr=QList<int>(), int nextTrackId=0);
     virtual QString getFullName() { return QString("Movie Header Box "); }
+    virtual QString getInfo();
 
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -3,10 +3,14 @@
 SampleTableBox::SampleTableBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 /////////////
 /////////////
-TimeToSampleBox::TimeToSampleBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
+TimeToSampleBox::TimeToSampleBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f,
+                                 int ec, QList<int> sc, QList<int> sd):
     FullBox(s,t,off,e, v, f) ,
     version(v),
-    flags(f)
+    flags(f),
+    entryCount(ec),
+    sampleCount(sc),
+    sampleDelta(sd)
 {}
 /////////////
 CompositionOffsetBox::CompositionOffsetBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):

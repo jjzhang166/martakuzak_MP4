@@ -40,7 +40,7 @@ public:
      * \param end number of the last element of subarray
      * \return unsigned long int value of the subarray
      */
-    unsigned long int valueOfGroupOfFields(int begin, int end, QByteArray array= QByteArray());
+    unsigned long int valueOfGroupOfFields(int begin, int end,QByteArray array= QByteArray());
     /*!
      * \brief toQString
      *  converts unsigned int to QString
@@ -76,6 +76,10 @@ private:
      * \brief arraySize
      */
     int arraySize;
+public:
+    QByteArray getTempArray() {
+        return tempArray;
+    }
 };
 
 
