@@ -110,7 +110,6 @@ public:
      */
     QString getType() {
         return box->getType();
-
     }
     /*!
      * \brief fullName

@@ -1,25 +1,76 @@
 #include "analyzer.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////
-
 Analyzer::Analyzer(const QString &fileName)
 {
     this->fileName=fileName;
     this->arraySize = 0;
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly)) {
+        return ;
+    }
+    QByteArray array = file.readAll();
+    tempArray= array;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
-
-unsigned long int Analyzer:: valueOfGroupOfFields(int begin, int end, QByteArray array) {
+unsigned long int Analyzer:: valueOfGroupOfFields(const int &begin, const int &end, QByteArray array) {
     if(!array.size())
         array= tempArray;
     unsigned long int num=0;
     for(int i=begin; i<(end+1); i++) {
         num |= static_cast<unsigned int>(array[i]) & 0xFF;
-            if(begin!=end && i!=end) {
-           num=(num<<8);
+        if(begin!=end && i!=end) {
+            num=(num<<8);
         }
     }
     return num;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned long int Analyzer:: valueOfBits(const int& begin, const int& end) {
+    int firstByte = begin/8;
+    int firstBit = begin - 8 * firstByte;
+    int lastByte = end/8;
+    qDebug()<<"lastByte"<<lastByte;
+    int lastBit;
+//    if((end == (8*(lastByte+1))-1))
+//        lastBit = 7;
+//    else {
+        lastBit = end - lastByte*8;
+        //lastByte ++;
+    //}
+    qDebug()<<"lastByte after if"<<lastByte;
+    qDebug()<<"lastBit"<<lastBit;
+    int numOfBits = 8*(lastByte - 1) + lastBit - 8*(firstByte -1) -firstBit + 1;
+    int numOfBytes = lastByte - firstByte + 1;
+    qDebug()<<"numOfBits"<<numOfBits;
+    qDebug()<<"numOfBytes"<<numOfBytes;
+    int byteValue = this->valueOfGroupOfFields(firstByte,lastByte);
+    QString tmpValue = QString::number(byteValue,2);
+    int tmpSize = tmpValue.size();
+    qDebug()<<"tmpSize"<<tmpSize;
+    qDebug()<<"tmpValue before if"<<tmpValue;//ok
+    if(tmpSize < numOfBytes*8) {
+        int delta = numOfBytes*8 - tmpSize;
+        qDebug()<<"delta"<<delta;
+        for (int i = 0; i<delta; ++i) {
+            tmpValue = tmpValue.insert(0, "0");
+        }
+        qDebug()<<"tmpValue after if"<<tmpValue;//
+    }
+    qDebug()<<"byteValue"<<byteValue;
+    qDebug()<<"tmpValue"<<tmpValue;
+    QString qstringBitsValue = tmpValue.mid(firstBit, numOfBits);
+    qDebug()<<"qstringBitsvalue"<<qstringBitsValue;
+    return qstringBitsValue.toUInt(0,2);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////
+bool Analyzer::bitValue(int byteId, int bitId) {
+    int byte = tempArray[byteId];
+    int retValue = QString::number(byte,2).at(bitId).digitValue();
+    QString::number(byte,2).mid(2,4);
+    bool ret(retValue);
+    return ret;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -69,7 +120,7 @@ void Analyzer::setData(QByteArray array, TreeItem *&parent, QHash<long, TreeItem
 
         if(toQString(type, 4) == QString("uuid")) {
             if(size == 1) {
-                    //to-do
+                //to-do
             }
             else {
 

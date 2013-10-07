@@ -1,3 +1,16 @@
+/*!
+ * \file SampleEntry
+ * \details
+ * SampleEntry
+ * HintSampleEntry
+ * VisualSampleEntry
+ * AudioSampleEntry
+ * MP4AudioSampleEntry
+ * MP4VisualSampleEntry
+ * MpegSampleEntry
+ * ObjectDescriptorBox
+ * ESDBox
+ */
 #ifndef SAMPLEENTRY_H
 #define SAMPLEENTRY_H
 

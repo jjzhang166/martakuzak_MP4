@@ -24,6 +24,7 @@
 #include <qDebug>
 #include "treemodel.h"
 #include "treeitem.h"
+
 /*!
  * \brief The MainWindow class defines a mind window of the application
  */

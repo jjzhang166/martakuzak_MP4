@@ -40,7 +40,22 @@ public:
      * \param end number of the last element of subarray
      * \return unsigned long int value of the subarray
      */
-    unsigned long int valueOfGroupOfFields(int begin, int end,QByteArray array= QByteArray());
+    unsigned long int valueOfGroupOfFields(const int & begin, const int & end,QByteArray array= QByteArray());
+    /*!
+     * \brief bitValue
+     * \param byteId id of byte in the array
+     * \param bitId id of bit in the given byte
+     * \return value of given bit
+     */
+    bool bitValue(int byteId, int bitId);
+    /*!
+     * \brief valueOfBits
+     * \param begin number of the first element of subarray
+     * \param end number of the last element of subarray
+     * \param pattern unsigned long int value of the subarray
+     * \return
+     */
+    unsigned long int valueOfBits(const int& begin, const int& end);
     /*!
      * \brief toQString
      *  converts unsigned int to QString

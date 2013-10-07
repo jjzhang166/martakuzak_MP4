@@ -84,24 +84,30 @@ QString MovieHeaderBox::getInfo() {
     tmp.append(QString::number(timeScale));
     tmp.append("\nDuration\t\t");
     tmp.append(QString::number(duration));
+    tmp.append("\nRate\t\t");
+    tmp.append(QString::number(rate));
+    tmp.append("\nVolume\t\t");
+    tmp.append(QString::number(volume));
+    tmp.append("\nReserved16\t\t");
+    tmp.append(QString::number(reserved16));
+    tmp.append("\nReserved32\t\t");
+    tmp.append(QString::number(reserved32));
+    tmp.append("\nMatrix\t\t");
+    QList<int>::iterator i;
+    for (i = matrix.begin(); i !=matrix.end(); ++i) {
+        tmp.append(*i);
+        tmp.append(" | ");
+    }
+    tmp.append("\nPredefined\t\t");
+    QList<int>::iterator k;
+    for (k = predefined.begin(); k !=predefined.end(); ++k) {
+        tmp.append(*k);
+        tmp.append(" | ");
+    }
+    tmp.append("\nNext track id\t\t");
+    tmp.append(QString::number(nextTrackId));
     return tmp;
 }
-/////////////
-TrackBox::TrackBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
-/////////////
-TrackHeaderBox::TrackHeaderBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
-    FullBox(s,t,off,e, v, f) ,
-    version(v),
-    flags(f)
-{}
-/////////////
-TrackReferenceBox::TrackReferenceBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
-/////////////
-HandlerBox::HandlerBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
-    FullBox(s,t,off,e, v, f) ,
-    version(v),
-    flags(f)
-{}
 /////////////
 MediaInformationBox::MediaInformationBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 /////////////
@@ -151,12 +157,6 @@ MovieExtendsBox::MovieExtendsBox(const int& s, const QString& t, const long int&
 ///////////////
 MovieExtendsHeaderBox::MovieExtendsHeaderBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f): FullBox(s,t,off,e, v, f) {}
 ///////////////
-TrackExtendsBox::TrackExtendsBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
-    FullBox(s,t,off,e, v, f) ,
-    version(v),
-    flags(f)
-{}
-///////////////
 MovieFragmentBox::MovieFragmentBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
 ///////////////
 MovieFragmentHeaderBox::MovieFragmentHeaderBox(const int& s, const QString& t, const long int& off, const int &  e, const long &sn, const int& v, const QList<int>& f):
@@ -170,22 +170,9 @@ QString MovieFragmentHeaderBox::getInfo() {
     qDebug()<<sequenceNumber;
     return tmp;
 }
-
-///////////////
-
-TrackFragmentBox::TrackFragmentBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
-///////////////
-TrackFragmentHeaderBox::TrackFragmentHeaderBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f): FullBox(s,t,off,e, v, f) {}
-///////////////
-TrackRunBox::TrackRunBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
-    FullBox(s,t,off,e, v, f) ,
-    version(v),
-    flags(f)
-{}
 ///////////////
 MovieFragmentRandomAccessBox::MovieFragmentRandomAccessBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
-///////////////
-TrackFragmentRandomAccessBox::TrackFragmentRandomAccessBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f): FullBox(s,t,off,e, v, f) {}
+
 ///////////////
 MovieFragmentRandomAccessOffsetBox::MovieFragmentRandomAccessOffsetBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f): FullBox(s,t,off,e, v, f) {}
 ///////////////
@@ -303,15 +290,77 @@ SampleAuxiliaryInformationSizesBox::SampleAuxiliaryInformationSizesBox(const int
 ///////////////
 SampleAuxiliaryInformationOffsetsBox::SampleAuxiliaryInformationOffsetsBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f): FullBox(s,t,off,e, v, f) {}
 ///////////////
-TrackFragmentBaseMediaDecodeTimeBox::TrackFragmentBaseMediaDecodeTimeBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f): FullBox(s,t,off,e, v, f) {}
-///////////////
 LevelAssignmentBox::LevelAssignmentBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f): FullBox(s,t,off,e, v, f) {}
 ///////////////
-SegmentIndexBox::SegmentIndexBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
+SegmentIndexBox::SegmentIndexBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f,
+                                 const int &ri, const int &ts, const int& myEarliestPresentationTime, const int& myFirstOffset,
+                                 const int &myReserved, const QList<bool>& myReferenceType, const QList<int> myReferenceSize,
+                                 const QList<int> & mySubsegmentDuration,const QList<bool> & myStartsWithSAP, const QList<int>& mySAPType,
+                                 const QList<int>& mySAPDeltaTime):
     FullBox(s,t,off,e, v, f),
     version(v),
-    flags(f)
+    flags(f),
+    referenceId(ri),
+    timescale(ts),
+    earliestPresentationTime(myEarliestPresentationTime),
+    firstOffset(myFirstOffset),
+    reserved(myReserved),
+    referenceType(myReferenceType),
+    referenceSize(myReferenceSize),
+    subsegmentDuration(mySubsegmentDuration),
+    startsWithSAP(myStartsWithSAP),
+    SAPType(mySAPType),
+    SAPDeltaTime(mySAPDeltaTime)
 {}
+QString SegmentIndexBox::getInfo() {
+    QString tmp;
+    tmp.append(FullBox::getInfo());
+    tmp.append("\nReference ID\t\t");
+    tmp.append(QString::number(referenceId));
+    tmp.append("\nTimescale\t\t");
+    tmp.append(QString::number(timescale));
+    tmp.append("\nEarliest presentation time\t");
+    tmp.append(QString::number(earliestPresentationTime));
+    tmp.append("\nFirst offset\t\t");
+    tmp.append(QString::number(firstOffset));
+    tmp.append("\nReserved\t\t");
+    tmp.append(QString::number(reserved));
+    int size = referenceType.size();
+    if(size>0) {
+        tmp.append("\nReference type\t\t");
+        for(int i=0; i<size; i++) {
+            tmp.append(QString::number(referenceType.at(i)));
+            tmp.append(" |");
+        }
+        tmp.append("\nReference size\t\t");
+        for(int i=0; i<size; i++) {
+            tmp.append(QString::number(referenceSize.at(i)));
+            tmp.append(" |");
+        }
+        tmp.append("\nSubsegment duration\t\t");
+        for(int i=0; i<size; i++) {
+            tmp.append(QString::number(subsegmentDuration.at(i)));
+            tmp.append(" |");
+        }
+        tmp.append("\nStarts with SAP\t\t");
+        for(int i=0; i<size; i++) {
+            tmp.append(QString::number(startsWithSAP.at(i)));
+            tmp.append(" |");
+        }
+        tmp.append("\nSAP type\t\t");
+        for(int i=0; i<size; i++) {
+            tmp.append(QString::number(SAPType.at(i)));
+            tmp.append(" |");
+        }
+        tmp.append("\nSAP delta time\t\t");
+        for(int i=0; i<size; i++) {
+            tmp.append(QString::number(SAPDeltaTime.at(i)));
+            tmp.append(" |");
+        }
+    }
+    return tmp;
+}
+
 ///////////////
 SubsegmentIndexBox::SubsegmentIndexBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f): FullBox(s,t,off,e, v, f) {}
 ///////////////

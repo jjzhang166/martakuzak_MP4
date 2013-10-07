@@ -33,7 +33,7 @@ QString VisualSampleEntry::getInfo() {
     tmp.append(QString::number(height));
     tmp.append("\nhorizonresolution\t");
     tmp.append(QString::number(horizresolution));
-    tmp.append("\nvertresolution\t");
+    tmp.append("\nvertresolution\t\t");
     tmp.append(QString::number(vertresolution));
     return tmp;
 }

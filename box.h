@@ -1,3 +1,25 @@
+/*!
+ * \file Box
+ * \details
+ * Box
+ * FullBox
+ * FileTypeBox
+ * MovieBox
+ * MovieExtendsBox
+ * MovieExtendsHeaderBox
+ * MovieFragmentBox
+ * MovieFragmentHeaderBox
+ * MovieFragmentRandomAccessBox
+ * MovieFragmentRandomAccessOffsetBox
+ * MovieHeaderBox
+ * MovieHintInformation
+ * MediaBox
+ * MediaDataBox
+ * MediaHeaderBox
+ * MediaInformationBox
+ * HandlerBox
+ */
+
 #ifndef BOX_H
 #define BOX_H
 
@@ -152,31 +174,7 @@ public:
 
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-class TrackBox : public Box
-{
-public:
-    TrackBox(const int& s, const QString& t, const long int& off, const int& e);
-    virtual bool isContainer() { return true; }
-    virtual QString getFullName() { return QString("Track Box"); }
-};
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-class TrackHeaderBox : public FullBox
-{
-private:
-    int version;
-    QList<int> flags;
-public:
-    TrackHeaderBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
-    virtual QString getFullName() { return QString("Track Header Box"); }
-};
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-class TrackReferenceBox : public Box
-{
-public:
-    TrackReferenceBox(const int& s, const QString& t, const long int& off, const int& e);
-    virtual QString getFullName() { return QString("Track Reference Box"); }
-};
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 class HandlerBox : public FullBox
 {
 private:
@@ -334,16 +332,6 @@ public:
     virtual QString getFullName() { return QString("Movie Extends Header Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-class TrackExtendsBox : public FullBox
-{
-private:
-    int version;
-    QList<int> flags;
-public:
-    TrackExtendsBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
-    virtual QString getFullName() { return QString("Track Extends Box"); }
-};
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MovieFragmentBox : public Box
 {
 public:
@@ -364,33 +352,7 @@ public:
     virtual QString getInfo();
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-class TrackFragmentBox : public Box
-{
-public:
-    TrackFragmentBox(const int& s, const QString& t, const long int& off, const int& e);
-    virtual bool isContainer() { return true; }
-    virtual QString getFullName() { return QString("Track Fragment Box"); }
-};
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-class TrackFragmentHeaderBox : public FullBox
-{
-private:
-    int version;
-    QList<int> flags;
-public:
-    TrackFragmentHeaderBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
-    virtual QString getFullName() { return QString("Track Fragment Header Box"); }
-};
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-class TrackRunBox : public FullBox
-{
-private:
-    int version;
-    QList<int> flags;
-public:
-    TrackRunBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
-    virtual QString getFullName() { return QString("Track Run Box"); }
-};
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MovieFragmentRandomAccessBox : public Box
 {
@@ -398,16 +360,6 @@ public:
     MovieFragmentRandomAccessBox(const int& s, const QString& t, const long int& off, const int& e);
     virtual bool isContainer() { return true; }
     virtual QString getFullName() { return QString("Movie Fragment Access Box"); }
-};
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-class TrackFragmentRandomAccessBox : public FullBox
-{
-private:
-    int version;
-    QList<int> flags;
-public:
-    TrackFragmentRandomAccessBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
-    virtual QString getFullName() { return QString("Track Fragment Random Access Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MovieFragmentRandomAccessOffsetBox : public FullBox
@@ -694,16 +646,7 @@ public:
     SampleAuxiliaryInformationOffsetsBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
     virtual QString getFullName() { return QString("Sample Auxiliary Information Offsets Box"); }
 };
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-class TrackFragmentBaseMediaDecodeTimeBox : public FullBox
-{
-private:
-    int version;
-    QList<int> flags;
-public:
-    TrackFragmentBaseMediaDecodeTimeBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
-    virtual QString getFullName() { return QString("Track Fragment Base Media Decode Time Box"); }
-};
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class LevelAssignmentBox : public FullBox
 {
@@ -720,9 +663,25 @@ class SegmentIndexBox : public FullBox
 private:
     int version;
     QList<int> flags;
+    int referenceId;
+    int timescale;
+    int earliestPresentationTime;
+    int firstOffset;
+    int reserved;
+    QList<bool> referenceType;
+    QList<int> referenceSize;
+    QList<int> subsegmentDuration;
+    QList<bool> startsWithSAP;
+    QList <int> SAPType;
+    QList <int> SAPDeltaTime;
+
 public:
-    SegmentIndexBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
+    SegmentIndexBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f, const int& referenceId,
+                    const int& timescale,const int& myEarliestPresentationTime, const int& myFirstOffset, const int& myReserved,
+                    const QList<bool>& referenceType, const QList<int> referenceSize, const QList<int> & subsegmentDuration,
+                    const QList<bool> & startsWithSAP, const QList<int>& SAPType, const QList<int>& SAPDeltaTime);
     virtual QString getFullName() { return QString("Segment Index Box"); }
+    virtual QString getInfo();
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class SubsegmentIndexBox : public FullBox

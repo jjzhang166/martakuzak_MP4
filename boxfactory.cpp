@@ -1,5 +1,5 @@
 #include "boxfactory.h"
-#include "exceptions.h"
+
 
 BoxFactory::BoxFactory(Analyzer *an): analyzer(an)
 {}
@@ -40,6 +40,8 @@ std::shared_ptr<Box> BoxFactory::getBox(int size,QString type, long int off, int
         int modificationTime;
         int timescale;
         int duration;
+        int rate;
+        int volume;
         if(version == 1) {
             creationTime = analyzer->valueOfGroupOfFields(offset+12,offset+19);
             modificationTime = analyzer->valueOfGroupOfFields(offset+20, offset+27);
@@ -51,8 +53,12 @@ std::shared_ptr<Box> BoxFactory::getBox(int size,QString type, long int off, int
             modificationTime = analyzer->valueOfGroupOfFields(offset+16, offset+19);
             timescale = analyzer->valueOfGroupOfFields(offset+20, offset+23);
             duration = analyzer->valueOfGroupOfFields(offset+24, offset+27);
+            //int rate = analyzer->valueOfGroupOfFields(offset+28, offset+31);//fixed number
+            //int volume = analyzer->valueOfGroupOfFields(offset+32, offset+33);
         }
-        std::shared_ptr<Box> ret(new MovieHeaderBox(size,type,off,e, version, f, creationTime, modificationTime, timescale, duration));
+
+        std::shared_ptr<Box> ret(new MovieHeaderBox(size,type,off,e, version, f, creationTime, modificationTime, timescale, duration,
+                                                    rate, volume));
         return ret;
     }
     else if(type=="trak"){
@@ -946,12 +952,46 @@ std::shared_ptr<Box> BoxFactory::getBox(int size,QString type, long int off, int
             offset+=8;
         if(type == QString("uuid"))
             offset+=16;
-        int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
+        int version = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<int> f;
         for (int i = 0; i<3; ++i) {
             f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
         }
-        return std::shared_ptr<Box>(new SegmentIndexBox(size,type,off,e, v, f));
+        int referenceId = analyzer->valueOfGroupOfFields(offset + 10, offset + 13);
+        int timescale = analyzer->valueOfGroupOfFields(offset + 14, offset + 17);
+
+        int earliestPresentationTime = 0;
+        int firstOffset = 0;
+        if (version == 0){
+            earliestPresentationTime = analyzer->valueOfGroupOfFields(offset + 18, offset + 21);
+            firstOffset = analyzer->valueOfGroupOfFields(offset + 22, offset + 25);
+            qDebug()<<"first offset 32"<<firstOffset;
+        }
+        else if (version == 1) {
+            earliestPresentationTime = analyzer->valueOfGroupOfFields(offset + 18, offset + 25);
+            firstOffset = analyzer->valueOfGroupOfFields(offset + 26, offset + 33);
+            qDebug()<<"first offset 64"<<firstOffset;
+            offset += 8;
+        }
+        int reserved = analyzer->valueOfGroupOfFields(offset + 26,offset + 27);
+        int referenceCount = analyzer->valueOfGroupOfFields(offset + 28, offset + 29);
+        QList<bool> referenceType;
+        QList<int> referenceSize;
+        QList<int> subsegmentDuration;
+        QList<bool> startsWithSAP;
+        QList <int> SAPType;
+        QList <int> SAPDeltaTime;
+        for(int i = 0; i<referenceCount; i++) {
+            referenceType.append(analyzer->bitValue(30,0));
+            referenceSize.append(analyzer->valueOfBits(241, 247));
+            subsegmentDuration.append(analyzer->valueOfGroupOfFields(31,34));
+            startsWithSAP.append(analyzer->bitValue(35,0));
+            SAPType.append(analyzer->valueOfBits(281,283));
+            SAPDeltaTime.append(analyzer->valueOfBits(284,311));
+        }
+        return std::shared_ptr<Box>(new SegmentIndexBox(size,type,off,e, version, f, referenceId, timescale, earliestPresentationTime,
+                                                        firstOffset, reserved, referenceType, referenceSize, subsegmentDuration,
+                                                        startsWithSAP, SAPType, SAPDeltaTime));
     }
     else if(type=="ssix"){
         int offset = 0;
@@ -959,12 +999,12 @@ std::shared_ptr<Box> BoxFactory::getBox(int size,QString type, long int off, int
             offset+=8;
         if(type == QString("uuid"))
             offset+=16;
-        int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
+        int version = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<int> f;
         for (int i = 0; i<3; ++i) {
             f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
         }
-        return std::shared_ptr<Box>(new SubsegmentIndexBox(size,type,off,e, v, f));
+        return std::shared_ptr<Box>(new SubsegmentIndexBox(size,type,off,e, version, f));
     }
     else if(type=="prft"){
         int offset = 0;

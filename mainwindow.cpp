@@ -239,6 +239,7 @@ void MainWindow::searchBox() {
         treeView->selectionModel()->select(backId, QItemSelectionModel::Select | QItemSelectionModel::Rows);
         Items.pop_back();
         boxInfo->clear();
+
     }
     mainLayout->update();
 

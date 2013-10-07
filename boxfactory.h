@@ -4,10 +4,13 @@
 #include <QList>
 #include <memory>
 #include <qDebug>
+#include "exceptions.h"
 #include "analyzer.h"
 #include "box.h"
+#include "trackbox.h"
 #include "sampleentry.h"
 #include "sampletablebox.h"
+
 
 class Analyzer;
 
