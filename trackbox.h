@@ -19,7 +19,7 @@
 class TrackBox : public Box
 {
 public:
-    TrackBox(const int& s, const QString& t, const long int& off, const int& e);
+    TrackBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e);
     virtual bool isContainer() { return true; }
     virtual QString getFullName() { return QString("Track Box"); }
 };
@@ -27,34 +27,36 @@ public:
 class TrackHeaderBox : public FullBox
 {
 private:
-    int version;
-    QList<int> flags;
+    unsigned int version;
+    QList<unsigned int> flags;
 public:
-    TrackHeaderBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
+    TrackHeaderBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e, const unsigned int& v,
+                   const QList<unsigned int>& f);
     virtual QString getFullName() { return QString("Track Header Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class TrackReferenceBox : public Box
 {
 public:
-    TrackReferenceBox(const int& s, const QString& t, const long int& off, const int& e);
+    TrackReferenceBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e);
     virtual QString getFullName() { return QString("Track Reference Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class TrackExtendsBox : public FullBox
 {
 private:
-    int version;
-    QList<int> flags;
+    unsigned int version;
+    QList<unsigned int> flags;
 public:
-    TrackExtendsBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
+    TrackExtendsBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e, const unsigned int& v,
+                    const QList<unsigned int>& f);
     virtual QString getFullName() { return QString("Track Extends Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class TrackFragmentBox : public Box
 {
 public:
-    TrackFragmentBox(const int& s, const QString& t, const long int& off, const int& e);
+    TrackFragmentBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e);
     virtual bool isContainer() { return true; }
     virtual QString getFullName() { return QString("Track Fragment Box"); }
 };
@@ -62,40 +64,40 @@ public:
 class TrackFragmentHeaderBox : public FullBox
 {
 private:
-    int version;
-    QList<int> flags;
+    unsigned int version;
+    QList<unsigned int> flags;
 public:
-    TrackFragmentHeaderBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
+    TrackFragmentHeaderBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e, const unsigned int& v, const QList<unsigned int>& f);
     virtual QString getFullName() { return QString("Track Fragment Header Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class TrackRunBox : public FullBox
 {
 private:
-    int version;
-    QList<int> flags;
+    unsigned int version;
+    QList<unsigned int> flags;
 public:
-    TrackRunBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
+    TrackRunBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e, const unsigned int& v, const QList<unsigned int>& f);
     virtual QString getFullName() { return QString("Track Run Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class TrackFragmentRandomAccessBox : public FullBox
 {
 private:
-    int version;
-    QList<int> flags;
+    unsigned int version;
+    QList<unsigned int> flags;
 public:
-    TrackFragmentRandomAccessBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
+    TrackFragmentRandomAccessBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e, const unsigned int& v, const QList<unsigned int>& f);
     virtual QString getFullName() { return QString("Track Fragment Random Access Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class TrackFragmentBaseMediaDecodeTimeBox : public FullBox
 {
 private:
-    int version;
-    QList<int> flags;
+    unsigned int version;
+    QList<unsigned int> flags;
 public:
-    TrackFragmentBaseMediaDecodeTimeBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
+    TrackFragmentBaseMediaDecodeTimeBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e, const unsigned int& v, const QList<unsigned int>& f);
     virtual QString getFullName() { return QString("Track Fragment Base Media Decode Time Box"); }
 };
 

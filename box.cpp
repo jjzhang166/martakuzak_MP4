@@ -1,9 +1,11 @@
 #include "box.h"
 
 
-Box::Box(const int &s, const QString &t, const long &off, const int & e): size(s),type(t),offset(off), extended_type(e) {}
+Box::Box(const unsigned  int &s, const QString &t, const unsigned long &off, const unsigned  int & e):
+    size(s),type(t),offset(off), extended_type(e) {}
 /////////////
-FullBox::FullBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
+FullBox::FullBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v,
+                 const QList<unsigned int>& f):
     Box(s,t,off,e),
     version(v),
     flags(f)
@@ -22,7 +24,8 @@ QString FullBox::getInfo() {
     return tmp;
 }
 /////////////
-FileTypeBox::FileTypeBox(const int& s, const QString& t, const long int& off, const int & e, const QString& mb, const QString& mv, const QList<QString>& cb):
+FileTypeBox::FileTypeBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int & e, const QString& mb, const QString& mv,
+                         const QList<QString>& cb):
     Box(s,t,off,e),
     majorBrand(mb),
     minorVersion(mv),
@@ -43,21 +46,21 @@ QString FileTypeBox::getInfo() {
     return tmp;
 }
 /////////////
-MediaBox::MediaBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
+MediaBox::MediaBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 /////////////
-MediaDataBox::MediaDataBox(const int& s, const QString& t, const long int& off, const int &  e):Box(s,t,off,e) {}
+MediaDataBox::MediaDataBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e):Box(s,t,off,e) {}
 /////////////
-MediaHeaderBox::MediaHeaderBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
+MediaHeaderBox::MediaHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f):
     FullBox(s,t,off,e, v, f) ,
     version(v),
     flags(f)
 {}
 /////////////
-MovieBox::MovieBox(const int& s, const QString& t, const long int& off, const int &  e):Box(s,t,off,e) {}
+MovieBox::MovieBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e):Box(s,t,off,e) {}
 /////////////
-MovieHeaderBox::MovieHeaderBox(const int& s, const QString& t, const long int& off, const int &  e, const int &v, const QList<int> &f,
-                               int ct, int mt, int ts, int d, int r, int vl, int r16,
-                               int r32, QList<int> mx, QList<int> pr, int nid):
+MovieHeaderBox::MovieHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int &v,
+                               const QList<unsigned int> &f, unsigned int ct, unsigned int mt, unsigned int ts, unsigned int d, unsigned int r, unsigned int vl, unsigned int r16,
+                               unsigned int r32, QList<unsigned int> mx, QList<unsigned int> pr, unsigned int nid):
     FullBox(s,t,off,e, v, f) ,
     version(v),
     flags(f),
@@ -93,13 +96,13 @@ QString MovieHeaderBox::getInfo() {
     tmp.append("\nReserved32\t\t");
     tmp.append(QString::number(reserved32));
     tmp.append("\nMatrix\t\t");
-    QList<int>::iterator i;
+    QList<unsigned int>::iterator i;
     for (i = matrix.begin(); i !=matrix.end(); ++i) {
         tmp.append(*i);
         tmp.append(" | ");
     }
     tmp.append("\nPredefined\t\t");
-    QList<int>::iterator k;
+    QList<unsigned int>::iterator k;
     for (k = predefined.begin(); k !=predefined.end(); ++k) {
         tmp.append(*k);
         tmp.append(" | ");
@@ -109,57 +112,57 @@ QString MovieHeaderBox::getInfo() {
     return tmp;
 }
 /////////////
-MediaInformationBox::MediaInformationBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
+MediaInformationBox::MediaInformationBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 /////////////
-VideoMediaHeaderBox::VideoMediaHeaderBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f): FullBox(s,t,off,e, v, f) {}
+VideoMediaHeaderBox::VideoMediaHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f): FullBox(s,t,off,e, v, f) {}
 /////////////
-SoundMediaHeaderBox::SoundMediaHeaderBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f): FullBox(s,t,off,e, v, f) {}
+SoundMediaHeaderBox::SoundMediaHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f): FullBox(s,t,off,e, v, f) {}
 /////////////
-HintMediaHeaderBox::HintMediaHeaderBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f): FullBox(s,t,off,e, v, f) {}
+HintMediaHeaderBox::HintMediaHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f): FullBox(s,t,off,e, v, f) {}
 /////////////
-NullMediaHeaderBox::NullMediaHeaderBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f): FullBox(s,t,off,e, v, f) {}
+NullMediaHeaderBox::NullMediaHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f): FullBox(s,t,off,e, v, f) {}
 /////////////
-DataInformationBox::DataInformationBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
+DataInformationBox::DataInformationBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 /////////////
-DataEntryUrnBox::DataEntryUrnBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
+DataEntryUrnBox::DataEntryUrnBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f):
     FullBox(s,t,off,e, v, f),
     version(v),
     flags(f)
 {}
 /////////////
-DataEntryUrlBox::DataEntryUrlBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
+DataEntryUrlBox::DataEntryUrlBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f):
     FullBox(s,t,off,e, v, f),
     version(v),
     flags(f)
 {}
 /////////////
-DataReferenceBox::DataReferenceBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
+DataReferenceBox::DataReferenceBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f):
     FullBox(s,t,off,e, v, f),
     version(v),
     flags(f)
 {}
 ///////////////
-FreeSpaceBox::FreeSpaceBox(bool c,const int& s, const QString& t, const long int& off, const int & e): Box(s,t,off,e), container(c) {}
+FreeSpaceBox::FreeSpaceBox(bool c,const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int & e): Box(s,t,off,e), container(c) {}
 ///////////////
-EditBox::EditBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
+EditBox::EditBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 ///////////////
-EditListBox::EditListBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
+EditListBox::EditListBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 ///////////////
-UserDataBox::UserDataBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
+UserDataBox::UserDataBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 ///////////////
-CopyRightBox::CopyRightBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
+CopyRightBox::CopyRightBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f):
     FullBox(s,t,off,e, v, f) ,
     version(v),
     flags(f)
 {}
 ///////////////
-MovieExtendsBox::MovieExtendsBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
+MovieExtendsBox::MovieExtendsBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 ///////////////
-MovieExtendsHeaderBox::MovieExtendsHeaderBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f): FullBox(s,t,off,e, v, f) {}
+MovieExtendsHeaderBox::MovieExtendsHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f): FullBox(s,t,off,e, v, f) {}
 ///////////////
-MovieFragmentBox::MovieFragmentBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
+MovieFragmentBox::MovieFragmentBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 ///////////////
-MovieFragmentHeaderBox::MovieFragmentHeaderBox(const int& s, const QString& t, const long int& off, const int &  e, const long &sn, const int& v, const QList<int>& f):
+MovieFragmentHeaderBox::MovieFragmentHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const long &sn, const unsigned int& v, const QList<unsigned int>& f):
     FullBox(s,t,off,e, v, f),
     sequenceNumber(sn){}
 QString MovieFragmentHeaderBox::getInfo() {
@@ -171,132 +174,132 @@ QString MovieFragmentHeaderBox::getInfo() {
     return tmp;
 }
 ///////////////
-MovieFragmentRandomAccessBox::MovieFragmentRandomAccessBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
+MovieFragmentRandomAccessBox::MovieFragmentRandomAccessBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 
 ///////////////
-MovieFragmentRandomAccessOffsetBox::MovieFragmentRandomAccessOffsetBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f): FullBox(s,t,off,e, v, f) {}
+MovieFragmentRandomAccessOffsetBox::MovieFragmentRandomAccessOffsetBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f): FullBox(s,t,off,e, v, f) {}
 ///////////////
-SampleDependencyTypeBox::SampleDependencyTypeBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f): FullBox(s,t,off,e, v, f) {}
+SampleDependencyTypeBox::SampleDependencyTypeBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f): FullBox(s,t,off,e, v, f) {}
 ///////////////
-SampleToGroupBox::SampleToGroupBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
+SampleToGroupBox::SampleToGroupBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f):
     FullBox(s,t,off,e, v, f),
     version(v),
     flags(f)
 {}
 ///////////////
-SampleGroupDescriptionBox::SampleGroupDescriptionBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f): FullBox(s,t,off,e, v, f) {}
+SampleGroupDescriptionBox::SampleGroupDescriptionBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f): FullBox(s,t,off,e, v, f) {}
 ///////////////
-SampleScaleBox::SampleScaleBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
+SampleScaleBox::SampleScaleBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f):
     FullBox(s,t,off,e, v, f),
     version(v),
     flags(f)
 {}
 ///////////////
-SubSampleInformationBox::SubSampleInformationBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f): FullBox(s,t,off,e, v, f) {}
+SubSampleInformationBox::SubSampleInformationBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f): FullBox(s,t,off,e, v, f) {}
 ///////////////
-ProgressiveDownloadInfoBox::ProgressiveDownloadInfoBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f): FullBox(s,t,off,e, v, f) {}
+ProgressiveDownloadInfoBox::ProgressiveDownloadInfoBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f): FullBox(s,t,off,e, v, f) {}
 ///////////////
-MetaBox::MetaBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
+MetaBox::MetaBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f):
     FullBox(s,t,off,e, v, f),
     version(v),
     flags(f)
 {}
 ///////////////
-XMLBox::XMLBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
+XMLBox::XMLBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f):
     FullBox(s,t,off,e, v, f),
     version(v),
     flags(f)
 {}
 ///////////////
-BinaryXMLBox::BinaryXMLBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
+BinaryXMLBox::BinaryXMLBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f):
     FullBox(s,t,off,e, v, f),
     version(v),
     flags(f)
 {}
 ///////////////
-ItemLocationBox::ItemLocationBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
+ItemLocationBox::ItemLocationBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f):
     FullBox(s,t,off,e, v, f),
     version(v),
     flags(f)
 {}
 ///////////////
-PrimaryItemBox::PrimaryItemBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
+PrimaryItemBox::PrimaryItemBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f):
     FullBox(s,t,off,e, v, f),
     version(v),
     flags(f)
 {}
 ///////////////
-ItemProtectionBox::ItemProtectionBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f): FullBox(s,t,off,e, v, f) {}
+ItemProtectionBox::ItemProtectionBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f): FullBox(s,t,off,e, v, f) {}
 ///////////////
-ItemInfoEntry::ItemInfoEntry(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
+ItemInfoEntry::ItemInfoEntry(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f):
     FullBox(s,t,off,e, v, f) ,
     version(v),
     flags(f)
 {}
 ///////////////
-ItemInfoBox::ItemInfoBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
+ItemInfoBox::ItemInfoBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f):
     FullBox(s,t,off,e, v, f) ,
     version(v),
     flags(f)
 {}
 ///////////////
-ProtectionSchemeInfoBox::ProtectionSchemeInfoBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
+ProtectionSchemeInfoBox::ProtectionSchemeInfoBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 ///////////////
-OriginalFormatBox::OriginalFormatBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
+OriginalFormatBox::OriginalFormatBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 ///////////////
-IPMPInfoBox::IPMPInfoBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
+IPMPInfoBox::IPMPInfoBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f):
     FullBox(s,t,off,e, v, f) ,
     version(v),
     flags(f)
 {}
 ///////////////
-IPMPControlBox::IPMPControlBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
+IPMPControlBox::IPMPControlBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f):
     FullBox(s,t,off,e, v, f),
     version(v),
     flags(f)
 {}
 ///////////////
-SchemeTypeBox::SchemeTypeBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
+SchemeTypeBox::SchemeTypeBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f):
     FullBox(s,t,off,e, v, f),
     version(v),
     flags(f)
 {}
 ///////////////
-SchemeInformationBox::SchemeInformationBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
+SchemeInformationBox::SchemeInformationBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 ///////////////
-TimeScaleEntry::TimeScaleEntry(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
+TimeScaleEntry::TimeScaleEntry(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 ///////////////
-TimeOffset::TimeOffset(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
+TimeOffset::TimeOffset(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 ///////////////
-SequenceOffset::SequenceOffset(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
+SequenceOffset::SequenceOffset(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 ///////////////
-SRTPProcessBox::SRTPProcessBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f):
+SRTPProcessBox::SRTPProcessBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f):
     FullBox(s,t,off,e, v, f),
     version(v),
     flags(f)
 {}
 ///////////////
-MovieHintInformation::MovieHintInformation(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
+MovieHintInformation::MovieHintInformation(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 ///////////////
-RTPMovieHintInformation::RTPMovieHintInformation(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
+RTPMovieHintInformation::RTPMovieHintInformation(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 ///////////////
-RTPTrackSDPHintInformation::RTPTrackSDPHintInformation(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
+RTPTrackSDPHintInformation::RTPTrackSDPHintInformation(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 ///////////////
-HintStatisticsBox::HintStatisticsBox(const int& s, const QString& t, const long int& off, const int &  e): Box(s,t,off,e) {}
+HintStatisticsBox::HintStatisticsBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 ///////////////
 ///mpeg dash
 //////////////
-SampleAuxiliaryInformationSizesBox::SampleAuxiliaryInformationSizesBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f): FullBox(s,t,off,e, v, f) {}
+SampleAuxiliaryInformationSizesBox::SampleAuxiliaryInformationSizesBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f): FullBox(s,t,off,e, v, f) {}
 ///////////////
-SampleAuxiliaryInformationOffsetsBox::SampleAuxiliaryInformationOffsetsBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f): FullBox(s,t,off,e, v, f) {}
+SampleAuxiliaryInformationOffsetsBox::SampleAuxiliaryInformationOffsetsBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f): FullBox(s,t,off,e, v, f) {}
 ///////////////
-LevelAssignmentBox::LevelAssignmentBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f): FullBox(s,t,off,e, v, f) {}
+LevelAssignmentBox::LevelAssignmentBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f): FullBox(s,t,off,e, v, f) {}
 ///////////////
-SegmentIndexBox::SegmentIndexBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f,
-                                 const int &ri, const int &ts, const int& myEarliestPresentationTime, const int& myFirstOffset,
-                                 const int &myReserved, const QList<bool>& myReferenceType, const QList<int> myReferenceSize,
-                                 const QList<int> & mySubsegmentDuration,const QList<bool> & myStartsWithSAP, const QList<int>& mySAPType,
-                                 const QList<int>& mySAPDeltaTime):
+SegmentIndexBox::SegmentIndexBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f,
+                                 const unsigned int &ri, const unsigned int &ts, const unsigned int& myEarliestPresentationTime, const unsigned int& myFirstOffset,
+                                 const unsigned int &myReserved, const QList<bool>& myReferenceType, const QList<unsigned  int> myReferenceSize,
+                                 const QList<unsigned  int> &mySubsegmentDuration, const QList<bool> & myStartsWithSAP, const QList<unsigned  int> &mySAPType,
+                                 const QList<unsigned  int> &mySAPDeltaTime):
     FullBox(s,t,off,e, v, f),
     version(v),
     flags(f),
@@ -325,35 +328,35 @@ QString SegmentIndexBox::getInfo() {
     tmp.append(QString::number(firstOffset));
     tmp.append("\nReserved\t\t");
     tmp.append(QString::number(reserved));
-    int size = referenceType.size();
+    unsigned int size = referenceType.size();
     if(size>0) {
         tmp.append("\nReference type\t\t");
-        for(int i=0; i<size; i++) {
+        for(unsigned int i=0; i<size; i++) {
             tmp.append(QString::number(referenceType.at(i)));
             tmp.append(" |");
         }
         tmp.append("\nReference size\t\t");
-        for(int i=0; i<size; i++) {
+        for(unsigned int i=0; i<size; i++) {
             tmp.append(QString::number(referenceSize.at(i)));
             tmp.append(" |");
         }
         tmp.append("\nSubsegment duration\t\t");
-        for(int i=0; i<size; i++) {
+        for(unsigned int i=0; i<size; i++) {
             tmp.append(QString::number(subsegmentDuration.at(i)));
             tmp.append(" |");
         }
         tmp.append("\nStarts with SAP\t\t");
-        for(int i=0; i<size; i++) {
+        for(unsigned int i=0; i<size; i++) {
             tmp.append(QString::number(startsWithSAP.at(i)));
             tmp.append(" |");
         }
         tmp.append("\nSAP type\t\t");
-        for(int i=0; i<size; i++) {
+        for(unsigned int i=0; i<size; i++) {
             tmp.append(QString::number(SAPType.at(i)));
             tmp.append(" |");
         }
         tmp.append("\nSAP delta time\t\t");
-        for(int i=0; i<size; i++) {
+        for(unsigned int i=0; i<size; i++) {
             tmp.append(QString::number(SAPDeltaTime.at(i)));
             tmp.append(" |");
         }
@@ -362,7 +365,7 @@ QString SegmentIndexBox::getInfo() {
 }
 
 ///////////////
-SubsegmentIndexBox::SubsegmentIndexBox(const int& s, const QString& t, const long int& off, const int &  e, const int& v, const QList<int>& f): FullBox(s,t,off,e, v, f) {}
+SubsegmentIndexBox::SubsegmentIndexBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f): FullBox(s,t,off,e, v, f) {}
 ///////////////
-ProducerReferenceTimeBox::ProducerReferenceTimeBox(const int& s, const QString& t, const long int& off, const int &  e, const int &v, const QList<int> &f): FullBox(s,t,off,e, v, f) {}
+ProducerReferenceTimeBox::ProducerReferenceTimeBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int &v, const QList<unsigned int> &f): FullBox(s,t,off,e, v, f) {}
 ///////////////

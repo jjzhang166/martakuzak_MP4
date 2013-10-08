@@ -22,13 +22,13 @@ private:
     unsigned int* reserved;
     unsigned int data_reference_index;
 public:
-    SampleEntry(const int &s=0, const QString &t="", const long &off=0, int e=0, const unsigned int &dri=0);
+    SampleEntry(const unsigned int &s=0, const QString &t="", const unsigned long &off=0, unsigned int e=0, const unsigned int &dri=0);
     virtual QString getFullName() { return QString("Sample Entry"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class HintSampleEntry: public SampleEntry {
 public:
-    HintSampleEntry(const int& s, const QString& t, const long int& off, const int& e);
+    HintSampleEntry(const unsigned int &s=0, const QString &t="", const unsigned long &off=0, const unsigned int& e=0);
     virtual QString getFullName() { return QString("Hint Sample Entry"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,13 +45,13 @@ private:
     unsigned int frame_count;
     QString compressorname;
     unsigned int depth;
-    int pre_defined2;
+    unsigned int pre_defined2;
 public:
-    VisualSampleEntry(const int &s=0, const QString &t="", const long &off=0, const int& e=0, const unsigned int& dri=0,
+    VisualSampleEntry(const unsigned int &s=0, const QString &t="", const unsigned long &off=0, const unsigned int& e=0, const unsigned int& dri=0,
                       const unsigned int pd=0, const unsigned int& r2=0, const unsigned int & pd1=0,
                       const unsigned int&wdth=0, const unsigned int& hght=0, const unsigned int& hr=72,
                       const unsigned int& vr=72, const unsigned int& r3=0, const unsigned int& fc=1,
-                      QString csn="", const unsigned int& dpth=0x0018, int pd2=-1);
+                      QString csn="", const unsigned int& dpth=0x0018, unsigned int pd2=-1);
     virtual bool isContainer() { return true; }
     unsigned int getWidth() { return width; }
     QString getQStringWidth() { return QString::number(width); }
@@ -64,18 +64,18 @@ public:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class AudioSampleEntry: public SampleEntry{
 public:
-    AudioSampleEntry(const int& s, const QString& t, const long int& off, const int& e);
+    AudioSampleEntry(const unsigned int &s=0, const QString &t="", const unsigned long &off=0, const unsigned int& e=0);
     virtual QString getFullName() { return QString("Audio Sample Entry"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MP4VisualSampleEntry : public VisualSampleEntry
 {
 public:
-    MP4VisualSampleEntry(const int &s=0, const QString &t="", const long &off=0, const int& e=0, const unsigned int& dri=0,
+    MP4VisualSampleEntry(const unsigned int &s=0, const QString &t="", const unsigned long &off=0, const unsigned int& e=0, const unsigned int& dri=0,
                          const unsigned int pd=0, const unsigned int& r2=0, const unsigned int & pd1=0,
                          const unsigned int&wdth=0, const unsigned int& hght=0, const unsigned int& hr=72,
                          const unsigned int& vr=72, const unsigned int& r3=0, const unsigned int& fc=1,
-                         QString csn="", const unsigned int& dpth=0x0018, int pd2=-1);
+                         QString csn="", const unsigned int& dpth=0x0018, unsigned int pd2=-1);
     virtual bool isContainer() { return true; }
     virtual unsigned int getOffset() { return 86; }
     virtual QString getFullName() { return QString("MP4 Visual Sample Entry"); }
@@ -84,7 +84,7 @@ public:
 class MP4AudioSampleEntry : public AudioSampleEntry
 {
 public:
-    MP4AudioSampleEntry(const int& s, const QString& t, const long int& off, const int& e);
+    MP4AudioSampleEntry(const unsigned int &s=0, const QString &t="", const unsigned long &off=0, const unsigned int& e=0);
     virtual bool isContainer() { return true; }
     virtual unsigned int getOffset() { return 36; }
     virtual QString getFullName() { return QString("MP4 Audio Sample Entry"); }
@@ -93,7 +93,7 @@ public:
 class MpegSampleEntry : public SampleEntry
 {
 public:
-    MpegSampleEntry(const int& s, const QString& t, const long int& off, const int& e);
+    MpegSampleEntry(const unsigned int &s, const QString& t, const unsigned long &off, const unsigned int &e);
     virtual bool isContainer() { return true; }
     virtual QString getFullName() { return QString("Mpeg Sample Entry"); }
 };
@@ -101,20 +101,20 @@ public:
 class ObjectDescriptorBox : public FullBox
 {
 private:
-    int version;
-    QList<int> flags;
+    unsigned int version;
+    QList<unsigned int> flags;
 public:
-    ObjectDescriptorBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
+    ObjectDescriptorBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int& e, const unsigned int& v, const QList<unsigned int>& f);
     virtual QString getFullName() { return QString("Object Descriptor Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class ESDBox : public FullBox
 {
 private:
-    int version;
-    QList<int> flags;
+    unsigned int version;
+    QList<unsigned int> flags;
 public:
-    ESDBox(const int& s, const QString& t, const long int& off, const int& e, const int& v, const QList<int>& f);
+    ESDBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int& e, const unsigned int& v,const QList<unsigned int>& f);
     virtual unsigned int getOffset() { return 8; }
     virtual QString getFullName() { return QString("ESD Box"); }
 };
