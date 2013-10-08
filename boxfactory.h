@@ -35,7 +35,7 @@ public:
      * \param e
      * \return Box created according to the given and extra parametrs
      */
-    std::shared_ptr<Box> getBox(int size=0, QString type="", long int off=0, int e=0);
+    std::shared_ptr<Box> getBox(const unsigned int& size=0, QString type="", unsigned long int off=0, const unsigned int&  e=0);
 };
 
 #endif // BOXFACTORY_H
