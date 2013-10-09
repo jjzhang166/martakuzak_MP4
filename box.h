@@ -122,6 +122,9 @@ public:
     MediaBox(const unsigned  int &s, const QString& t, const unsigned long &off, const unsigned  int &e);
     virtual bool isContainer() { return true; }
     virtual QString getFullName() { return QString("Media Box"); }
+    virtual QString getInfo() {
+        return QString("Media Box is a container for all objects that declare information about the media data within a track.");
+    }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 class MediaDataBox : public Box
@@ -129,6 +132,9 @@ class MediaDataBox : public Box
 public:
     MediaDataBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e);
     virtual QString getFullName() { return QString("Media Data Box"); }
+    virtual QString getInfo() {
+        return QString("Media Box contains the media data.");
+    }
 };
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 class MediaHeaderBox : public FullBox
@@ -147,6 +153,9 @@ public:
     MovieBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e);
     virtual bool isContainer() { return true; }
     virtual QString getFullName() { return QString("Movie Box"); }
+    virtual QString getInfo() {
+        return QString("Movie Box is container box for all meta-data.");
+    }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MovieHeaderBox : public FullBox
@@ -302,6 +311,7 @@ class UserDataBox : public Box
 public:
     UserDataBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e);
     virtual QString getFullName() { return QString("User Data Box"); }
+    virtual QString getInfo() { return QString("User Data Box is container for objects that declare user information about the containing box and its data (presentation or track)."); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class CopyRightBox : public FullBox

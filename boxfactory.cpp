@@ -41,6 +41,12 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         std::shared_ptr<Box> ret(new VideoMediaHeaderBox(size,type,off,e, v, f));
         return ret;
     }
+    ////!!!
+    else if(type == "avc1"){
+        return std::shared_ptr<Box>(new MP4VisualSampleEntry(size,type,off,e,0,0,0,0,
+                                                             analyzer->valueOfGroupOfFields(32,33),
+                                                             analyzer->valueOfGroupOfFields(34,35)));
+    }
     else if(type=="nmhd"){
         unsigned int offset = 0;
         if(size == 1)
@@ -550,9 +556,45 @@ std::shared_ptr<Box> BoxFactory::getTBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
-        std::shared_ptr<Box> ret(new TrackHeaderBox(size,type,off,e, v, f));
+        unsigned long int creationTime = 0;
+        unsigned long int modificationTime = 0;
+        unsigned int trackID = 0;
+        unsigned int reserved1;
+        unsigned long int duration;
+        if(v == 1) {
+            creationTime = analyzer->valueOfGroupOfFields(offset + 12, offset + 19);
+            modificationTime = analyzer->valueOfGroupOfFields(offset + 20, offset + 27);
+            trackID = analyzer->valueOfGroupOfFields(offset + 28, offset + 31);
+            reserved1 = analyzer->valueOfGroupOfFields(offset + 32, offset + 35);
+            duration = analyzer->valueOfGroupOfFields(offset + 36, offset + 43);
+            offset += 12;
+        }
+        else if(v == 0) {
+            creationTime = analyzer->valueOfGroupOfFields(offset + 12, offset + 15);
+            modificationTime = analyzer->valueOfGroupOfFields(offset + 16, offset + 19);
+            trackID = analyzer->valueOfGroupOfFields(offset + 20, offset + 23);
+            reserved1 = analyzer->valueOfGroupOfFields(offset + 24, offset + 27);
+            duration = analyzer->valueOfGroupOfFields(offset + 28, offset + 31);
+        }
+        QList<unsigned int> reserved2;
+        reserved2.append(analyzer->valueOfGroupOfFields(offset + 32, offset + 35));
+        reserved2.append(analyzer->valueOfGroupOfFields(offset + 36, offset + 39));
+        unsigned int layer = analyzer->valueOfGroupOfFields(offset + 40,offset + 41);
+        unsigned int alternateGroup = analyzer->valueOfGroupOfFields(offset + 42, offset + 42);
+        unsigned int volume = analyzer->valueOfGroupOfFields(offset + 44, offset + 45);
+        unsigned int reserved3 = analyzer->valueOfGroupOfFields(offset + 46, offset + 47);
+        QList<unsigned long int> matrix;
+        for(int i = 0; i<9; i++) {
+            matrix.append(analyzer->valueOfGroupOfFields(offset + 48 , offset + 51 ));
+            offset += 4;
+        }
+        offset -= 4;
+        unsigned int width = analyzer->valueOfGroupOfFields(offset + 49, offset + 53);
+        unsigned int height = analyzer->valueOfGroupOfFields(offset + 54, offset + 57);
+        std::shared_ptr<Box> ret(new TrackHeaderBox(size,type,off,e, v, f, creationTime, modificationTime, trackID, reserved1, duration,
+                                                    reserved2, layer, alternateGroup, volume, reserved3, matrix, width, height));
         return ret;
     }
     else if(type=="tref"){
