@@ -446,7 +446,51 @@ std::shared_ptr<Box> BoxFactory::getMBox(const unsigned int& size, QString type,
         for (unsigned int i = 0; i<3; ++i) {
             f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
         }
-        std::shared_ptr<Box> ret(new MediaHeaderBox(size,type,off,e, v, f));
+        unsigned long int creationTime;
+        unsigned long int modificationTime;
+        unsigned int timescale;
+        unsigned long int duration;
+        if(v == 1) {
+            creationTime = analyzer->valueOfGroupOfFields(offset + 12, offset + 19);
+            modificationTime = analyzer->valueOfGroupOfFields(offset + 20, offset + 27);
+            timescale = analyzer->valueOfGroupOfFields(offset + 28, offset + 35);
+            duration = analyzer->valueOfGroupOfFields(offset + 36, offset + 43);
+            offset += 12;
+        }
+        else if (v == 0) {
+            creationTime = analyzer->valueOfGroupOfFields(offset + 12, offset + 15);
+            modificationTime = analyzer->valueOfGroupOfFields(offset + 16, offset + 19);
+            timescale = analyzer->valueOfGroupOfFields(offset + 20, offset + 23);
+            duration = analyzer->valueOfGroupOfFields(offset + 24, offset + 27);
+        }
+
+        unsigned long int byteValue = analyzer->valueOfGroupOfFields(offset + 28, offset + 31);
+        QString tmpValue = QString::number(byteValue,2);
+        int tmpSize = tmpValue.size();
+        if(tmpSize < 32) {
+            int delta = 32 - tmpSize;
+            for (int i = 0; i<delta; ++i) {
+                tmpValue = tmpValue.insert(0, "0");
+            }
+        }
+        QString qstringPad = tmpValue.mid(0,1);
+        bool pad = (qstringPad.toUInt(0,2) == 0);
+        QList<unsigned int> language;
+        for(int i = 0; i<3; ++i) {
+            QString qstringLan = tmpValue.mid(1+i*5,5);
+            language.append(qstringLan.toUInt(0,2));
+        }
+        QString qstringPred = tmpValue.mid(16, 16);
+        unsigned int predefined = qstringPred.toUInt(0,2);
+//        QString qstringStarsWithSAP = tmpValue.mid(0,1);
+//        startsWithSAP.append(qstringStarsWithSAP.toUInt(0,2));
+//        QString qstringSAPType = tmpValue.mid(1,3);
+//        SAPType.append(qstringSAPType.toUInt(0,2));
+//        QString qstringSAPDeltaTime = tmpValue.mid(4,28);
+//        SAPDeltaTime.append(qstringSAPDeltaTime.toUInt(0,2))
+
+        std::shared_ptr<Box> ret(new MediaHeaderBox(size,type,off,e, v, f, creationTime, modificationTime, timescale, duration,
+                                                    pad, language, predefined));
         return ret;
     }
     else if(type=="mdia"){
@@ -951,8 +995,8 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
             QString qstringSAPDeltaTime = tmpValue.mid(4,28);
             SAPDeltaTime.append(qstringSAPDeltaTime.toUInt(0,2));
 
-//            startsWithSAP.append(analyzer->bitValue(offset+40,0));
-//            int SAPTypeBitOffset = (offset + 39) * 8;
+            //            startsWithSAP.append(analyzer->bitValue(offset+40,0));
+            //            int SAPTypeBitOffset = (offset + 39) * 8;
 //            SAPType.append(analyzer->valueOfBits(SAPTypeBitOffset+312,SAPTypeBitOffset+314));
 //            SAPDeltaTime.append(analyzer->valueOfBits(SAPTypeBitOffset+315,SAPTypeBitOffset+342));
             offset += 12;

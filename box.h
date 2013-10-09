@@ -142,9 +142,19 @@ class MediaHeaderBox : public FullBox
 private:
     unsigned  int version;
     QList<unsigned int> flags;
+    unsigned long int creationTime;
+    unsigned long int modificationTime;
+    unsigned int timescale;
+    unsigned long int duration;
+    bool pad;
+    QList<unsigned int> language;
+    unsigned int predefined;
 public:
-    MediaHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int& e, const unsigned  int& v, const QList<unsigned int>& f);
+    MediaHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int& e, const unsigned  int& v,
+                   const QList<unsigned int>& f, const unsigned long int& ct, const unsigned long int& mt, const unsigned int & ts,
+                   const unsigned long int & dur, const bool & pad, const QList<unsigned int> & lan, const unsigned int & pd);
     virtual QString getFullName() { return QString("Media Header Box"); }
+    virtual QString getInfo();
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MovieBox : public Box

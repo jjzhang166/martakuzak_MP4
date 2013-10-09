@@ -50,11 +50,47 @@ MediaBox::MediaBox(const unsigned  int& s, const QString& t, const unsigned long
 /////////////
 MediaDataBox::MediaDataBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e):Box(s,t,off,e) {}
 /////////////
-MediaHeaderBox::MediaHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f):
+MediaHeaderBox::MediaHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e,
+                               const unsigned  int& v, const QList<unsigned int>& f, const unsigned long &ct, const unsigned long &mt,
+                               const unsigned int &ts, const unsigned long &dur, const bool &pd, const QList<unsigned int> &lan,
+                               const unsigned int &prd):
     FullBox(s,t,off,e, v, f) ,
     version(v),
-    flags(f)
+    flags(f),
+    creationTime(ct),
+    modificationTime(mt),
+    timescale(ts),
+    duration(dur),
+    pad(pd),
+    language(lan),
+    predefined(prd)
 {}
+QString MediaHeaderBox::getInfo() {
+    QString tmp("");
+    tmp.append(FullBox::getInfo());
+    tmp.append("\nCreation time\t\t");
+    tmp.append(QString::number(creationTime));
+    tmp.append("\nModification time\t");
+    tmp.append(QString::number(modificationTime));
+    tmp.append("\nTimescale\t\t");
+    tmp.append(QString::number(timescale));
+    tmp.append("\nDuration\t\t");
+    tmp.append(QString::number(duration));
+    tmp.append("\nPad\t\t");
+    if(pad)
+        tmp.append("1");
+    else
+        tmp.append("0");
+    int lanSize = language.size();
+    tmp.append("\nLanguage\t\t");
+    for(int i = 0; i < lanSize; ++i) {
+        tmp.append(QString::number(language.at(i)));
+        tmp.append(" | ");
+    }
+    tmp.append("\nPredefined\t\t");
+    tmp.append(QString::number(predefined));
+    return tmp;
+}
 /////////////
 MovieBox::MovieBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e):Box(s,t,off,e) {}
 /////////////
