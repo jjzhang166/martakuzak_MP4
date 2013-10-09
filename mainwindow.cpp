@@ -13,7 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setMinimumSize(160, 160);
     const int m_width = QApplication::desktop()->width();
     const int m_height = QApplication::desktop()->height();
-    resize(0.8*m_width, 0.5*m_height);
+    resize(0.8*m_width, 0.65*m_height);
 
     mainLayout = new QVBoxLayout();
     boxParseLayout = new QHBoxLayout();
@@ -71,7 +71,6 @@ void MainWindow::createMenu()
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::setSearchBoxSection() {
-
     searchBoxGroupBox = new QGroupBox();
 
     searchLabel = new QLabel("Type box type: ");
@@ -169,9 +168,16 @@ void MainWindow::openFile()
     QString fileName = QFileDialog::getOpenFileName(this,
                                                     tr("Open File"), "/", tr("MP4 Files (*.mp4)"));
     if(fileName.length()) {
+//        boxParsingProgressDialog = new QProgressDialog(this);
+//        boxParsingProgress = new QProgressBar();
+//        boxParsingProgress->setFormat("Box analyzing %p");
+//        boxParsingProgressDialog->setBar(boxParsingProgress);
+//        boxParsingProgressDialog->show();
+
         if(!searchBoxLayout->count())
             setSearchBoxSection();
         setBoxInfoSection(fileName);
+        //boxParsingProgressDialog->close();
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////

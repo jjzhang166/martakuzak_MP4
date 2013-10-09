@@ -83,7 +83,7 @@ QString MovieHeaderBox::getInfo() {
     tmp.append(QString::number(creationTime));
     tmp.append("\nModification time\t");
     tmp.append(QString::number(modificationTime));
-    tmp.append("\nTime scale\t\t");
+    tmp.append("\nTimescale\t\t");
     tmp.append(QString::number(timeScale));
     tmp.append("\nDuration\t\t");
     tmp.append(QString::number(duration));
@@ -168,7 +168,7 @@ MovieFragmentHeaderBox::MovieFragmentHeaderBox(const unsigned  int& s, const QSt
 QString MovieFragmentHeaderBox::getInfo() {
     QString tmp("");
     tmp.append(FullBox::getInfo());
-    tmp.append("\n\tSequence number\t\t");
+    tmp.append("\nSequence number\t\t");
     tmp.append(QString::number(sequenceNumber));
     qDebug()<<sequenceNumber;
     return tmp;
@@ -340,7 +340,7 @@ QString SegmentIndexBox::getInfo() {
             tmp.append(QString::number(referenceSize.at(i)));
             tmp.append(" |");
         }
-        tmp.append("\nSubsegment duration\t\t");
+        tmp.append("\nSubsegment duration\t");
         for(unsigned int i=0; i<size; i++) {
             tmp.append(QString::number(subsegmentDuration.at(i)));
             tmp.append(" |");

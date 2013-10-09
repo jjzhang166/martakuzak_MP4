@@ -19,6 +19,8 @@
 #include <QGridLayout>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QProgressBar>
+#include <QProgressDialog>
 #include <QDirModel>
 #include <QLineEdit>
 #include <qDebug>
@@ -57,6 +59,8 @@ private:
     QLabel * searchLabel;
     QLineEdit * typeBoxType;
     QPushButton * nextSearchButton;
+    QProgressBar * boxParsingProgress;
+    QProgressDialog * boxParsingProgressDialog;
     //info box content
     QLabel * boxNameLabel;
     QTextEdit * boxInfo;
