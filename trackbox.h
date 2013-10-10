@@ -10,6 +10,7 @@
  * TrackHeaderBox
  * TrackReferenceBox
  * TrackRunBox
+ * HandlerBox
  */
 #ifndef TRACKBOX_H
 #define TRACKBOX_H
@@ -119,6 +120,23 @@ private:
 public:
     TrackFragmentBaseMediaDecodeTimeBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e, const unsigned int& v, const QList<unsigned int>& f);
     virtual QString getFullName() { return QString("Track Fragment Base Media Decode Time Box"); }
+};
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+class HandlerBox : public FullBox
+{
+private:
+    unsigned  int version;
+    QList<unsigned int> flags;
+    unsigned int predefined;
+    unsigned long int handlerType;
+    QList<unsigned int> reserved;
+    QString name;
+public:
+    HandlerBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int& e, const unsigned  int& v,
+               const QList<unsigned int>& f, const unsigned int & pred, const unsigned int & hand, const QList<unsigned int> & res,
+               const QString & nam);
+    virtual QString getFullName() { return QString("Handler Box"); }
+    virtual QString getInfo();
 };
 
 #endif // TRACKBOX_H

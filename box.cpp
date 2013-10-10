@@ -150,7 +150,28 @@ QString MovieHeaderBox::getInfo() {
 /////////////
 MediaInformationBox::MediaInformationBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 /////////////
-VideoMediaHeaderBox::VideoMediaHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f): FullBox(s,t,off,e, v, f) {}
+VideoMediaHeaderBox::VideoMediaHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e,
+                                         const unsigned  int& v, const QList<unsigned int>& f, const unsigned int &gmode,
+                                         const QList<unsigned int> &opc):
+    FullBox(s,t,off,e, v, f),
+    version(v),
+    flags(f),
+    graphicsmode(gmode),
+    opcolor(opc)
+{}
+QString VideoMediaHeaderBox::getInfo() {
+    QString tmp("");
+    tmp.append(FullBox::getInfo());
+    tmp.append("\nGraphicsmode\t\t");
+    tmp.append(QString::number(graphicsmode));
+    int ocSize = opcolor.size();
+    for (int i = 0; i<ocSize; ++i) {
+        tmp.append(QString::number(opcolor.at(i)));
+        tmp.append(" | ");
+    }
+    return tmp;
+}
+
 /////////////
 SoundMediaHeaderBox::SoundMediaHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f): FullBox(s,t,off,e, v, f) {}
 /////////////

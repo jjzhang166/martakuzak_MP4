@@ -38,15 +38,20 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         for (unsigned int i = 0; i<3; ++i) {
             f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
         }
-        std::shared_ptr<Box> ret(new VideoMediaHeaderBox(size,type,off,e, v, f));
+        unsigned int graphicsMode = analyzer ->valueOfGroupOfFields(offset + 12, offset + 13);
+        QList <unsigned int> opcolor;
+        for (int i = 0; i<3; ++i) {
+            opcolor.append(analyzer->valueOfGroupOfFields(offset + 14 + i*2, offset + 15 + i*2));
+        }
+        std::shared_ptr<Box> ret(new VideoMediaHeaderBox(size,type,off,e, v, f, graphicsMode, opcolor));
         return ret;
     }
     ////!!!
-    else if(type == "avc1"){
-        return std::shared_ptr<Box>(new MP4VisualSampleEntry(size,type,off,e,0,0,0,0,
-                                                             analyzer->valueOfGroupOfFields(32,33),
-                                                             analyzer->valueOfGroupOfFields(34,35)));
-    }
+//    else if(type == "avc1"){
+//        return std::shared_ptr<Box>(new MP4VisualSampleEntry(size,type,off,e,0,0,0,0,
+//                                                             analyzer->valueOfGroupOfFields(32,33),
+//                                                             analyzer->valueOfGroupOfFields(34,35)));
+//    }
     else if(type=="nmhd"){
         unsigned int offset = 0;
         if(size == 1)
@@ -517,17 +522,44 @@ std::shared_ptr<Box> BoxFactory::getMBox(const unsigned int& size, QString type,
         return ret;
     }
     else if(type=="mp4v" /*|| type == "avc1"*/){
-        return std::shared_ptr<Box>(new MP4VisualSampleEntry(size,type,off,e,0,0,0,0,
-                                                             analyzer->valueOfGroupOfFields(32,33),
-                                                             analyzer->valueOfGroupOfFields(34,35)));
+        QList <unsigned int> reserved;
+        for(int i = 0; i<6; ++i) {
+            reserved.append(analyzer->valueOfGroupOfFields(8+i,8+i));
+        }
+        unsigned int dataReferenceIndex = analyzer->valueOfGroupOfFields(14,15);
+        unsigned int predefined = analyzer->valueOfGroupOfFields(16,17);
+        unsigned int reserved1 = analyzer->valueOfGroupOfFields(18,19);
+        QList <unsigned int> predefined1;
+        for(int i = 0; i<3; ++i) {
+            predefined1.append(analyzer->valueOfGroupOfFields(20 + i,23 + i));
+        }
+        unsigned int width = analyzer->valueOfGroupOfFields(32,33);
+        unsigned int height = analyzer->valueOfGroupOfFields(34,35);
+        unsigned int horizonresolution = analyzer ->valueOfGroupOfFields(36,39)/65536;
+        unsigned int vertresolution = analyzer->valueOfGroupOfFields(40,43)/65536;
+        unsigned int reserved2 = analyzer->valueOfGroupOfFields(44,47);
+        unsigned int frameCount = analyzer->valueOfGroupOfFields(48,49);
+        unsigned int cname = analyzer->valueOfGroupOfFields(50,81);
+        QString compressorName = analyzer->toQString(cname, 4);
+        unsigned int depth = analyzer->valueOfGroupOfFields(82,83);
+        int predefined2 = analyzer->valueOfGroupOfFields(84,85);
+        return std::shared_ptr<Box>(new MP4VisualSampleEntry(size,type,off,e,reserved,dataReferenceIndex, predefined, reserved1, predefined1,
+                                                             width,height,horizonresolution, vertresolution, reserved2, frameCount,
+                                                             compressorName, depth, predefined2));
     }
     else if(type=="mp4a"){
         //33
 
-        return std::shared_ptr<Box>(new MP4AudioSampleEntry(size,type,off,e));
+       //
+        //return std::shared_ptr<Box>(new MP4AudioSampleEntry(size,type,off,e));
     }
     else if(type=="mp4s"){
-        return std::shared_ptr<Box>(new MpegSampleEntry(size,type,off,e));
+        QList <unsigned int> reserved;
+        for(int i = 0; i<6; ++i) {
+            reserved.append(analyzer->valueOfGroupOfFields(8+i,8+i));
+        }
+        unsigned int dataReferenceIndex = analyzer->valueOfGroupOfFields(14,15);
+        return std::shared_ptr<Box>(new MpegSampleEntry(size,type,off,e,reserved,dataReferenceIndex));
     }
     else if(type=="mvex"){
         std::shared_ptr<Box> ret(new MovieExtendsBox(size,type,off,e));
@@ -1117,7 +1149,15 @@ std::shared_ptr<Box> BoxFactory::getHBox(const unsigned int& size, QString type,
         for (unsigned int i = 0; i<3; ++i) {
             f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
         }
-        std::shared_ptr<Box> ret(new HandlerBox(size,type,off,e, v, f));
+        unsigned int predefined = analyzer->valueOfGroupOfFields(offset + 12, offset + 15);
+        unsigned long int handlerType = analyzer->valueOfGroupOfFields(offset + 16, offset + 19);
+        QList <unsigned int> reserved;
+        for(int i = 0; i<3; ++i) {
+            reserved.append(analyzer->valueOfGroupOfFields(offset + 20 + 4*i, offset + 23 + 4*i));
+        }
+        unsigned long int intName = analyzer->valueOfGroupOfFields(offset + 32, offset + 35);
+        QString name = analyzer->toQString(intName, 4);
+        std::shared_ptr<Box> ret(new HandlerBox(size,type,off,e, v, f, predefined, handlerType, reserved, name));
         return ret;
     }
     else if(type=="hmhd"){

@@ -68,11 +68,33 @@ QString TrackHeaderBox::getInfo() {
 TrackReferenceBox::TrackReferenceBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 /////////////
 HandlerBox::HandlerBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e,
-                       const unsigned  int& v, const QList<unsigned int>& f):
+                       const unsigned  int& v, const QList<unsigned int>& f, const unsigned int &pred, const unsigned int &hand,
+                       const QList<unsigned int> &res, const QString &nam):
     FullBox(s,t,off,e, v, f) ,
     version(v),
-    flags(f)
+    flags(f),
+    predefined(pred),
+    handlerType(hand),
+    reserved(res),
+    name(nam)
 {}
+QString HandlerBox::getInfo() {
+    QString tmp("");
+    tmp.append(FullBox::getInfo());
+    tmp.append("\nPredefined\t\t");
+    tmp.append(QString::number(predefined));
+    tmp.append("\nHandler type\t\t");
+    tmp.append(QString::number(handlerType));
+    int resSize = reserved.size();
+    for (int i = 0; i<resSize; ++i) {
+        tmp.append(QString::number(reserved.at(i)));
+        tmp.append(" | ");
+    }
+    tmp.append("\nName\t\t");
+    tmp.append(name);
+    return tmp;
+}
+
 /////////////
 TrackExtendsBox::TrackExtendsBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e,
                                  const unsigned  int& v, const QList<unsigned int>& f):

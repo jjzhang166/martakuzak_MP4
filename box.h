@@ -17,7 +17,6 @@
  * MediaDataBox
  * MediaHeaderBox
  * MediaInformationBox
- * HandlerBox
  */
 
 #ifndef BOX_H
@@ -193,23 +192,13 @@ public:
 
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-class HandlerBox : public FullBox
-{
-private:
-    unsigned  int version;
-    QList<unsigned int> flags;
-public:
-    HandlerBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int& e, const unsigned  int& v, const QList<unsigned int>& f);
-    virtual QString getFullName() { return QString("Handler Box"); }
-};
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MediaInformationBox : public Box
 {
 public:
     MediaInformationBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e);
     virtual bool isContainer() { return true; }
     virtual QString getFullName() { return QString("Media Information Box"); }
+    virtual QString getInfo() { return QString("Media Information Box is a box container for objects that declare characteristic information of the media in the track."); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class VideoMediaHeaderBox : public FullBox
@@ -217,9 +206,14 @@ class VideoMediaHeaderBox : public FullBox
 private:
     unsigned  int version;
     QList<unsigned int> flags;
+    unsigned int graphicsmode;
+    QList <unsigned int> opcolor;
 public:
-    VideoMediaHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int& e, const unsigned  int& v, const QList<unsigned int>& f);
+    VideoMediaHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int& e,
+                        const unsigned  int& v, const QList<unsigned int>& f, const unsigned int & graphicsmode,
+                        const QList <unsigned int> & opcolor);
     virtual QString getFullName() { return QString("Video Media Header Box"); }
+    virtual QString getInfo();
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class SoundMediaHeaderBox : public FullBox
