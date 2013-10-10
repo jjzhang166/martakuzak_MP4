@@ -171,7 +171,6 @@ QString VideoMediaHeaderBox::getInfo() {
     }
     return tmp;
 }
-
 /////////////
 SoundMediaHeaderBox::SoundMediaHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f): FullBox(s,t,off,e, v, f) {}
 /////////////
@@ -203,11 +202,51 @@ FreeSpaceBox::FreeSpaceBox(bool c,const unsigned  int& s, const QString& t, cons
 ///////////////
 EditBox::EditBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 ///////////////
-EditListBox::EditListBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
+EditListBox::EditListBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e,
+                         const unsigned int& v, const QList<unsigned int>& f, const unsigned int & eCount,
+                         const QList<unsigned long int>& segmD, const QList<unsigned long int>&medT, const QList<unsigned int>& mri,
+                         const QList<unsigned int>& mrf):
+    FullBox(s,t,off,e, v, f),
+    version(v),
+    flags(f),
+    entryCount(eCount),
+    segmentDuration(segmD),
+    mediaTime(medT),
+    mediaRateInteger(mri),
+    mediaRateFraction(mrf)
+{}
+QString EditListBox::getInfo() {
+    QString tmp("");
+    tmp.append(FullBox::getInfo());
+    tmp.append("\nEntry count\t\t");
+    tmp.append(QString::number(entryCount));
+    tmp.append("\nSegment duration\t");
+    for (unsigned int i = 0; i<entryCount; ++i) {
+        tmp.append(QString::number(segmentDuration.at(i)));
+        tmp.append(" | ");
+    }
+    tmp.append("\nMedia time\t\t");
+    for (unsigned int i = 0; i<entryCount; ++i) {
+        tmp.append(QString::number(mediaTime.at(i)));
+        tmp.append(" | ");
+    }
+    tmp.append("\nMedia rate integer\t");
+    for (unsigned int i = 0; i<entryCount; ++i) {
+        tmp.append(QString::number(mediaRateInteger.at(i)));
+        tmp.append(" | ");
+    }
+    tmp.append("\nMedia rate fraction\t");
+    for (unsigned int i = 0; i<entryCount; ++i) {
+        tmp.append(QString::number(mediaRateFraction.at(i)));
+        tmp.append(" | ");
+    }
+    return tmp;
+}
 ///////////////
 UserDataBox::UserDataBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 ///////////////
-CopyRightBox::CopyRightBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f):
+CopyRightBox::CopyRightBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e,
+                           const unsigned  int& v, const QList<unsigned int>& f):
     FullBox(s,t,off,e, v, f) ,
     version(v),
     flags(f)

@@ -20,7 +20,7 @@
 class SampleEntry: public Box {
 private:
     QList<unsigned int> reserved;
-    unsigned int data_reference_index;
+    unsigned int dataReferenceIndex;
 public:
     SampleEntry(const unsigned int &s, const QString &t, const unsigned long int &off, const unsigned int &e, const QList<unsigned int>& res,
                 const unsigned int &dri);
@@ -37,18 +37,18 @@ public:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class VisualSampleEntry: public SampleEntry {
 private:
-    unsigned int pre_defined;
+    unsigned int predefined;
     unsigned int reserved2;
-    QList<unsigned int> pre_defined1;
+    QList<unsigned int> predefined1;
     unsigned int width;
     unsigned int height;
-    unsigned int horizresolution; // 72 dpi
-    unsigned int vertresolution; // 72 dpi
+    unsigned int horizontalResolution; // 72 dpi
+    unsigned int verticalResolution; // 72 dpi
     unsigned int reserved3;
-    unsigned int frame_count;
+    unsigned int frameCount;
     QString compressorname;
     unsigned int depth;
-    int pre_defined2;
+    int predefined2;
 public:
     VisualSampleEntry(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e,
                       const QList<unsigned int>& res, const unsigned int &dri, const unsigned int &pd, const unsigned int& r2,
@@ -59,8 +59,8 @@ public:
     unsigned int getWidth() { return width; }
     QString getQStringWidth() { return QString::number(width); }
     unsigned int getHeight() { return height; }
-    unsigned int hResolution() { return horizresolution; }
-    unsigned int vResolution() { return vertresolution; }
+    unsigned int hResolution() { return horizontalResolution; }
+    unsigned int vResolution() { return verticalResolution; }
     virtual QString getFullName() { return QString("Visual Sample Entry"); }
     virtual QString getInfo();
 };
@@ -137,4 +137,17 @@ public:
     virtual QString getFullName() { return QString("ESD Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
+class AVCSampleEntry: public VisualSampleEntry
+{
+public:
+    AVCSampleEntry(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e,
+                         const QList<unsigned int>& res, const unsigned int &dri, const unsigned int &pd, const unsigned int& r2,
+                         const QList<unsigned int>& pd1,const unsigned int& wdth, const unsigned int& hght, const unsigned  int& hr,
+                         const unsigned int& vr, const unsigned int& r3, const unsigned int& fc, const QString & csn,
+                         const unsigned int& dpth, const unsigned int &pd2);
+    virtual bool isContainer() { return true; }
+    virtual unsigned int getOffset() { return 86; }
+    virtual QString getFullName() { return QString("AVC Sample Entry"); }
+};
+
 #endif // SAMPLEENTRY_H

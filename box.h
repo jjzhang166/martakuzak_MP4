@@ -301,13 +301,25 @@ public:
     EditBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e);
     virtual bool isContainer() { return true; }
     virtual QString getFullName() { return QString("Edit Box"); }
+    virtual QString getInfo() { return QString("Edit Box is a container for edit lists. It maps the presentation time-line to the media time-line as it is stored in the file."); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-class EditListBox : public Box
+class EditListBox : public FullBox
 {
+private:
+    unsigned  int version;
+    QList<unsigned int> flags;
+    unsigned int entryCount;
+    QList <unsigned long int> segmentDuration;
+    QList <unsigned long int> mediaTime;
+    QList <unsigned int> mediaRateInteger;
+    QList <unsigned int> mediaRateFraction;
 public:
-    EditListBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e);
+    EditListBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e,
+                const unsigned  int& v, const QList<unsigned int>& f, const unsigned int & entryCount, const QList<unsigned long int>& segmD,
+                const QList<unsigned long int>&medT, const QList<unsigned int>& mri, const QList<unsigned int>& mrf);
     virtual QString getFullName() { return QString("Edit List Box"); }
+    virtual QString getInfo();
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class UserDataBox : public Box

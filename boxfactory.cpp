@@ -70,6 +70,32 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         std::shared_ptr<Box> ret(new DataInformationBox(size,type,off,e));
         return ret;
     }
+    else if(type == "avc1"){
+        QList <unsigned int> reserved;
+        for(int i = 0; i<6; ++i) {
+            reserved.append(analyzer->valueOfGroupOfFields(8+i,8+i));
+        }
+        unsigned int dataReferenceIndex = analyzer->valueOfGroupOfFields(14,15);
+        unsigned int predefined = analyzer->valueOfGroupOfFields(16,17);
+        unsigned int reserved1 = analyzer->valueOfGroupOfFields(18,19);
+        QList <unsigned int> predefined1;
+        for(int i = 0; i<3; ++i) {
+            predefined1.append(analyzer->valueOfGroupOfFields(20 + i*4,23 + i*4));
+        }
+        unsigned int width = analyzer->valueOfGroupOfFields(32,33);
+        unsigned int height = analyzer->valueOfGroupOfFields(34,35);
+        unsigned int horizonresolution = analyzer ->valueOfGroupOfFields(36,39)/65536;
+        unsigned int vertresolution = analyzer->valueOfGroupOfFields(40,43)/65536;
+        unsigned int reserved2 = analyzer->valueOfGroupOfFields(44,47);
+        unsigned int frameCount = analyzer->valueOfGroupOfFields(48,49);
+        unsigned int cname = analyzer->valueOfGroupOfFields(50,81);
+        QString compressorName = analyzer->toQString(cname, 4);
+        unsigned int depth = analyzer->valueOfGroupOfFields(82,83);
+        int predefined2 = analyzer->valueOfGroupOfFields(84,85);
+        return std::shared_ptr<Box>(new AVCSampleEntry(size,type,off,e,reserved,dataReferenceIndex, predefined, reserved1, predefined1,
+                                                             width,height,horizonresolution, vertresolution, reserved2, frameCount,
+                                                             compressorName, depth, predefined2));
+    }
     else if(type=="url"){
         unsigned int offset = 0;
         if(size == 1)
@@ -163,7 +189,36 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         return ret;
     }
     else if(type=="elst"){
-        std::shared_ptr<Box> ret(new EditListBox(size,type,off,e));
+        unsigned int offset = 0;
+        if(size == 1)
+            offset+=8;
+        if(type == QString("uuid"))
+            offset+=16;
+        unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
+        QList<unsigned int> f;
+        for (unsigned int i = 0; i<3; ++i) {
+            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+        }
+        QList<unsigned long int> segmentDuration;
+        QList<unsigned long int> mediaTime;
+        QList<unsigned int> mediaRateInteger;
+        QList<unsigned int> mediaRateFraction;
+        unsigned int entryCount = analyzer->valueOfGroupOfFields(offset + 12, offset + 15);
+        for(unsigned int i = 0; i<entryCount; ++i) {
+            if(v==1) {
+                segmentDuration.append(analyzer->valueOfGroupOfFields(offset + 16, offset + 23));
+                mediaTime.append(analyzer->valueOfGroupOfFields(offset + 24, offset + 31));
+                offset += 8;
+            }
+            else if(v == 0) {
+                segmentDuration.append(analyzer->valueOfGroupOfFields(offset + 16, offset + 19));
+                mediaTime.append(analyzer->valueOfGroupOfFields(offset + 20, offset + 23));
+            }
+            mediaRateInteger.append(analyzer->valueOfGroupOfFields(offset + 24, offset + 25));
+            mediaRateFraction.append(analyzer->valueOfGroupOfFields(offset + 26, offset + 27));
+        }
+        std::shared_ptr<Box> ret(new EditListBox(size,type,off,e, v, f, entryCount, segmentDuration, mediaTime, mediaRateInteger,
+                                                 mediaRateFraction));
         return ret;
     }
     else if(type=="udta"){
@@ -531,7 +586,7 @@ std::shared_ptr<Box> BoxFactory::getMBox(const unsigned int& size, QString type,
         unsigned int reserved1 = analyzer->valueOfGroupOfFields(18,19);
         QList <unsigned int> predefined1;
         for(int i = 0; i<3; ++i) {
-            predefined1.append(analyzer->valueOfGroupOfFields(20 + i,23 + i));
+            predefined1.append(analyzer->valueOfGroupOfFields(20 + i*4,23 + i*4));
         }
         unsigned int width = analyzer->valueOfGroupOfFields(32,33);
         unsigned int height = analyzer->valueOfGroupOfFields(34,35);

@@ -5,7 +5,7 @@ SampleEntry::SampleEntry(const unsigned int& s, const QString& t, const unsigned
                          const QList<unsigned int> &res, const unsigned  int& dri):
     Box(s,t,off,e),
     reserved(res),
-    data_reference_index(dri)
+    dataReferenceIndex(dri)
 {}
 QString SampleEntry::getInfo() {
     QString tmp("");
@@ -16,7 +16,7 @@ QString SampleEntry::getInfo() {
         tmp.append(" | ");
     }
     tmp.append("\nData reference index\t");
-    tmp.append(QString::number(data_reference_index));
+    tmp.append(QString::number(dataReferenceIndex));
     return tmp;
 }
 
@@ -27,29 +27,29 @@ VisualSampleEntry::VisualSampleEntry(const unsigned  int& s, const QString& t, c
                                      const unsigned int& vr, const unsigned int& r3, const unsigned int& fc, const QString & csn,
                                      const unsigned int& dpth, const int &pd2):
     SampleEntry(s,t,off,e, res, dri),
-    pre_defined(pd),
+    predefined(pd),
     reserved2(r2),
-    pre_defined1(pd1),
+    predefined1(pd1),
     width(wdth),
     height(hght),
-    horizresolution(hr),
-    vertresolution(vr),
+    horizontalResolution(hr),
+    verticalResolution(vr),
     reserved3(r3),
-    frame_count(fc),
+    frameCount(fc),
     compressorname(csn),
     depth(dpth),
-    pre_defined2(pd2)
+    predefined2(pd2)
 {}
 QString VisualSampleEntry::getInfo() {
     QString tmp("");
     tmp.append(SampleEntry::getInfo());
     tmp.append("\nPredefined\t\t");
-    tmp.append(QString::number(pre_defined));
+    tmp.append(QString::number(predefined));
     tmp.append("\nReserved\t\t");
     tmp.append(QString::number(reserved2));
-    int p1Size = pre_defined1.size();
+    int p1Size = predefined1.size();
     for (int i = 0; i<p1Size; ++i) {
-        tmp.append(QString::number(pre_defined1.at(i)));
+        tmp.append(QString::number(predefined1.at(i)));
         tmp.append(" | ");
     }
     tmp.append("\nWidth\t\t");
@@ -57,19 +57,19 @@ QString VisualSampleEntry::getInfo() {
     tmp.append("\nHeight\t\t");
     tmp.append(QString::number(height));
     tmp.append("\nHorizontal resolution\t");
-    tmp.append(QString::number(horizresolution));
+    tmp.append(QString::number(horizontalResolution));
     tmp.append("\nVertical resolution\t");
-    tmp.append(QString::number(vertresolution));
+    tmp.append(QString::number(verticalResolution));
     tmp.append("\nReserved2\t\t");
     tmp.append(QString::number(reserved3));
     tmp.append("\nFrame count\t\t");
-    tmp.append(QString::number(frame_count));
+    tmp.append(QString::number(frameCount));
     tmp.append("\nCompressor name\t\t");
     tmp.append(compressorname);
     tmp.append("\nDepth\t\t");
     tmp.append(QString::number(depth));
     tmp.append("\nPredefined2\t\t");
-    tmp.append(QString::number(pre_defined2));
+    tmp.append(QString::number(predefined2));
     return tmp;
 }
 /////////////
@@ -142,6 +142,14 @@ ESDBox::ESDBox(const unsigned  int& s, const QString& t, const unsigned long int
     FullBox(s,t,off,e, v, f) ,
     version(v),
     flags(f)
+{}
+///////////////
+AVCSampleEntry::AVCSampleEntry(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e,
+                                           const QList<unsigned int>& res, const unsigned int &dri, const unsigned int &pd,
+                                           const unsigned int& r2,const QList<unsigned int>& pd1,const unsigned int& wdth,
+                                           const unsigned int& hght, const unsigned  int& hr, const unsigned int& vr, const unsigned int& r3,
+                                           const unsigned int& fc, const QString & csn, const unsigned int& dpth, const unsigned int &pd2):
+    VisualSampleEntry(s,t,off,e,res, dri,pd,r2,pd1, wdth,hght, hr,vr, r3, fc, csn, dpth, pd2)
 {}
 ///////////////
 
