@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     boxInfoLayout = new QVBoxLayout();
 
     QWidget *window = new QWidget();
-    //setWindowIcon(QIcon("icon2.png"));
+    setWindowIcon(QIcon("D://vnb//pear.png"));
     setCentralWidget(window);
 
     window->setLayout(mainLayout);
@@ -59,6 +59,9 @@ void MainWindow::createActions()
 
     searchBoxAct = new QAction(tr("&Search"), this);
     connect(searchBoxAct, SIGNAL(triggered()), this, SLOT(searchBox()));
+
+    helpAct = new QAction(tr("&Help"), this);
+    connect(helpAct, SIGNAL(triggered()), this, SLOT(launchHelp()));
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::createMenu()
@@ -68,6 +71,8 @@ void MainWindow::createMenu()
     fileMenu->addSeparator();
     fileMenu->addAction(exitAct);
 
+    helpMenu = menuBar()->addMenu(tr("&Help"));
+    helpMenu->addAction(helpAct);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::setSearchBoxSection() {
@@ -252,5 +257,8 @@ void MainWindow::searchBox() {
     mainLayout->update();
 
 }
-
+////////////////////////////////////////////////////////////
+void MainWindow::launchHelp() {
+    QDesktopServices::openUrl(QUrl("D://PDI//Code//help.html"));
+}
 

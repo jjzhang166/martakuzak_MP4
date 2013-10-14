@@ -96,7 +96,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
                                                              width,height,horizonresolution, vertresolution, reserved2, frameCount,
                                                              compressorName, depth, predefined2));
     }
-    else if(type=="url"){
+    else if(type=="url "){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -107,10 +107,17 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         for (unsigned int i = 0; i<3; ++i) {
             f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
         }
-        std::shared_ptr<Box> ret(new DataEntryUrlBox(size,type,off,e, v, f));
+        QString location;
+        if(f.at(2) == 1)
+            location = QString("this file");
+        else {
+            int tmp = size - 16 - 1 - offset;
+            location = analyzer->valueOfGroupOfFields(offset + 13, offset + tmp);
+        }
+        std::shared_ptr<Box> ret(new DataEntryUrlBox(size,type,off,e, v, f, location));
         return ret;
     }
-    else if(type=="urn"){
+    else if(type=="urn "){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -135,7 +142,8 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         for (unsigned int i = 0; i<3; ++i) {
             f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
         }
-        std::shared_ptr<Box> ret(new DataReferenceBox(size,type,off,e, v, f));
+        unsigned long int entryCount = analyzer->valueOfGroupOfFields(offset + 12, offset + 15);
+        std::shared_ptr<Box> ret(new DataReferenceBox(size,type,off,e, v, f, entryCount));
         return ret;
     } 
     else if(type=="ctts"){
@@ -603,10 +611,23 @@ std::shared_ptr<Box> BoxFactory::getMBox(const unsigned int& size, QString type,
                                                              compressorName, depth, predefined2));
     }
     else if(type=="mp4a"){
-        //33
-
-       //
-        //return std::shared_ptr<Box>(new MP4AudioSampleEntry(size,type,off,e));
+        //SampleEntry
+        QList <unsigned int> reserved;
+        for(int i = 0; i<6; ++i) {
+            reserved.append(analyzer->valueOfGroupOfFields(8+i,8+i));
+        }
+        unsigned int dataReferenceIndex = analyzer->valueOfGroupOfFields(14,15);
+        //AudioSampleEntry
+        QList <unsigned int> reserved1;
+        reserved1.append(analyzer->valueOfGroupOfFields(16,19));
+        reserved1.append(analyzer->valueOfGroupOfFields(20,23));
+        unsigned int channelCount = analyzer->valueOfGroupOfFields(24,25);
+        unsigned int sampleSize = analyzer->valueOfGroupOfFields(26,27);
+        unsigned int predefined = analyzer->valueOfGroupOfFields(28,29);
+        unsigned int reserved2 = analyzer->valueOfGroupOfFields(30,31);
+        unsigned int sampleRate = analyzer->valueOfGroupOfFields(32,33);
+        return std::shared_ptr<Box>(new MP4AudioSampleEntry(size,type,off,e,reserved,dataReferenceIndex, reserved1, channelCount,
+                                                            sampleSize, predefined, reserved2, sampleRate));
     }
     else if(type=="mp4s"){
         QList <unsigned int> reserved;
@@ -828,7 +849,9 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         for (unsigned int i = 0; i<3; ++i) {
             f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
         }
-        std::shared_ptr<Box> ret(new SoundMediaHeaderBox(size,type,off,e, v, f));
+        unsigned int balance = analyzer->valueOfGroupOfFields(offset + 12, offset + 13);
+        unsigned int reserved = analyzer->valueOfGroupOfFields(offset + 14, offset + 15);
+        std::shared_ptr<Box> ret(new SoundMediaHeaderBox(size,type,off,e, v, f, balance, reserved));
         return ret;
     }
     else if(type=="stbl"){

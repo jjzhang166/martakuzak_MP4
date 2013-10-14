@@ -221,9 +221,13 @@ class SoundMediaHeaderBox : public FullBox
 private:
     unsigned  int version;
     QList<unsigned int> flags;
+    unsigned int balance;
+    unsigned int reserved;
 public:
-    SoundMediaHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int& e, const unsigned  int& v, const QList<unsigned int>& f);
+    SoundMediaHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int& e,
+                        const unsigned  int& v, const QList<unsigned int>& f, const unsigned int& bl, const unsigned int&res);
     virtual QString getFullName() { return QString("Sound Media Header Box"); }
+    virtual QString getInfo();
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class HintMediaHeaderBox : public FullBox
@@ -248,10 +252,16 @@ public:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class DataInformationBox : public Box
 {
+private:
+    unsigned  int version;
+    QList<unsigned int> flags;
 public:
     DataInformationBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e);
     virtual bool isContainer() { return true; }
     virtual QString getFullName() { return QString("Data Information Box"); }
+    virtual QString getInfo() {
+        return QString("Data Information Box contains objects that declare the location of the media informatin in a track");
+    }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class DataEntryUrnBox : public FullBox
@@ -269,9 +279,12 @@ class DataEntryUrlBox : public FullBox
 private:
     unsigned  int version;
     QList<unsigned int> flags;
+    QString location;
 public:
-    DataEntryUrlBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int& e, const unsigned  int& v, const QList<unsigned int>& f);
+    DataEntryUrlBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int& e, const unsigned  int& v,
+                    const QList<unsigned int>& f, const QString& location);
     virtual QString getFullName() { return QString("Data Entry URL Box"); }
+    virtual QString getInfo();
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class DataReferenceBox : public FullBox
@@ -279,9 +292,14 @@ class DataReferenceBox : public FullBox
 private:
     unsigned  int version;
     QList<unsigned int> flags;
+    unsigned long int entryCount;
 public:
-    DataReferenceBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int& e, const unsigned  int& v, const QList<unsigned int>& f);
+    DataReferenceBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int& e, const unsigned  int& v,
+                     const QList<unsigned int>& f, const unsigned long int& ec);
     virtual QString getFullName() { return QString("Data Reference Box"); }
+    virtual QString getInfo();
+    virtual bool isContainer() { return entryCount; }
+    virtual unsigned int getOffset() { return 16; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -293,6 +311,9 @@ public:
     FreeSpaceBox(bool container,const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e);
     virtual bool isContainer() { return container; }
     virtual QString getFullName() { return QString("Free Space Box"); }
+    virtual QString getInfo() {
+        return QString("Free Space Box may be ignored because its content is irrelevant.");
+    }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class EditBox : public Box

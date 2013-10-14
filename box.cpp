@@ -172,31 +172,72 @@ QString VideoMediaHeaderBox::getInfo() {
     return tmp;
 }
 /////////////
-SoundMediaHeaderBox::SoundMediaHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f): FullBox(s,t,off,e, v, f) {}
+SoundMediaHeaderBox::SoundMediaHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e,
+                                         const unsigned  int& v, const QList<unsigned int>& f, const unsigned int &bl,
+                                         const unsigned int &res):
+    FullBox(s,t,off,e, v, f),
+    version(v),
+    flags(f),
+    balance(bl),
+    reserved(res)
+{}
+QString SoundMediaHeaderBox::getInfo() {
+    QString tmp("");
+    tmp.append(FullBox::getInfo());
+    tmp.append("\nBalance\t\t");
+    tmp.append(QString::number(balance));
+    tmp.append("\nReserved\t\t");
+    tmp.append(QString::number(reserved));
+    return tmp;
+}
+
 /////////////
 HintMediaHeaderBox::HintMediaHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f): FullBox(s,t,off,e, v, f) {}
 /////////////
 NullMediaHeaderBox::NullMediaHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f): FullBox(s,t,off,e, v, f) {}
 /////////////
-DataInformationBox::DataInformationBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
+DataInformationBox::DataInformationBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e):
+    Box(s,t,off,e)
+{}
 /////////////
-DataEntryUrnBox::DataEntryUrnBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f):
+DataEntryUrnBox::DataEntryUrnBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e,
+                                 const unsigned  int& v, const QList<unsigned int>& f):
     FullBox(s,t,off,e, v, f),
     version(v),
     flags(f)
 {}
 /////////////
-DataEntryUrlBox::DataEntryUrlBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f):
+DataEntryUrlBox::DataEntryUrlBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e,
+                                 const unsigned  int& v, const QList<unsigned int>& f, const QString &loc):
     FullBox(s,t,off,e, v, f),
     version(v),
-    flags(f)
+    flags(f),
+    location(loc)
 {}
+QString DataEntryUrlBox::getInfo() {
+    QString tmp;
+    tmp.append(FullBox::getInfo());
+    tmp.append("\nLocation\t\t");
+    tmp.append(location);
+    return tmp;
+}
+
 /////////////
-DataReferenceBox::DataReferenceBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f):
+DataReferenceBox::DataReferenceBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e,
+                                   const unsigned  int& v, const QList<unsigned int>& f, const unsigned long int&ec):
     FullBox(s,t,off,e, v, f),
     version(v),
-    flags(f)
+    flags(f),
+    entryCount(ec)
 {}
+QString DataReferenceBox::getInfo() {
+    QString tmp;
+    tmp.append(FullBox::getInfo());
+    tmp.append("\nEntry count\t\t");
+    tmp.append(QString::number(entryCount));
+    return tmp;
+}
+
 ///////////////
 FreeSpaceBox::FreeSpaceBox(bool c,const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int & e): Box(s,t,off,e), container(c) {}
 ///////////////

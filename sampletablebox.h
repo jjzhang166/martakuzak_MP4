@@ -27,6 +27,9 @@ public:
     SampleTableBox(const unsigned int& s=0, const QString& t="", const unsigned long int& off=0, const unsigned int& e=0);
     virtual bool isContainer() { return true; }
     virtual QString getFullName() { return QString("Sample Table Box "); }
+    virtual QString getInfo(){
+        return QString("Sample Table Box is a container for all the time and data indexing of the media samples in the track.");
+    }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class TimeToSampleBox : public FullBox

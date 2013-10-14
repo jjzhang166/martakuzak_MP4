@@ -23,6 +23,8 @@
 #include <QProgressDialog>
 #include <QDirModel>
 #include <QLineEdit>
+#include <QDesktopServices>
+#include <QUrl>
 #include <qDebug>
 #include "treemodel.h"
 #include "treeitem.h"
@@ -35,10 +37,12 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 private:
-    //Actions
+    //Actions- File
     QAction *openAct;
     QAction *exitAct;
     QAction * searchBoxAct;
+    //Actions- Help
+    QAction * helpAct;
     /*!
      * \brief title
      */
@@ -73,6 +77,10 @@ private:
      * \brief fileMenu
      */
     QMenu *fileMenu;
+    /*!
+     * \brief helpMenu
+     */
+    QMenu *helpMenu;
 public:
     //!Constructor
     /*!
@@ -101,6 +109,10 @@ private slots:
      * - no box was found
      */
     void searchBox();
+    /*!
+     * \brief launchHelp launches help html site.
+     */
+    void launchHelp();
 
 private:
     /*!
@@ -121,7 +133,6 @@ private:
      * \info search box section enables searching for boxes by typing typename
      */
     void setSearchBoxSection();
-
 };
 
 
