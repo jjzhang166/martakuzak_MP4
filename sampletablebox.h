@@ -41,9 +41,10 @@ private:
     QList<unsigned int> sampleCount;
     QList<unsigned int> sampleDelta;
 public:
-    TimeToSampleBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int& e, const unsigned int& v, const QList<unsigned int>& f,
-                    unsigned int ec, QList<unsigned int> sc, QList<unsigned int> sd);
+    TimeToSampleBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int& e, const unsigned int& v,
+                    const QList<unsigned int>& f, unsigned int ec, QList<unsigned int> sc, QList<unsigned int> sd);
     virtual QString getFullName() { return QString("Time To Sample Box"); }
+    virtual QString getInfo();
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class CompositionOffsetBox : public FullBox
@@ -51,9 +52,14 @@ class CompositionOffsetBox : public FullBox
 private:
     unsigned int version;
     QList<unsigned int> flags;
+    unsigned int entryCount;
+    QList<unsigned int> sampleCount;
+    QList<unsigned int> sampleOffset;
 public:
-    CompositionOffsetBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int& e, const unsigned int& v, const QList<unsigned int>& f);
+    CompositionOffsetBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int& e, const unsigned int& v,
+                         const QList<unsigned int>& f,unsigned int ec, QList<unsigned int> sc, QList<unsigned int> sd);
     virtual QString getFullName() { return QString("Composition Offset Box"); }
+    virtual QString getInfo();
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*!
@@ -65,20 +71,24 @@ public:
  *    - Mandatory: Yes
  *    - Quantity: Exactly one
 */
-class SampleDescriptionBox : public Box
+class SampleDescriptionBox : public FullBox
 {
 private:
-    unsigned int entry_count;
+    unsigned int version;
+    QList<unsigned int> flags;
+    unsigned int entryCount;
 public:
-    SampleDescriptionBox(unsigned int s=0, QString t="", unsigned long int off=0, unsigned int e=0, unsigned  int ec=1);
+    SampleDescriptionBox(const unsigned int &s, const QString& t, const unsigned long int& off, const unsigned int &e, const unsigned int& v,
+                         const QList<unsigned int>& f, const unsigned int &ec);
     virtual bool isContainer() { return true; }
-    virtual unsigned  int getOffset() { return (16); }
+    virtual unsigned int getOffset() { return (16); }
     virtual QString getFullName() { return QString("Sample Description Box"); }
     /*!
      * \brief getEntryCount
      * \return entry_count
      */
-    unsigned  int getEntryCount() { return entry_count; }
+    unsigned int getEntryCount() { return entryCount; }
+    virtual QString getInfo();
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class SampleSizeBox : public FullBox
@@ -86,9 +96,15 @@ class SampleSizeBox : public FullBox
 private:
     unsigned int version;
     QList<unsigned int> flags;
+    unsigned long int sampleSize;
+    unsigned long int sampleCount;
+    QList<unsigned long int> entrySize;
 public:
-    SampleSizeBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int& e, const unsigned int& v, const QList<unsigned int>& f);
+    SampleSizeBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int& e, const unsigned int& v,
+                  const QList<unsigned int>& f, const unsigned long int &sz, const unsigned long int & sc,
+                  const QList<unsigned long int> & es);
     virtual QString getFullName() { return QString("Sample Size Box"); }
+    virtual QString getInfo();
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class CompactSampleSizeBox : public FullBox

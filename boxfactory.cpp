@@ -157,7 +157,19 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         for (unsigned int i = 0; i<3; ++i) {
             f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
         }
-        std::shared_ptr<Box> ret(new CompositionOffsetBox(size,type,off,e, v, f));
+        unsigned int entryCount = analyzer->valueOfGroupOfFields(offset+12, offset+15);
+
+        QList<unsigned int> sampleCount;
+        QList<unsigned int> sampleDelta;
+        unsigned int index =0;
+        unsigned int i = 0;
+        while(index<entryCount) {
+            sampleCount.append(analyzer->valueOfGroupOfFields(offset+i+16, offset+i+19));
+            sampleDelta.append(analyzer->valueOfGroupOfFields(offset+i+20, offset+i+23));
+            index++;
+            i+=8;
+        }
+        std::shared_ptr<Box> ret(new TimeToSampleBox(size,type,off,e, v, f, entryCount, sampleCount, sampleDelta));
         return ret;
     }
     else if(type=="co64"){
@@ -885,7 +897,18 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         return ret;
     }
     else if(type=="stsd"){
-        std::shared_ptr<Box> ret(new SampleDescriptionBox(size,type,off,e));
+        unsigned int offset = 0;
+        if(size == 1)
+            offset+=8;
+        if(type == QString("uuid"))
+            offset+=16;
+        unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
+        QList<unsigned int> f;
+        for (unsigned int i = 0; i<3; ++i) {
+            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+        }
+        unsigned int entryCount = analyzer->valueOfGroupOfFields(offset + 12, offset + 15);
+        std::shared_ptr<Box> ret(new SampleDescriptionBox(size,type,off,e,v,f,entryCount));
         return ret;
     }
     else if(type=="stsz"){
@@ -899,7 +922,15 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         for (unsigned int i = 0; i<3; ++i) {
             f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
         }
-        std::shared_ptr<Box> ret(new SampleSizeBox(size,type,off,e, v, f));
+        unsigned long int sampleSize = analyzer->valueOfGroupOfFields(offset + 12, offset + 15);
+        unsigned long int sampleCount = analyzer->valueOfGroupOfFields(offset + 16, offset + 19);
+        QList<unsigned long int> entrySize;
+        if(sampleSize == 0) {
+            for(unsigned int i = 0; i<sampleCount; ++i) {
+                entrySize.append(analyzer->valueOfGroupOfFields(offset + 20 + 4*i, offset + 23 + 4*i));
+            }
+        }
+        std::shared_ptr<Box> ret(new SampleSizeBox(size,type,off,e, v, f, sampleSize, sampleCount, entrySize));
         return ret;
     }
     else if(type=="stz2"){
