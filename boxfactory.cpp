@@ -183,7 +183,12 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         for (unsigned int i = 0; i<3; ++i) {
             f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
         }
-        std::shared_ptr<Box> ret(new ChunkLargeOffsetBox(size,type,off,e, v, f));
+        unsigned long int entryCount = analyzer->valueOfGroupOfFields(offset + 12, offset + 15);
+        QList<unsigned long int> chunkOffset;
+        for(unsigned int i = 0; i<entryCount; ++i) {
+            chunkOffset.append(analyzer->valueOfGroupOfFields(offset + 16 + 4*i, offset + 19 + 4*i));
+        }
+        std::shared_ptr<Box> ret(new ChunkLargeOffsetBox(size,type,off,e, v, f, entryCount, chunkOffset));
         return ret;
     }
     else if(type=="padb"){
@@ -958,7 +963,17 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         for (unsigned int i = 0; i<3; ++i) {
             f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
         }
-        std::shared_ptr<Box> ret(new SampleToChunkBox(size,type,off,e, v, f));
+        unsigned long int entryCount = analyzer->valueOfGroupOfFields(offset + 12, offset + 15);
+        QList<unsigned long int> firstChunk;
+        QList<unsigned long int> samplesPerChunk;
+        QList<unsigned long int> sampleDescriptionIndex;
+        for(unsigned int i = 0; i<entryCount; ++i) {
+            firstChunk.append(analyzer->valueOfGroupOfFields(offset + 16 + 12*i, offset + 19 + 12*i));
+            samplesPerChunk.append(analyzer->valueOfGroupOfFields(offset + 20 + 12*i, offset + 23 + 12*i));
+            sampleDescriptionIndex.append(analyzer->valueOfGroupOfFields(offset + 24 + 12*i, offset + 27 + 12*i));
+        }
+        std::shared_ptr<Box> ret(new SampleToChunkBox(size,type,off,e, v, f, entryCount, firstChunk, samplesPerChunk,
+                                                      sampleDescriptionIndex));
         return ret;
     }
     else if(type=="stco"){
@@ -972,7 +987,12 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         for (unsigned int i = 0; i<3; ++i) {
             f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
         }
-        std::shared_ptr<Box> ret(new ChunkOffsetBox(size,type,off,e, v, f));
+        unsigned long int entryCount = analyzer->valueOfGroupOfFields(offset + 12, offset + 15);
+        QList<unsigned long int> chunkOffset;
+        for(unsigned int i = 0; i<entryCount; ++i) {
+            chunkOffset.append(analyzer->valueOfGroupOfFields(offset + 16 + 4*i, offset + 19 + 4*i));
+        }
+        std::shared_ptr<Box> ret(new ChunkOffsetBox(size,type,off,e, v, f, entryCount, chunkOffset));
         return ret;
     }
     else if(type=="stss"){
@@ -986,7 +1006,12 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         for (unsigned int i = 0; i<3; ++i) {
             f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
         }
-        std::shared_ptr<Box> ret(new SyncSampleBox(size,type,off,e, v, f));
+        unsigned long int entryCount = analyzer->valueOfGroupOfFields(offset + 12, offset + 15);
+        QList<unsigned long int> sampleNumber;
+        for (unsigned int i = 0; i<entryCount; ++i) {
+            sampleNumber.append(analyzer->valueOfGroupOfFields(offset + 16 + 4*i, offset + 19 + 4*i));
+        }
+        std::shared_ptr<Box> ret(new SyncSampleBox(size,type,off,e, v, f, entryCount,sampleNumber));
         return ret;
     }
     else if(type=="stsh"){
@@ -1264,8 +1289,22 @@ std::shared_ptr<Box> BoxFactory::getHBox(const unsigned int& size, QString type,
         for(int i = 0; i<3; ++i) {
             reserved.append(analyzer->valueOfGroupOfFields(offset + 20 + 4*i, offset + 23 + 4*i));
         }
-        unsigned long int intName = analyzer->valueOfGroupOfFields(offset + 32, offset + 35);
-        QString name = analyzer->toQString(intName, 4);
+        QString name;
+        int nameLength = size - offset - 32;
+        int i = 0;
+        while(i < nameLength) {
+            unsigned long int intName;
+            if((nameLength-i)>=4) {
+                intName = analyzer->valueOfGroupOfFields(offset + 32 + i, offset + 35 + i);
+                name.append(analyzer->toQString(intName, 4));
+            }
+            else {
+                int newLen = nameLength - i;
+                intName = analyzer->valueOfGroupOfFields(offset + 32 + i, offset + 32 + newLen + i);
+                name.append(analyzer->toQString(intName, newLen));
+            }
+            i+=4;
+        }
         std::shared_ptr<Box> ret(new HandlerBox(size,type,off,e, v, f, predefined, handlerType, reserved, name));
         return ret;
     }

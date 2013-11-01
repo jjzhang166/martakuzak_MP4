@@ -122,9 +122,16 @@ class SampleToChunkBox : public FullBox
 private:
     unsigned int version;
     QList<unsigned int> flags;
+    unsigned long int entryCount;
+    QList<unsigned long int> firstChunk;
+    QList<unsigned long int> samplesPerChunk;
+    QList<unsigned long int> sampleDescriptionIndex;
 public:
-    SampleToChunkBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int& e, const unsigned int& v, const QList<unsigned int>& f);
+    SampleToChunkBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int& e, const unsigned int& v,
+                     const QList<unsigned int>& f, const unsigned long int &entryCount, const QList<unsigned long int>& fc,
+                     const QList<unsigned long int>& spc, const QList<unsigned long int>& sdi);
     virtual QString getFullName() { return QString("Sample To Chunk Box"); }
+    virtual QString getInfo();
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class ChunkOffsetBox : public FullBox
@@ -132,9 +139,13 @@ class ChunkOffsetBox : public FullBox
 private:
     unsigned int version;
     QList<unsigned int> flags;
+    unsigned long int entryCount;
+    QList<unsigned long int> chunkOffset;
 public:
-    ChunkOffsetBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int& e, const unsigned int& v, const QList<unsigned int>& f);
+    ChunkOffsetBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int& e, const unsigned int& v,
+                   const QList<unsigned int>& f, const unsigned long int& ec, const QList<unsigned long int>& co);
     virtual QString getFullName() { return QString("Chunk Offset Box"); }
+    virtual QString getInfo();
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class ChunkLargeOffsetBox : public FullBox
@@ -142,9 +153,13 @@ class ChunkLargeOffsetBox : public FullBox
 private:
     unsigned int version;
     QList<unsigned int> flags;
+    unsigned long int entryCount;
+    QList<unsigned long int> chunkOffset;
 public:
-    ChunkLargeOffsetBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int& e, const unsigned int& v, const QList<unsigned int>& f);
+    ChunkLargeOffsetBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int& e, const unsigned int& v,
+                        const QList<unsigned int>& f, const unsigned long int& ec, const QList<unsigned long int>& co);
     virtual QString getFullName() { return QString("Chunk Large Offset Box"); }
+    virtual QString getInfo();
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class SyncSampleBox : public FullBox
@@ -152,9 +167,13 @@ class SyncSampleBox : public FullBox
 private:
     unsigned int version;
     QList<unsigned int> flags;
+    unsigned long int entryCount;
+    QList<unsigned long int> sampleNumber;
 public:
-    SyncSampleBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int& e, const unsigned int& v, const QList<unsigned int>& f);
+    SyncSampleBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int& e, const unsigned int& v,
+                  const QList<unsigned int>& f, const unsigned long int&ec, const QList<unsigned long int> sn);
     virtual QString getFullName() { return QString("Sync Sample Box"); }
+    virtual QString getInfo();
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class ShadowSyncSampleBox : public FullBox

@@ -108,7 +108,6 @@ void MainWindow::setSearchBoxSection() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::setBoxInfoSection(const QString& fileName) {
 
-
     if(!boxParseLayout->count()) {
         boxParseGroupBox = new QGroupBox();
         boxInfoGroupBox = new QGroupBox();
@@ -241,9 +240,10 @@ void MainWindow::searchBox() {
 
     }
     //selects found boxes and expands their predecessors
+    QModelIndex tmpId;
     while (!Items.isEmpty()) {
         QModelIndex backId = Items.back();
-        QModelIndex tmpId = backId;
+        tmpId = backId;
         QModelIndex tmpParent = tmpId.parent();
         while(tmpParent.isValid()) {
             treeView->setExpanded(tmpParent, true);
@@ -251,8 +251,15 @@ void MainWindow::searchBox() {
         }
         treeView->selectionModel()->select(backId, QItemSelectionModel::Select | QItemSelectionModel::Rows);
         Items.pop_back();
-        boxInfo->clear();
-
+    }   
+    QModelIndex child = model->index(tmpId.row(), 2, tmpId.parent());
+    boxNameLabel->setText(model->getChild(model->data(child,
+                                                      Qt::DisplayRole).toInt())->fullName());
+    QString text= model->getChild(model->data(child,
+                                              Qt::DisplayRole).toInt())->fullName();
+    if(text!=NULL) {
+        boxNameLabel->setText(text);
+        boxInfo->setText(model->getChild(model->data(child,Qt::DisplayRole).toInt())->getInfo());
     }
     mainLayout->update();
 
