@@ -39,6 +39,7 @@ class MainWindow : public QMainWindow
 private:
     //Actions- File
     QAction *openAct;
+    QAction *splitAct;
     QAction *exitAct;
     QAction * searchBoxAct;
     //Actions- Help
@@ -98,6 +99,10 @@ private slots:
      * (and searchBox section, if it doesn't exist).
      */
     void openFile();
+    /*!
+     * \brief splitFile
+     */
+    void splitFile();
     /*!
      * \brief printSelectedBox prints info about selected Box in boxInfo->
      */

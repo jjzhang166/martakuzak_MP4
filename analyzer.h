@@ -11,6 +11,7 @@
 
 
 class TreeItem;
+class TreeModel;
 /*!
  * \brief The Analyzer class - provides with tools to analyze MP4 file.
  */

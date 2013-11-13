@@ -708,7 +708,7 @@ std::shared_ptr<Box> BoxFactory::getMBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new MovieFragmentRandomAccessOffsetBox(size,type,off,e, v, f));
         return ret;
     }
-    return NULL;
+    return std::shared_ptr<Box>(new Box(size,type,off,e));
 }
 ////////////////////////////////////////////////////////////////
 std::shared_ptr<Box> BoxFactory::getTBox(const unsigned int& size, QString type, unsigned long int off, const unsigned int&  e) {
@@ -851,7 +851,7 @@ std::shared_ptr<Box> BoxFactory::getTBox(const unsigned int& size, QString type,
         }
         return std::shared_ptr<Box>(new TrackFragmentBaseMediaDecodeTimeBox(size,type,off,e, v, f));
     }
-    return NULL;
+    return std::shared_ptr<Box>(new Box(size,type,off,e));
 }
 ////////////////////////////////////////////////////////////////
 std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type, unsigned long int off, const unsigned int&  e) {
@@ -1268,7 +1268,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         }
         return std::shared_ptr<Box>(new SampleAuxiliaryInformationOffsetsBox(size,type,off,e, v, f));
     }
-    return NULL;
+    return std::shared_ptr<Box>(new Box(size,type,off,e));
 }
 ////////////////////////////////////////////////////////////////
 std::shared_ptr<Box> BoxFactory::getHBox(const unsigned int& size, QString type, unsigned long int off, const unsigned int&  e) {
@@ -1330,5 +1330,5 @@ std::shared_ptr<Box> BoxFactory::getHBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new HintStatisticsBox(size,type,off,e));
         return ret;
     }
-    return NULL;
+    return std::shared_ptr<Box>(new Box(size,type,off,e));
 }

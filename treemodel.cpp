@@ -1,8 +1,7 @@
 #include "treemodel.h"
 
-TreeModel::TreeModel(const QString &fileName, QObject *parent)
+TreeModel::TreeModel(Analyzer *analyzer, QObject *parent)
     : QAbstractItemModel(parent) {
-    Analyzer* analyzer= new Analyzer(fileName);
     QList<QVariant> rootData;
     rootData << "Name" << "Size"<<"Offset";
     rootItem = new TreeItem(analyzer,rootData);

@@ -32,7 +32,10 @@ MainWindow::~MainWindow()
     delete fileMenu;
     delete treeView;
     delete openAct;
+    delete splitAct;
     delete exitAct;
+    delete helpMenu;
+    delete helpAct;
     delete model;
     delete boxInfo;
     delete nextSearchButton;
@@ -53,6 +56,9 @@ void MainWindow::createActions()
     openAct->setShortcuts(QKeySequence::Open);
     connect(openAct, SIGNAL(triggered()), this, SLOT(openFile()));
 
+    splitAct = new QAction(tr("&Split"), this);
+    connect(splitAct, SIGNAL(triggered()), this, SLOT(splitFile()));
+
     exitAct = new QAction(tr("E&xit"), this);
     exitAct->setShortcuts(QKeySequence::Quit);
     connect(exitAct, SIGNAL(triggered()), this, SLOT(close()));
@@ -68,6 +74,7 @@ void MainWindow::createMenu()
 {
     fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(openAct);
+    fileMenu->addAction(splitAct);
     fileMenu->addSeparator();
     fileMenu->addAction(exitAct);
 
@@ -120,8 +127,8 @@ void MainWindow::setBoxInfoSection(const QString& fileName) {
         boxNameLabel->setFont(QFont("Arial", 13));
     }
 
-
-    model= new TreeModel(fileName);
+    Analyzer* an = new Analyzer(fileName);
+    model= new TreeModel(an);
 
     treeView->setModel(model);
     //treeView->setFont(QFont("Arial", 12));
@@ -262,6 +269,10 @@ void MainWindow::searchBox() {
         boxInfo->setText(model->getChild(model->data(child,Qt::DisplayRole).toInt())->getInfo());
     }
     mainLayout->update();
+
+}
+////////////////////////////////////////////////////////////
+void MainWindow::splitFile() {
 
 }
 ////////////////////////////////////////////////////////////

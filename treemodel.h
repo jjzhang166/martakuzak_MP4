@@ -10,6 +10,7 @@
 #include "analyzer.h"
 
 class TreeItem;
+class Analyzer;
 /*!
  * \brief The TreeModel class
  * represents tree model for TreeView
@@ -36,7 +37,7 @@ public:
      * \param fileName  name of the analyzed file
      * \param parent
      */
-    explicit TreeModel(const QString &fileName, QObject *parent = 0);
+    explicit TreeModel(Analyzer* analyzer, QObject *parent = 0);
     //!Destructor
     ~TreeModel();
     /*!

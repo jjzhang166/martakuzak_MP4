@@ -27,7 +27,7 @@ public:
      * \brief BoxFactory
      * \param an analyzer that enables reading extra parameters of the box.
      */
-    BoxFactory(Analyzer* an);
+    BoxFactory(Analyzer *an);
     /*!
      * \brief getBox creates Box according to the given parameters and adds extra parameters depending on type of the box.
      * \param size
