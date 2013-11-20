@@ -18,11 +18,13 @@ class TreeModel;
 class Analyzer
 {
 public:
+    Analyzer();
     /*!
      * \brief Analyzer - constructor
      * \param fileName name of the file to be analyzed
      */
     Analyzer(const QString& fileName);
+    void setFile(const QString& fileName);
     /*!
      * \brief getData
      * \return QString object that contains data for the treeView.
@@ -79,11 +81,7 @@ private:
      *  name of the analyzed file
      */
     QString fileName;
-    /*!
-     * \brief list
-     * QString that contains data formatted in a way suitable for treemodel
-     */
-    QString list;
+    //QString list;
     /*!
      * \brief tempArray
      */
@@ -96,6 +94,7 @@ public:
     QByteArray getTempArray() {
         return tempArray;
     }
+
 };
 
 

@@ -94,9 +94,11 @@ QString MediaHeaderBox::getInfo() {
 /////////////
 MovieBox::MovieBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e):Box(s,t,off,e) {}
 /////////////
-MovieHeaderBox::MovieHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int &v,
-                               const QList<unsigned int> &f, unsigned int ct, unsigned int mt, unsigned int ts, unsigned int d, unsigned int r, unsigned int vl, unsigned int r16,
-                               unsigned int r32, QList<unsigned int> mx, QList<unsigned int> pr, unsigned int nid):
+MovieHeaderBox::MovieHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e,
+                               const unsigned  int &v, const QList<unsigned int> &f, const unsigned long &ct, const unsigned long &mt,
+                               const unsigned long &ts, const unsigned long &d, const unsigned int &r, const unsigned int &vl,
+                               const unsigned int &r16, const QList<unsigned long> &r32, const QList<unsigned long> &mx,
+                               const QList<unsigned long> &pr, const unsigned long &nid):
     FullBox(s,t,off,e, v, f) ,
     version(v),
     flags(f),
@@ -130,17 +132,21 @@ QString MovieHeaderBox::getInfo() {
     tmp.append("\nReserved16\t\t");
     tmp.append(QString::number(reserved16));
     tmp.append("\nReserved32\t\t");
-    tmp.append(QString::number(reserved32));
+    QList<unsigned long int>::iterator p;
+    for (p = reserved32.begin(); p !=reserved32.end(); ++p) {
+        tmp.append(QString::number(*p));
+        tmp.append(" | ");
+    }
     tmp.append("\nMatrix\t\t");
-    QList<unsigned int>::iterator i;
+    QList<unsigned long int>::iterator i;
     for (i = matrix.begin(); i !=matrix.end(); ++i) {
-        tmp.append(*i);
+        tmp.append(QString::number(*i));
         tmp.append(" | ");
     }
     tmp.append("\nPredefined\t\t");
-    QList<unsigned int>::iterator k;
+    QList<unsigned long int>::iterator k;
     for (k = predefined.begin(); k !=predefined.end(); ++k) {
-        tmp.append(*k);
+        tmp.append(QString::number(*k));
         tmp.append(" | ");
     }
     tmp.append("\nNext track id\t\t");
@@ -295,7 +301,18 @@ CopyRightBox::CopyRightBox(const unsigned  int& s, const QString& t, const unsig
 ///////////////
 MovieExtendsBox::MovieExtendsBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 ///////////////
-MovieExtendsHeaderBox::MovieExtendsHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f): FullBox(s,t,off,e, v, f) {}
+MovieExtendsHeaderBox::MovieExtendsHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e,
+                                             const unsigned  int& v, const QList<unsigned int>& f, const unsigned long &fd):
+    FullBox(s,t,off,e, v, f),
+    fragmentDuration(fd)
+{}
+QString MovieExtendsHeaderBox::getInfo() {
+    QString tmp("");
+    tmp.append(FullBox::getInfo());
+    tmp.append("\nFragment duration\t");
+    tmp.append(QString::number(fragmentDuration));
+    return tmp;
+}
 ///////////////
 MovieFragmentBox::MovieFragmentBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 ///////////////
@@ -305,9 +322,8 @@ MovieFragmentHeaderBox::MovieFragmentHeaderBox(const unsigned  int& s, const QSt
 QString MovieFragmentHeaderBox::getInfo() {
     QString tmp("");
     tmp.append(FullBox::getInfo());
-    tmp.append("\nSequence number\t\t");
+    tmp.append("\nSequence number\t");
     tmp.append(QString::number(sequenceNumber));
-    qDebug()<<sequenceNumber;
     return tmp;
 }
 ///////////////

@@ -1,16 +1,29 @@
 #include "analyzer.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////
+Analyzer::Analyzer() {}
+////////////////////////////////////////////////////////////////////////////////////////////
 Analyzer::Analyzer(const QString &fileName)
 {
     this->fileName=fileName;
     this->arraySize = 0;
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
+        qDebug()<<"?";
         return ;
     }
-    QByteArray array = file.readAll();
-    tempArray= array;
+    qDebug()<<"??";
+    try {
+        file.readAll();
+        qDebug()<<"???";
+        QByteArray array = file.readAll();
+        tempArray= array;
+    }
+    catch(...) {
+        tempArray = NULL;
+    }
+
+
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 unsigned long int Analyzer:: valueOfGroupOfFields(const int &begin, const int &end, QByteArray array) {
@@ -98,6 +111,7 @@ void Analyzer::setData(QByteArray array, TreeItem *&parent, QHash<long, TreeItem
 
         size=valueOfGroupOfFields(i, i+3, array); //obliczenie wartosci rozmiaru i typu
         type= valueOfGroupOfFields(i+4, i+7, array); //w zadanej tablicy: zawsze na poczatku
+        qDebug()<<"type"<<QString::number(type);
 
         if(size == 0) { //gdy size = 0, to box ciągnie się do końca pliku
             size = arraySize - offset;  //nieprzetestowane!

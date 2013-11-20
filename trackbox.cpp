@@ -97,24 +97,89 @@ QString HandlerBox::getInfo() {
 
 /////////////
 TrackExtendsBox::TrackExtendsBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e,
-                                 const unsigned  int& v, const QList<unsigned int>& f):
+                                 const unsigned  int& v, const QList<unsigned int>& f, const unsigned int& tid, const unsigned int& dsdi,
+                                 const unsigned int& dsd,const unsigned int& dss, const unsigned int& dsf):
     FullBox(s,t,off,e, v, f) ,
     version(v),
-    flags(f)
+    flags(f),
+    trackID(tid),
+    defaultSampleDescriptionIndex(dsdi),
+    defaultSampleDuration(dsd),
+    defaultSampleSize(dss),
+    defaultSampleFlags(dsf)
 {}
+QString TrackExtendsBox::getInfo() {
+    QString tmp("");
+    tmp.append(FullBox::getInfo());
+    tmp.append("\nTrack ID\t\t");
+    tmp.append(QString::number(trackID));
+    tmp.append("\nDefault Sample Description Index\t");
+    tmp.append(QString::number(defaultSampleDescriptionIndex));
+    tmp.append("\nDefault Sample Duration\t");
+    tmp.append(QString::number(defaultSampleDuration));
+    tmp.append("\nDefault Sample Size\t");
+    tmp.append(QString::number(defaultSampleSize));
+    tmp.append("\nDefault Sample Flags\t");
+    tmp.append(QString::number(defaultSampleFlags));
+    return tmp;
+}
 ///////////////
 TrackFragmentBox::TrackFragmentBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e): Box(s,t,off,e) {}
 ///////////////
-TrackFragmentHeaderBox::TrackFragmentHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e,
-                                               const unsigned  int& v, const QList<unsigned int>& f):
-    FullBox(s,t,off,e, v, f)
+TrackFragmentHeaderBox::TrackFragmentHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off,
+                                               const unsigned  int &  e, const unsigned  int& v, const QList<unsigned int>& f,
+                                               const unsigned long int& tid, const unsigned long &bdo, const unsigned long &dsdi,
+                                               const unsigned long &dsd, const unsigned long &dss, const unsigned long &dsf):
+    FullBox(s,t,off,e, v, f),
+    trackID(tid),
+    baseDataOffset(bdo),
+    sampleDescriptionIndex(dsdi),
+    defaultSampleDuration(dsd),
+    defaultSampleSize(dss),
+    defaultSampleFlags(dsf)
 {}
+QString TrackFragmentHeaderBox::getInfo() {
+    QString tmp("");
+    tmp.append(FullBox::getInfo());
+    tmp.append("\nTrack ID\t\t");
+    tmp.append(QString::number(trackID));
+    if (getSize() >= 24) {
+        tmp.append(("\nBase Data Offset\t"));
+        tmp.append(QString::number(baseDataOffset));
+        if (getSize() >= 28) {
+            tmp.append("\nSample Description Index\t");
+            tmp.append(QString::number(sampleDescriptionIndex));
+            if (getSize() >=32 ) {
+                tmp.append("\nDefault Sample Duration\t");
+                tmp.append(QString::number(defaultSampleDuration));
+                if (getSize() >=36 ) {
+                    tmp.append("\nDefault Sample Size\t");
+                    tmp.append(QString::number(defaultSampleSize));
+                    if (getSize() >= 40) {
+                        tmp.append("\nDefault Sample Flags\t");
+                        tmp.append(QString::number(defaultSampleFlags));
+                    }
+                }
+            }
+        }
+    }
+    return tmp;
+}
 ///////////////
 TrackRunBox::TrackRunBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e,
-                         const unsigned  int& v, const QList<unsigned int>& f):
+                         const unsigned  int& v, const QList<unsigned int>& f, const unsigned long &sc, const long &dof,
+                         const unsigned int &fsf,const unsigned long &sd, const unsigned long &ss, const unsigned int &sf,
+                         const unsigned long &scto):
     FullBox(s,t,off,e, v, f) ,
     version(v),
-    flags(f)
+    flags(f),
+    sampleCount(sc),
+    dataOffset(dof),
+    firstSampleFlags(fsf),
+    sampleDuration(sd),
+    sampleSize(ss),
+    sampleFlags(sf),
+    sampleCompositionTimeOffset(scto)
 {}
 ///////////////
 TrackFragmentRandomAccessBox::TrackFragmentRandomAccessBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e,
@@ -122,7 +187,16 @@ TrackFragmentRandomAccessBox::TrackFragmentRandomAccessBox(const unsigned  int& 
     FullBox(s,t,off,e, v, f)
 {}
 ///////////////
-TrackFragmentBaseMediaDecodeTimeBox::TrackFragmentBaseMediaDecodeTimeBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e,
-                                                                         const unsigned  int& v, const QList<unsigned int>& f):
-    FullBox(s,t,off,e, v, f)
+TrackFragmentBaseMediaDecodeTimeBox::TrackFragmentBaseMediaDecodeTimeBox(const unsigned  int& s, const QString& t, const unsigned long int& off,
+                                                                         const unsigned  int &  e, const unsigned  int& v,
+                                                                         const QList<unsigned int>& f, const unsigned long &bmdt):
+    FullBox(s,t,off,e, v, f),
+    baseMediaDecodeTime(bmdt)
 {}
+QString TrackFragmentBaseMediaDecodeTimeBox::getInfo() {
+    QString tmp;
+    tmp.append(FullBox::getInfo());
+    tmp.append("\nBase Media Decode Time\t");
+    tmp.append(QString::number(baseMediaDecodeTime));
+    return tmp;
+}

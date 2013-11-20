@@ -68,10 +68,17 @@ class TrackExtendsBox : public FullBox
 private:
     unsigned int version;
     QList<unsigned int> flags;
+    unsigned int trackID;
+    unsigned int defaultSampleDescriptionIndex;
+    unsigned int defaultSampleDuration;
+    unsigned int defaultSampleSize;
+    unsigned int defaultSampleFlags;
 public:
     TrackExtendsBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e, const unsigned int& v,
-                    const QList<unsigned int>& f);
+                    const QList<unsigned int>& f, const unsigned int& tid, const unsigned int& dsdi, const unsigned int& dsd,
+                    const unsigned int& dss, const unsigned int& dsf);
     virtual QString getFullName() { return QString("Track Extends Box"); }
+    virtual QString getInfo();
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class TrackFragmentBox : public Box
@@ -80,6 +87,9 @@ public:
     TrackFragmentBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e);
     virtual bool isContainer() { return true; }
     virtual QString getFullName() { return QString("Track Fragment Box"); }
+    virtual QString getInfo() {
+        return QString("Track Fragment Box is usefull for defaulting many fields within track fragments structure, it can store the space and complexity of movie fragments default values");
+    }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class TrackFragmentHeaderBox : public FullBox
@@ -87,9 +97,19 @@ class TrackFragmentHeaderBox : public FullBox
 private:
     unsigned int version;
     QList<unsigned int> flags;
+    unsigned long int trackID;
+    unsigned long int baseDataOffset;
+    unsigned long int sampleDescriptionIndex;
+    unsigned long int defaultSampleDuration;
+    unsigned long int defaultSampleSize;
+    unsigned long int defaultSampleFlags;
 public:
-    TrackFragmentHeaderBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e, const unsigned int& v, const QList<unsigned int>& f);
+    TrackFragmentHeaderBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e,
+                           const unsigned int& v, const QList<unsigned int>& f, const unsigned long int& tid, const unsigned long int& bdo,
+                           const unsigned long int& dsdi, const unsigned long int& dsd, const unsigned long int& dss,
+                           const unsigned long int& dsf);
     virtual QString getFullName() { return QString("Track Fragment Header Box"); }
+    virtual QString getInfo();
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class TrackRunBox : public FullBox
@@ -97,8 +117,18 @@ class TrackRunBox : public FullBox
 private:
     unsigned int version;
     QList<unsigned int> flags;
+    unsigned long int sampleCount;
+    long int dataOffset;
+    unsigned int firstSampleFlags;
+    unsigned long int sampleDuration;
+    unsigned long int sampleSize;
+    unsigned int sampleFlags;
+    unsigned long int sampleCompositionTimeOffset;
+
 public:
-    TrackRunBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e, const unsigned int& v, const QList<unsigned int>& f);
+    TrackRunBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e, const unsigned int& v,
+                const QList<unsigned int>& f, const unsigned long int& sc, const long int& dof, const unsigned int& fsf,
+                const unsigned long int& sd, const unsigned long int& ss, const unsigned int& sf, const unsigned long int& scto);
     virtual QString getFullName() { return QString("Track Run Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -117,9 +147,12 @@ class TrackFragmentBaseMediaDecodeTimeBox : public FullBox
 private:
     unsigned int version;
     QList<unsigned int> flags;
+    unsigned long int baseMediaDecodeTime;
 public:
-    TrackFragmentBaseMediaDecodeTimeBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e, const unsigned int& v, const QList<unsigned int>& f);
+    TrackFragmentBaseMediaDecodeTimeBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e,
+                                        const unsigned int& v, const QList<unsigned int>& f, const unsigned long int& bmdt);
     virtual QString getFullName() { return QString("Track Fragment Base Media Decode Time Box"); }
+    virtual QString getInfo();
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class HandlerBox : public FullBox

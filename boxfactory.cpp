@@ -36,7 +36,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         unsigned int graphicsMode = analyzer ->valueOfGroupOfFields(offset + 12, offset + 13);
         QList <unsigned int> opcolor;
@@ -61,7 +61,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new NullMediaHeaderBox(size,type,off,e, v, f));
         return ret;
@@ -105,7 +105,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         QString location;
         if(f.at(2) == 1)
@@ -126,7 +126,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new DataEntryUrnBox(size,type,off,e, v, f));
         return ret;
@@ -140,7 +140,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         unsigned long int entryCount = analyzer->valueOfGroupOfFields(offset + 12, offset + 15);
         std::shared_ptr<Box> ret(new DataReferenceBox(size,type,off,e, v, f, entryCount));
@@ -155,7 +155,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         unsigned int entryCount = analyzer->valueOfGroupOfFields(offset+12, offset+15);
 
@@ -181,7 +181,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         unsigned long int entryCount = analyzer->valueOfGroupOfFields(offset + 12, offset + 15);
         QList<unsigned long int> chunkOffset;
@@ -200,7 +200,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new PaddingBitsBox(size,type,off,e, v, f));
         return ret;
@@ -222,7 +222,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         QList<unsigned long int> segmentDuration;
         QList<unsigned long int> mediaTime;
@@ -259,7 +259,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new CopyRightBox(size,type,off,e, v, f));
         return ret;
@@ -273,7 +273,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new ProgressiveDownloadInfoBox(size,type,off,e, v, f));
         return ret;
@@ -287,7 +287,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new XMLBox(size,type,off,e, v, f));
         return ret;
@@ -301,7 +301,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new BinaryXMLBox(size,type,off,e, v, f));
         return ret;
@@ -315,7 +315,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new ItemLocationBox(size,type,off,e, v, f));
         return ret;
@@ -329,7 +329,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new PrimaryItemBox(size,type,off,e, v, f));
         return ret;
@@ -343,7 +343,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new ItemProtectionBox(size,type,off,e, v, f));
         return ret;
@@ -358,7 +358,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new ItemInfoEntry(size,type,off,e, v, f));
         return ret;
@@ -372,7 +372,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new ItemInfoBox(size,type,off,e, v, f));
         return ret;
@@ -390,7 +390,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new IPMPInfoBox(size,type,off,e, v, f));
         return ret;
@@ -404,7 +404,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new IPMPControlBox(size,type,off,e, v, f));
         return ret;
@@ -422,7 +422,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         return std::shared_ptr<Box>(new ObjectDescriptorBox(size,type,off,e, v, f));
     }
@@ -435,7 +435,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         return std::shared_ptr<Box>(new ESDBox(size,type,off,e, v, f));
     }
@@ -452,7 +452,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         return std::shared_ptr<Box>(new LevelAssignmentBox(size,type,off,e, v, f));
     }
@@ -465,7 +465,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         return std::shared_ptr<Box>(new ProducerReferenceTimeBox(size,type,off,e, v, f));
     }
@@ -493,31 +493,44 @@ std::shared_ptr<Box> BoxFactory::getMBox(const unsigned int& size, QString type,
         unsigned int version = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
-        unsigned int creationTime;
-        unsigned int modificationTime;
-        unsigned int timescale;
-        unsigned int duration;
-        unsigned int rate;
-        unsigned int volume;
+        unsigned long int creationTime;
+        unsigned long int modificationTime;
+        unsigned long int timescale;
+        unsigned long int duration;
         if(version == 1) {
             creationTime = analyzer->valueOfGroupOfFields(offset+12,offset+19);
             modificationTime = analyzer->valueOfGroupOfFields(offset+20, offset+27);
             timescale = analyzer->valueOfGroupOfFields(offset+28, offset+35);
             duration = analyzer->valueOfGroupOfFields(offset+36, offset+43);
+            offset+=12;
         }
         else if(version == 0) {
             creationTime = analyzer->valueOfGroupOfFields(offset+12,offset+15);
             modificationTime = analyzer->valueOfGroupOfFields(offset+16, offset+19);
             timescale = analyzer->valueOfGroupOfFields(offset+20, offset+23);
             duration = analyzer->valueOfGroupOfFields(offset+24, offset+27);
-            //unsigned int rate = analyzer->valueOfGroupOfFields(offset+28, offset+31);//fixed number
-            //unsigned int volume = analyzer->valueOfGroupOfFields(offset+32, offset+33);
         }
+        QList<unsigned long int> reserved32;
+        QList<unsigned long int> matrix;
+        QList<unsigned long int> predefined;
+        unsigned long int nextTrackId;
+        unsigned int rate = analyzer->valueOfGroupOfFields(offset+28, offset+31);//fixed number
+        unsigned int volume = analyzer->valueOfGroupOfFields(offset+32, offset+33);
+        unsigned int reserved16 = analyzer->valueOfGroupOfFields(offset + 34, offset + 35);
+        reserved32.append(analyzer->valueOfGroupOfFields(offset + 36, offset + 39));
+        reserved32.append(analyzer->valueOfGroupOfFields(offset + 40, offset + 43));
+        for(int i = 0; i<9; ++i) {
+            matrix.append(analyzer->valueOfGroupOfFields(offset + 44 + 4*i, offset + 47 + 4*i));
+        }
+        for(int i = 0; i<6; ++i) {
+            predefined.append(analyzer->valueOfGroupOfFields(offset + 80 + 4*i, offset + 83 +4*i));
+        }
+        nextTrackId = analyzer->valueOfGroupOfFields(offset + 104, offset + 107);
 
         std::shared_ptr<Box> ret(new MovieHeaderBox(size,type,off,e, version, f, creationTime, modificationTime, timescale, duration,
-                                                    rate, volume));
+                                                    rate, volume, reserved16, reserved32, matrix, predefined, nextTrackId));
         return ret;
     }
     else if(type=="mdhd"){
@@ -529,7 +542,7 @@ std::shared_ptr<Box> BoxFactory::getMBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         unsigned long int creationTime;
         unsigned long int modificationTime;
@@ -595,7 +608,7 @@ std::shared_ptr<Box> BoxFactory::getMBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         unsigned int sn = analyzer->valueOfGroupOfFields(8,11);
         std::shared_ptr<Box> ret(new MovieFragmentHeaderBox(size,type,off,e, sn, v, f));
@@ -667,9 +680,14 @@ std::shared_ptr<Box> BoxFactory::getMBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
-        std::shared_ptr<Box> ret(new MovieExtendsHeaderBox(size,type,off,e, v, f));
+        unsigned long int fd;
+        if(v)
+            fd = analyzer->valueOfGroupOfFields(offset+12, offset + 19);
+        else
+            fd = analyzer->valueOfGroupOfFields(offset+12, offset + 15);
+        std::shared_ptr<Box> ret(new MovieExtendsHeaderBox(size,type,off,e, v, f, fd));
         return ret;
     }
     else if(type=="minf"){
@@ -689,7 +707,7 @@ std::shared_ptr<Box> BoxFactory::getMBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new MetaBox(size,type,off,e, v, f));
         return ret;
@@ -703,7 +721,7 @@ std::shared_ptr<Box> BoxFactory::getMBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new MovieFragmentRandomAccessOffsetBox(size,type,off,e, v, f));
         return ret;
@@ -779,9 +797,15 @@ std::shared_ptr<Box> BoxFactory::getTBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
-        std::shared_ptr<Box> ret(new TrackExtendsBox(size,type,off,e, v, f));
+        unsigned int tid = analyzer->valueOfGroupOfFields(offset + 12, offset + 15);
+        unsigned int dsdi = analyzer->valueOfGroupOfFields(offset + 16, offset + 19);
+        unsigned int dsd = analyzer->valueOfGroupOfFields(offset + 20, offset + 23);
+        unsigned int dss = analyzer->valueOfGroupOfFields(offset + 24, offset + 27);
+        unsigned int dsf = analyzer->valueOfGroupOfFields(offset + 28, offset + 31);
+
+        std::shared_ptr<Box> ret(new TrackExtendsBox(size,type,off,e, v, f, tid, dsdi, dsd, dss, dsf));
         return ret;
     }
     else if(type=="traf"){
@@ -797,9 +821,29 @@ std::shared_ptr<Box> BoxFactory::getTBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
-        std::shared_ptr<Box> ret(new TrackFragmentHeaderBox(size,type,off,e, v, f));
+        unsigned long int tid = analyzer->valueOfGroupOfFields(offset+12,offset+15);
+        unsigned long int bdo = 0;
+        unsigned long int sdi = 0;
+        unsigned long int dsd = 0;
+        unsigned long int dss = 0;
+        unsigned long int dsf = 0;
+        if(size >= 24) {
+            bdo = analyzer->valueOfGroupOfFields(offset + 16, offset + 23);
+            if(size >= 28) {
+                sdi = analyzer->valueOfGroupOfFields(offset + 24, offset + 27);
+                if(size >= 32) {
+                    dsd = analyzer->valueOfGroupOfFields(offset + 28, offset + 31);
+                    if(size >= 36) {
+                        dss = analyzer->valueOfGroupOfFields(offset + 32, offset + 35);
+                        if(size >=40)
+                            dsf = analyzer->valueOfGroupOfFields(offset + 36, offset + 39);
+                    }
+                }
+            }
+        }
+        std::shared_ptr<Box> ret(new TrackFragmentHeaderBox(size,type,off,e, v, f, tid, bdo, sdi, dsd, dss, dsf));
         return ret;
     }
     else if(type=="trun"){
@@ -811,9 +855,10 @@ std::shared_ptr<Box> BoxFactory::getTBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
-        std::shared_ptr<Box> ret(new TrackRunBox(size,type,off,e, v, f));
+
+        std::shared_ptr<Box> ret(new TrackRunBox(size,type,off,e, v, f,0,0,0,0,0,0,0));
         return ret;
     }
     else if(type=="tfra"){
@@ -825,8 +870,9 @@ std::shared_ptr<Box> BoxFactory::getTBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
+
         std::shared_ptr<Box> ret(new TrackFragmentRandomAccessBox(size,type,off,e, v, f));
         return ret;
     }
@@ -847,9 +893,14 @@ std::shared_ptr<Box> BoxFactory::getTBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
-        return std::shared_ptr<Box>(new TrackFragmentBaseMediaDecodeTimeBox(size,type,off,e, v, f));
+        unsigned long int baseMediaDecodeTime;
+        if(v == 1)
+            baseMediaDecodeTime = analyzer->valueOfGroupOfFields(offset + 12, offset + 19);
+        else if(v == 0)
+            baseMediaDecodeTime = analyzer->valueOfGroupOfFields(offset + 12, offset + 15);
+        return std::shared_ptr<Box>(new TrackFragmentBaseMediaDecodeTimeBox(size,type,off,e, v, f, baseMediaDecodeTime));
     }
     return std::shared_ptr<Box>(new Box(size,type,off,e));
 }
@@ -864,7 +915,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         unsigned int balance = analyzer->valueOfGroupOfFields(offset + 12, offset + 13);
         unsigned int reserved = analyzer->valueOfGroupOfFields(offset + 14, offset + 15);
@@ -910,7 +961,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         unsigned int entryCount = analyzer->valueOfGroupOfFields(offset + 12, offset + 15);
         std::shared_ptr<Box> ret(new SampleDescriptionBox(size,type,off,e,v,f,entryCount));
@@ -925,7 +976,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         unsigned long int sampleSize = analyzer->valueOfGroupOfFields(offset + 12, offset + 15);
         unsigned long int sampleCount = analyzer->valueOfGroupOfFields(offset + 16, offset + 19);
@@ -947,7 +998,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new CompactSampleSizeBox(size,type,off,e, v, f));
         return ret;
@@ -961,7 +1012,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         unsigned long int entryCount = analyzer->valueOfGroupOfFields(offset + 12, offset + 15);
         QList<unsigned long int> firstChunk;
@@ -985,7 +1036,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         unsigned long int entryCount = analyzer->valueOfGroupOfFields(offset + 12, offset + 15);
         QList<unsigned long int> chunkOffset;
@@ -1004,7 +1055,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         unsigned long int entryCount = analyzer->valueOfGroupOfFields(offset + 12, offset + 15);
         QList<unsigned long int> sampleNumber;
@@ -1023,7 +1074,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new ShadowSyncSampleBox(size,type,off,e, v, f));
         return ret;
@@ -1037,7 +1088,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new DegradationPriorityBox(size,type,off,e, v, f));
         return ret;
@@ -1055,7 +1106,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new SampleDependencyTypeBox(size,type,off,e, v, f));
         return ret;
@@ -1069,7 +1120,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new SampleToGroupBox(size,type,off,e, v, f));
         return ret;
@@ -1083,7 +1134,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new SampleGroupDescriptionBox(size,type,off,e, v, f));
         return ret;
@@ -1097,7 +1148,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new SampleScaleBox(size,type,off,e, v, f));
         return ret;
@@ -1111,7 +1162,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         unsigned int version = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         unsigned int referenceId = analyzer->valueOfGroupOfFields(offset + 12, offset + 15);
         unsigned int timescale = analyzer->valueOfGroupOfFields(offset + 16, offset + 19);
@@ -1180,7 +1231,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         unsigned int version = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         return std::shared_ptr<Box>(new SubsegmentIndexBox(size,type,off,e, version, f));
     }
@@ -1193,7 +1244,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new SubSampleInformationBox(size,type,off,e, v, f));
         return ret;
@@ -1211,7 +1262,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new SchemeTypeBox(size,type,off,e, v, f));
         return ret;
@@ -1233,7 +1284,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new SRTPProcessBox(size,type,off,e, v, f));
         return ret;
@@ -1251,7 +1302,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         return std::shared_ptr<Box>(new SampleAuxiliaryInformationSizesBox(size,type,off,e, v, f));
     }
@@ -1264,7 +1315,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         return std::shared_ptr<Box>(new SampleAuxiliaryInformationOffsetsBox(size,type,off,e, v, f));
     }
@@ -1281,7 +1332,7 @@ std::shared_ptr<Box> BoxFactory::getHBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         unsigned int predefined = analyzer->valueOfGroupOfFields(offset + 12, offset + 15);
         unsigned long int handlerType = analyzer->valueOfGroupOfFields(offset + 16, offset + 19);
@@ -1317,7 +1368,7 @@ std::shared_ptr<Box> BoxFactory::getHBox(const unsigned int& size, QString type,
         unsigned int v = analyzer->valueOfGroupOfFields(offset+8,offset+8);
         QList<unsigned int> f;
         for (unsigned int i = 0; i<3; ++i) {
-            f.append(analyzer->valueOfGroupOfFields(offset+i+8, offset+i+9));
+            f.append(analyzer->valueOfGroupOfFields(offset+i+9, offset+i+9));
         }
         std::shared_ptr<Box> ret(new HintMediaHeaderBox(size,type,off,e, v, f));
         return ret;

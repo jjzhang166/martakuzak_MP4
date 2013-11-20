@@ -20,6 +20,8 @@ MainWindow::MainWindow(QWidget *parent) :
     searchBoxLayout = new QGridLayout();
     boxInfoLayout = new QVBoxLayout();
 
+    analyzer = new Analyzer();
+
     QWidget *window = new QWidget();
     setWindowIcon(QIcon("D://vnb//pear.png"));
     setCentralWidget(window);
@@ -48,6 +50,7 @@ MainWindow::~MainWindow()
     delete mainLayout;
     delete boxParseLayout;
     delete searchBoxLayout;
+    delete analyzer;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::createActions()
@@ -114,7 +117,7 @@ void MainWindow::setSearchBoxSection() {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::setBoxInfoSection(const QString& fileName) {
-
+    qDebug()<<"setBoxInfoSection 1"<<fileName;
     if(!boxParseLayout->count()) {
         boxParseGroupBox = new QGroupBox();
         boxInfoGroupBox = new QGroupBox();
@@ -126,10 +129,11 @@ void MainWindow::setBoxInfoSection(const QString& fileName) {
         boxNameLabel->setMaximumHeight(20);
         boxNameLabel->setFont(QFont("Arial", 13));
     }
-
-    Analyzer* an = new Analyzer(fileName);
-    model= new TreeModel(an);
-
+    qDebug()<<"setBoxInfoSection przed analyzerem";
+    delete analyzer;
+    analyzer = new Analyzer(fileName);
+    model= new TreeModel(analyzer);
+    qDebug()<<"setInfoBoxSection przed setModel";
     treeView->setModel(model);
     //treeView->setFont(QFont("Arial", 12));
     //treeView->header()->setStretchLastSection(false);
@@ -175,23 +179,33 @@ void MainWindow::setBoxInfoSection(const QString& fileName) {
 void MainWindow::openFile()
 {
     QFileDialog dialog(this);
+    qDebug()<<"openFile 1";
     dialog.setFileMode(QFileDialog::AnyFile);
+    qDebug()<<"openFile 2";
 //    QString fileName = QFileDialog::getOpenFileName(this,
 //                                                    tr("Open File"), "/", tr("MP4 Files (*.mp4)"));
     QString fileName = QFileDialog::getOpenFileName(this,
                                                     tr("Open File"), "/");
+
+    qDebug()<<"openFile 3";
     if(fileName.length()) {
+
+        qDebug()<<"openFile: fileName.length() 1";
 //        boxParsingProgressDialog = new QProgressDialog(this);
 //        boxParsingProgress = new QProgressBar();
 //        boxParsingProgress->setFormat("Box analyzing %p");
 //        boxParsingProgressDialog->setBar(boxParsingProgress);
 //        boxParsingProgressDialog->show();
 
-        if(!searchBoxLayout->count())
+        if(!searchBoxLayout->count()) {
+            qDebug()<<"openFile: fileName.length() 2";
             setSearchBoxSection();
+        }
+        qDebug()<<"openFile: fileName.length() 3";
         setBoxInfoSection(fileName);
         //boxParsingProgressDialog->close();
     }
+    qDebug()<<"openFile: after if";
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::printSelectedBox() {

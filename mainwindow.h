@@ -82,6 +82,10 @@ private:
      * \brief helpMenu
      */
     QMenu *helpMenu;
+    /*!
+     * \brief analyzer
+     */
+    Analyzer * analyzer;
 public:
     //!Constructor
     /*!

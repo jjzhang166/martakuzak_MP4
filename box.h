@@ -90,6 +90,12 @@ public:
      * \return all the attributes fields in one formatted QString.
      */
     virtual QString getInfo() {return QString(" "); }
+    /*!
+     * \brief getSize
+     * \return size in bytes
+     */
+    unsigned long int getSize() { return size; }
+
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////
 class FullBox : public Box
@@ -172,24 +178,25 @@ class MovieHeaderBox : public FullBox
 private:
     unsigned  int version;
     QList<unsigned int> flags;
-    unsigned int creationTime; //in seconds since midnight, Jan. 1, 1904, in UTC time
-    unsigned int modificationTime;
-    unsigned int timeScale; //ilosc jednostek w sekundzie
-    unsigned int duration; //liczba jednostek czasu wynikajacych ze skali czasu
+    unsigned long int creationTime; //in seconds since midnight, Jan. 1, 1904, in UTC time
+    unsigned long int modificationTime;
+    unsigned long int timeScale; //ilosc jednostek w sekundzie
+    unsigned long int duration; //liczba jednostek czasu wynikajacych ze skali czasu
     unsigned int rate;
     unsigned int volume;
     unsigned int reserved16;
-    unsigned int reserved32;
-    QList<unsigned int> matrix;
-    QList<unsigned int> predefined;
-    unsigned int nextTrackId;
+    QList<unsigned long int> reserved32;
+    QList<unsigned long int> matrix;
+    QList<unsigned long int> predefined;
+    unsigned int long nextTrackId;
 public:
-    MovieHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int& e, const unsigned  int& v, const QList<unsigned int>& f,
-                   unsigned int creationTime, unsigned int modificationTime, unsigned int timeScale, unsigned int duration, unsigned int rate=1, unsigned int volume=1, unsigned int reserved16=0,
-                   unsigned int reserved32=0, QList<unsigned int> mx=QList<unsigned int>(), QList<unsigned int> pr=QList<unsigned int>(), unsigned int nextTrackId=0);
+    MovieHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int& e, const unsigned  int& v,
+                   const QList<unsigned int>& f, const unsigned long int &creationTime, const unsigned long int& modificationTime,
+                   const unsigned long int &timeScale, const unsigned long int& duration, const unsigned int& rate, const unsigned int& volume,
+                   const unsigned int& reserved16, const QList<unsigned long int>& reserved32, const QList<unsigned long int>& mx,
+                   const QList<unsigned long int>& pr, const unsigned long int& nextTrackId);
     virtual QString getFullName() { return QString("Movie Header Box "); }
     virtual QString getInfo();
-
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MediaInformationBox : public Box
@@ -367,6 +374,9 @@ public:
     MovieExtendsBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e);
     virtual bool isContainer() { return true; }
     virtual QString getFullName() { return QString("Movie Extends Box"); }
+    virtual QString getInfo() {
+        return QString("Movie Extends Box existence means that there may be Movie Fragment Boxes in the file.");
+    }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MovieExtendsHeaderBox : public FullBox
@@ -374,9 +384,12 @@ class MovieExtendsHeaderBox : public FullBox
 private:
     unsigned  int version;
     QList<unsigned int> flags;
+    unsigned long int fragmentDuration;
 public:
-    MovieExtendsHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int& e, const unsigned  int& v, const QList<unsigned int>& f);
+    MovieExtendsHeaderBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int& e,
+                          const unsigned  int& v, const QList<unsigned int>& f, const unsigned long int& fd);
     virtual QString getFullName() { return QString("Movie Extends Header Box"); }
+    virtual QString getInfo();
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MovieFragmentBox : public Box
