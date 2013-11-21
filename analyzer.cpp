@@ -84,9 +84,12 @@ QString Analyzer:: toQString(unsigned int num, int bytes) {
     result.push_front(QChar(num));
     return result;
 }
-
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+Analyzer::~Analyzer() {
+    delete arraySize;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
 void Analyzer::setData(TreeItem* parent, QHash<long, TreeItem *>* items) {
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly)) {
@@ -94,7 +97,7 @@ void Analyzer::setData(TreeItem* parent, QHash<long, TreeItem *>* items) {
     }
     QByteArray array = file.readAll();
     tempArray= array;
-    arraySize = array.size();
+    arraySize = new long(array.size());
     setData(array,parent,items, 0);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -114,7 +117,7 @@ void Analyzer::setData(QByteArray array, TreeItem *&parent, QHash<long, TreeItem
         qDebug()<<"type"<<QString::number(type);
 
         if(size == 0) { //gdy size = 0, to box ciągnie się do końca pliku
-            size = arraySize - offset;  //nieprzetestowane!
+            size = *arraySize - offset;  //nieprzetestowane!
         }
         else if(size == 1 ) { //dla size = 1, rozmiar przybiera wartość rozszerzoną int(64), po typie
             size = valueOfGroupOfFields(i+8, i+15, array);

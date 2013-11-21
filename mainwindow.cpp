@@ -132,6 +132,7 @@ void MainWindow::setBoxInfoSection(const QString& fileName) {
     qDebug()<<"setBoxInfoSection przed analyzerem";
     delete analyzer;
     analyzer = new Analyzer(fileName);
+    qDebug()<<"setBoxInfoSection przed setModel";
     model= new TreeModel(analyzer);
     qDebug()<<"setInfoBoxSection przed setModel";
     treeView->setModel(model);

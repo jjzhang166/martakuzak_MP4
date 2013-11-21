@@ -6,6 +6,7 @@ TreeModel::TreeModel(Analyzer *analyzer, QObject *parent)
     rootData << "Name" << "Size"<<"Offset";
     rootItem = new TreeItem(analyzer,rootData);
     treeItems= new QHash<long,TreeItem*>();
+    qDebug()<<"TreeModel constr przed set data";
     analyzer->setData(rootItem, treeItems);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////

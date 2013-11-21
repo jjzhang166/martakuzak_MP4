@@ -24,12 +24,7 @@ public:
      * \param fileName name of the file to be analyzed
      */
     Analyzer(const QString& fileName);
-    void setFile(const QString& fileName);
-    /*!
-     * \brief getData
-     * \return QString object that contains data for the treeView.
-     */
-    //QString getData();
+    ~Analyzer();
     /*!
      * \brief setData adds children to the parent.
      * \param parent parent of the tree fragment that children are to be analyzed.
@@ -81,7 +76,6 @@ private:
      *  name of the analyzed file
      */
     QString fileName;
-    //QString list;
     /*!
      * \brief tempArray
      */
@@ -89,7 +83,7 @@ private:
     /*!
      * \brief arraySize
      */
-    int arraySize;
+    long * arraySize;
 public:
     QByteArray getTempArray() {
         return tempArray;
