@@ -114,7 +114,6 @@ void Analyzer::setData(QByteArray array, TreeItem *&parent, QHash<long, TreeItem
 
         size=valueOfGroupOfFields(i, i+3, array); //obliczenie wartosci rozmiaru i typu
         type= valueOfGroupOfFields(i+4, i+7, array); //w zadanej tablicy: zawsze na poczatku
-        qDebug()<<"type"<<QString::number(type);
 
         if(size == 0) { //gdy size = 0, to box ciągnie się do końca pliku
             size = *arraySize - offset;  //nieprzetestowane!
