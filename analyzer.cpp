@@ -7,17 +7,23 @@ Analyzer::Analyzer(const QString &fileName)
 {
     this->fileName=fileName;
     this->arraySize = 0;
-    QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly)) {
+    file = new QFile(fileName);
+    if (!file->open(QIODevice::ReadOnly)) {
         qDebug()<<"?";
         return ;
     }
     qDebug()<<"??";
     try {
-        file.readAll();
         qDebug()<<"???";
-        QByteArray array = file.readAll();
+        QByteArray array = file->readAll();
         tempArray= array;
+        QByteArray sm = file->readLine(4000);
+        smiec = sm;
+        char buf[1024];
+        qint64 lineLength = file.readLine(buf, sizeof(buf));
+        if (lineLength != -1) {
+                // the line is available in buf
+        }
     }
     catch(...) {
         tempArray = NULL;
@@ -91,18 +97,13 @@ Analyzer::~Analyzer() {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 void Analyzer::setData(TreeItem* parent, QHash<long, TreeItem *>* items) {
-    QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly)) {
-        return ;
-    }
-    QByteArray array = file.readAll();
-    tempArray= array;
-    arraySize = new long(array.size());
-    setData(array,parent,items, 0);
+    qDebug()<<"setData init";
+    setData(tempArray,parent,items, 0);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 void Analyzer::setData(QByteArray array, TreeItem *&parent, QHash<long, TreeItem *>* items, long off) {
+    qDebug()<<"setData1"<<smiec.size();
     tempArray= array;
     long offset= off;//offset tej array w pliku
     bool progress= true;
@@ -111,7 +112,6 @@ void Analyzer::setData(QByteArray array, TreeItem *&parent, QHash<long, TreeItem
         unsigned long int size; //rozmiar boxa
         unsigned long int type; //typ boxa
         //unsigned int [16] extendedType;//to-do
-
         size=valueOfGroupOfFields(i, i+3, array); //obliczenie wartosci rozmiaru i typu
         type= valueOfGroupOfFields(i+4, i+7, array); //w zadanej tablicy: zawsze na poczatku
 
@@ -121,6 +121,7 @@ void Analyzer::setData(QByteArray array, TreeItem *&parent, QHash<long, TreeItem
         else if(size == 1 ) { //dla size = 1, rozmiar przybiera wartość rozszerzoną int(64), po typie
             size = valueOfGroupOfFields(i+8, i+15, array);
         }
+        //qDebug()<<"setData3"<<toQString(type,4);
 
         if(toQString(type, 4) == QString("uuid")) {
             if(size == 1) {

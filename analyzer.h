@@ -80,10 +80,12 @@ private:
      * \brief tempArray
      */
     QByteArray tempArray;
+    QFile* file;
     /*!
      * \brief arraySize
      */
     long * arraySize;
+    QByteArray smiec;
 public:
     QByteArray getTempArray() {
         return tempArray;

@@ -117,7 +117,6 @@ void MainWindow::setSearchBoxSection() {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::setBoxInfoSection(const QString& fileName) {
-    qDebug()<<"setBoxInfoSection 1"<<fileName;
     if(!boxParseLayout->count()) {
         boxParseGroupBox = new QGroupBox();
         boxInfoGroupBox = new QGroupBox();
@@ -129,12 +128,9 @@ void MainWindow::setBoxInfoSection(const QString& fileName) {
         boxNameLabel->setMaximumHeight(20);
         boxNameLabel->setFont(QFont("Arial", 13));
     }
-    qDebug()<<"setBoxInfoSection przed analyzerem";
     delete analyzer;
     analyzer = new Analyzer(fileName);
-    qDebug()<<"setBoxInfoSection przed setModel";
     model= new TreeModel(analyzer);
-    qDebug()<<"setInfoBoxSection przed setModel";
     treeView->setModel(model);
     //treeView->setFont(QFont("Arial", 12));
     //treeView->header()->setStretchLastSection(false);
