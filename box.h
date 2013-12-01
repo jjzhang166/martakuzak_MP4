@@ -94,7 +94,7 @@ public:
      * \brief getSize
      * \return size in bytes
      */
-    unsigned long int getSize() { return size; }
+    virtual unsigned long int getSize() { return size; }
 
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////

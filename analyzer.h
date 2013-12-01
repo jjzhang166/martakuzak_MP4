@@ -38,7 +38,7 @@ public:
      * \param end number of the last element of subarray
      * \return unsigned long int value of the subarray
      */
-    unsigned long int valueOfGroupOfFields(const int & begin, const int & end,QByteArray array= QByteArray());
+    unsigned long int valueOfGroupOfFields(const int & length, const unsigned long int& offset = 0);
     /*!
      * \brief bitValue
      * \param byteId id of byte in the array
@@ -53,7 +53,7 @@ public:
      * \param pattern unsigned long int value of the subarray
      * \return
      */
-    unsigned long int valueOfBits(const int& begin, const int& end);
+    //unsigned long int valueOfBits(const int& begin, const int& end);
     /*!
      * \brief toQString
      *  converts unsigned int to QString
@@ -70,7 +70,7 @@ public:
      * \param off offset
      */
 private:
-    void setData(QByteArray arr, TreeItem* &parent, QHash<long,TreeItem*>* items, long off=0);
+    void setData(TreeItem* &parent, QHash<long,TreeItem*>* items, const unsigned long int &off, unsigned long int maxOff = 0L);
     /*!
      * \brief fileName
      *  name of the analyzed file
@@ -84,7 +84,8 @@ private:
     /*!
      * \brief arraySize
      */
-    long * arraySize;
+    unsigned long int fileSize;
+    unsigned long int maxTempOff; //rozmiar tymczasowo analizowanego boxu
     QByteArray smiec;
 public:
     QByteArray getTempArray() {

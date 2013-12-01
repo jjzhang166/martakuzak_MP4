@@ -176,18 +176,18 @@ void MainWindow::setBoxInfoSection(const QString& fileName) {
 void MainWindow::openFile()
 {
     QFileDialog dialog(this);
-    qDebug()<<"openFile 1";
+   // qDebug()<<"openFile 1";
     dialog.setFileMode(QFileDialog::AnyFile);
-    qDebug()<<"openFile 2";
+    //qDebug()<<"openFile 2";
 //    QString fileName = QFileDialog::getOpenFileName(this,
 //                                                    tr("Open File"), "/", tr("MP4 Files (*.mp4)"));
     QString fileName = QFileDialog::getOpenFileName(this,
                                                     tr("Open File"), "/");
 
-    qDebug()<<"openFile 3";
+    //qDebug()<<"openFile 3";
     if(fileName.length()) {
 
-        qDebug()<<"openFile: fileName.length() 1";
+       // qDebug()<<"openFile: fileName.length() 1";
 //        boxParsingProgressDialog = new QProgressDialog(this);
 //        boxParsingProgress = new QProgressBar();
 //        boxParsingProgress->setFormat("Box analyzing %p");
@@ -195,14 +195,14 @@ void MainWindow::openFile()
 //        boxParsingProgressDialog->show();
 
         if(!searchBoxLayout->count()) {
-            qDebug()<<"openFile: fileName.length() 2";
+           // qDebug()<<"openFile: fileName.length() 2";
             setSearchBoxSection();
         }
-        qDebug()<<"openFile: fileName.length() 3";
+        //qDebug()<<"openFile: fileName.length() 3";
         setBoxInfoSection(fileName);
         //boxParsingProgressDialog->close();
     }
-    qDebug()<<"openFile: after if";
+    //qDebug()<<"openFile: after if";
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::printSelectedBox() {

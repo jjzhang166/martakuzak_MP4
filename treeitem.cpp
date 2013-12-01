@@ -1,6 +1,6 @@
 #include "treeitem.h"
 
-TreeItem::TreeItem(Analyzer *an, const QList<QVariant> &data, TreeItem *parent, int off){
+TreeItem::TreeItem(Analyzer *an, const QList<QVariant> &data, TreeItem *parent, const long int &off){
     parentItem = parent;
     itemData = data;
     BoxFactory bf(an);

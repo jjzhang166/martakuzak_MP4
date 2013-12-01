@@ -6,46 +6,48 @@ Analyzer::Analyzer() {}
 Analyzer::Analyzer(const QString &fileName)
 {
     this->fileName=fileName;
-    this->arraySize = 0;
+    this->fileSize = 0;
     file = new QFile(fileName);
     if (!file->open(QIODevice::ReadOnly)) {
-        qDebug()<<"?";
         return ;
     }
-    qDebug()<<"??";
-    try {
-        qDebug()<<"???";
-        QByteArray array = file->readAll();
-        tempArray= array;
-        QByteArray sm = file->readLine(4000);
-        smiec = sm;
-        char buf[1024];
-        qint64 lineLength = file.readLine(buf, sizeof(buf));
-        if (lineLength != -1) {
-                // the line is available in buf
-        }
-    }
-    catch(...) {
-        tempArray = NULL;
-    }
-
-
+    fileSize = file->size();
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
-unsigned long int Analyzer:: valueOfGroupOfFields(const int &begin, const int &end, QByteArray array) {
-    if(!array.size())
-        array= tempArray;
+unsigned long int Analyzer:: valueOfGroupOfFields(const int &length, const unsigned long int& offset) {
+    QByteArray array;
     unsigned long int num=0;
-    for(int i=begin; i<(end+1); i++) {
-        num |= static_cast<unsigned int>(array[i]) & 0xFF;
-        if(begin!=end && i!=end) {
-            num=(num<<8);
+    if(offset != 0) {
+        file->seek(offset - 1);
+        array = file->read(length + 1);
+        for(int i=0; i<(length+1); i++) {
+            num |= static_cast<unsigned int>(array[i]) & 0xFF;
+            if(0!=length && i!=length) {
+                num=(num<<8);
+            }
         }
     }
+    else {
+        array = file->read(length);
+        for(int i=0; i<(length); i++) {
+            qDebug()<<QString::number(num);
+            num |= static_cast<unsigned int>(array[i]) & 0xFF;
+            if(0!=(length-1) && i!=(length-1)) {
+                num=(num<<8);
+            }
+        }
+        qDebug()<<QString::number(num);
+
+    }
+    //qDebug()<<"vogf fileread";
+
+
+    //qDebug()<<"vogf przed return";
+
     return num;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
-unsigned long int Analyzer:: valueOfBits(const int& begin, const int& end) {
+/*unsigned long int Analyzer:: valueOfBits(const int& begin, const int& end) {
     int firstByte = begin/8;
     int firstBit = begin - 8 * firstByte;
     int lastByte = end/8;
@@ -69,7 +71,7 @@ unsigned long int Analyzer:: valueOfBits(const int& begin, const int& end) {
     }
     QString qstringBitsValue = tmpValue.mid(firstBit, numOfBits);
     return qstringBitsValue.toUInt(0,2);
-}
+}*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 bool Analyzer::bitValue(int byteId, int bitId) {
@@ -93,22 +95,76 @@ QString Analyzer:: toQString(unsigned int num, int bytes) {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 Analyzer::~Analyzer() {
-    delete arraySize;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 void Analyzer::setData(TreeItem* parent, QHash<long, TreeItem *>* items) {
     qDebug()<<"setData init";
-    setData(tempArray,parent,items, 0);
+    file = new QFile(fileName);
+    if (!file->open(QIODevice::ReadOnly)) {
+        return ;
+    }
+    maxTempOff = file->size();
+    setData(parent, items, 0, fileSize); //zaczynamy od zerowego offsetu
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-void Analyzer::setData(QByteArray array, TreeItem *&parent, QHash<long, TreeItem *>* items, long off) {
-    qDebug()<<"setData1"<<smiec.size();
-    tempArray= array;
-    long offset= off;//offset tej array w pliku
+void Analyzer::setData(TreeItem *&parent, QHash<long, TreeItem *>* items, const unsigned long &off, unsigned long int maxOff) {
+    qDebug()<<"setData wywołanie!"<<maxOff;
+    unsigned long int offset= off;//offset w pliku
     bool progress= true;
-    int i=0; //cos jak offset w arrayu
     while(progress) {
+        unsigned long int size; //rozmiar boxa
+        unsigned long int type; //typ boxa
+        //unsigned int [16] extendedType;//to-do
+        size = valueOfGroupOfFields(4, 0 + offset);
+        type = valueOfGroupOfFields(4, 4 + offset);
+
+        if(size == 0) { //gdy size = 0, to box ciągnie się do końca pliku
+            size = fileSize - offset;  //nieprzetestowane!
+        }
+        if(size == 1 ) { //dla size = 1, rozmiar przybiera wartość rozszerzoną int(64), po typie
+            size = valueOfGroupOfFields(8, 8 + offset);
+        }
+
+        if(toQString(type, 4) == QString("uuid")) {
+            if(size == 1) {
+                //to-do
+            }
+            else {
+
+            }
+        }
+
+        QList<QVariant> columnData; //konstrukcja danych, ktore beda wyswietlane w drzewie
+        columnData<<toQString(type,4);
+        columnData<<QString::number(size);
+        columnData<<QString::number(offset);
+
+        TreeItem *newItem= new TreeItem(this,columnData,parent,offset);//tworzymy treeitem
+
+        parent->appendChild(newItem);
+        items->insert(offset, newItem);
+        if(newItem->isContainer()){//gdy treeitem zawiera inne boxy, tworzymy subarray wycinajac offset na atrybuty
+            qDebug()<<"tempSize"<<maxOff;
+
+            setData(newItem,
+                    items,
+                    offset + newItem->getOffset(), offset + size);
+        }
+
+        offset += size;
+
+        //maxTempOff += size;
+        qDebug()<<"setData off temps"<<offset<<maxOff;
+        if( offset >= fileSize )
+            progress = false;
+        if( offset >= maxOff ) {
+            progress = false;
+            //maxTempOff -= size;
+            qDebug()<<"setData progress-false";
+        }
+    }
+    /*while(progress) {
         unsigned long int size; //rozmiar boxa
         unsigned long int type; //typ boxa
         //unsigned int [16] extendedType;//to-do
@@ -154,6 +210,6 @@ void Analyzer::setData(QByteArray array, TreeItem *&parent, QHash<long, TreeItem
         if(i>=array.size()) {//poki i jest nie wieksze od rozmiaru tablicy
             progress=false;
         }
-    }
+    }*/
 
 }
