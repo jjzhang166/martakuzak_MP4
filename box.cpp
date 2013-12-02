@@ -171,6 +171,7 @@ QString VideoMediaHeaderBox::getInfo() {
     tmp.append("\nGraphicsmode\t\t");
     tmp.append(QString::number(graphicsmode));
     int ocSize = opcolor.size();
+    tmp.append("\nOpcolor\t\t");
     for (int i = 0; i<ocSize; ++i) {
         tmp.append(QString::number(opcolor.at(i)));
         tmp.append(" | ");

@@ -30,30 +30,20 @@ public:
      * \param parent parent of the tree fragment that children are to be analyzed.
      */
     void setData(TreeItem* parent, QHash<long,TreeItem*>* items);
-
     /*!
-     * \brief valueOfGroupOfFields converts subarray of QByteArray to unsigned long int
-     * \param array array which fragment is to be converted
-     * \param begin number of the first element of subarray
-     * \param end number of the last element of subarray
-     * \return unsigned long int value of the subarray
+     * \brief valueOfGroupOfBytes takes a given sequence of bytes and converts them into unsigned long int value
+     * \param length number of bytes in the sequence
+     * \param offset offset of the sequence in the file
+     * \return value of byte sequence
      */
-    unsigned long int valueOfGroupOfFields(const int & length, const unsigned long int& offset = 0);
+    unsigned long int valueOfGroupOfBytes(const int & length, const unsigned long int& offset = 0);
     /*!
-     * \brief bitValue
-     * \param byteId id of byte in the array
-     * \param bitId id of bit in the given byte
-     * \return value of given bit
+     * \brief valueOfGroupOfBits takes a given sequence of bits and converts them into unsigned long int value
+     * \param length number of bits in the sequence
+     * \param offset offset of the sequnce in the file
+     * \return value of bit sequence
      */
-    bool bitValue(int byteId, int bitId);
-    /*!
-     * \brief valueOfBits
-     * \param begin number of the first element of subarray
-     * \param end number of the last element of subarray
-     * \param pattern unsigned long int value of the subarray
-     * \return
-     */
-    //unsigned long int valueOfBits(const int& begin, const int& end);
+    unsigned long int valueOfGroupOfBits(const int & length, const unsigned long int& offset);
     /*!
      * \brief toQString
      *  converts unsigned int to QString
@@ -70,6 +60,14 @@ public:
      * \param off offset
      */
 private:
+    /*!
+     * \brief setData the method is calls inside public setData method. It analyzes mp4 file by finding boxes, creating TreeItem objects
+     * for each box and adding them to their parents.
+     * \param parent parent of the tree fragment that children are to be analyzed
+     * \param items hashmap of TreeItem pointers
+     * \param off offset of the analyzed box
+     * \param maxOff max offset possible of the parent analyzed box
+     */
     void setData(TreeItem* &parent, QHash<long,TreeItem*>* items, const unsigned long int &off, unsigned long int maxOff = 0L);
     /*!
      * \brief fileName
@@ -79,18 +77,11 @@ private:
     /*!
      * \brief tempArray
      */
-    QByteArray tempArray;
     QFile* file;
     /*!
      * \brief arraySize
      */
     unsigned long int fileSize;
-    unsigned long int maxTempOff; //rozmiar tymczasowo analizowanego boxu
-    QByteArray smiec;
-public:
-    QByteArray getTempArray() {
-        return tempArray;
-    }
 
 };
 

@@ -16,6 +16,8 @@ TimeToSampleBox::TimeToSampleBox(const unsigned int& s, const QString& t, const 
 QString TimeToSampleBox::getInfo() {
     QString tmp;
     tmp.append(FullBox::getInfo());
+    tmp.append("\nEntry count\t\t");
+    tmp.append(QString::number(entryCount));
     tmp.append("\nSample count\t\t");
     for(unsigned int i = 0; i<entryCount; ++i) {
         tmp.append(QString::number(sampleCount.at(i)));

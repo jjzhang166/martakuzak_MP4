@@ -305,7 +305,7 @@ public:
                      const QList<unsigned int>& f, const unsigned long int& ec);
     virtual QString getFullName() { return QString("Data Reference Box"); }
     virtual QString getInfo();
-    virtual bool isContainer() { return entryCount; }
+    virtual bool isContainer() { return true; }
     virtual unsigned int getOffset() { return 16; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////

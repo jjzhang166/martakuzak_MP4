@@ -85,6 +85,7 @@ QString HandlerBox::getInfo() {
     tmp.append(QString::number(predefined));
     tmp.append("\nHandler type\t\t");
     tmp.append(QString::number(handlerType));
+    tmp.append("\nReserved\t\t");
     int resSize = reserved.size();
     for (int i = 0; i<resSize; ++i) {
         tmp.append(QString::number(reserved.at(i)));
