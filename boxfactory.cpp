@@ -86,8 +86,8 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned int depth = analyzer->valueOfGroupOfBytes(2, off + 82);
         int predefined2 = analyzer->valueOfGroupOfBytes(2, off + 84);
         return std::shared_ptr<Box>(new AVCSampleEntry(size, type, off, e,reserved,dataReferenceIndex, predefined, reserved1, predefined1,
-                                                             width,height,horizonresolution, vertresolution, reserved2, frameCount,
-                                                             compressorName, depth, predefined2));
+                                                       width,height,horizonresolution, vertresolution, reserved2, frameCount,
+                                                       compressorName, depth, predefined2));
     }
     else if(type=="url "){
         unsigned int offset = 0;
@@ -137,7 +137,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         unsigned long int entryCount = analyzer->valueOfGroupOfBytes(4, off + offset + 12);
         std::shared_ptr<Box> ret(new DataReferenceBox(size, type, off, e, v, f, entryCount));
         return ret;
-    } 
+    }
     else if(type=="ctts"){
         unsigned int offset = 0;
         if(size == 1)
@@ -575,12 +575,12 @@ std::shared_ptr<Box> BoxFactory::getMBox(const unsigned int& size, QString type,
         }
         QString qstringPred = tmpValue.mid(16, 16);
         unsigned int predefined = qstringPred.toUInt(0,2);
-//        QString qstringStarsWithSAP = tmpValue.mid(0,1);
-//        startsWithSAP.append(qstringStarsWithSAP.toUInt(0,2));
-//        QString qstringSAPType = tmpValue.mid(1,3);
-//        SAPType.append(qstringSAPType.toUInt(0,2));
-//        QString qstringSAPDeltaTime = tmpValue.mid(4,28);
-//        SAPDeltaTime.append(qstringSAPDeltaTime.toUInt(0,2))
+        //        QString qstringStarsWithSAP = tmpValue.mid(0,1);
+        //        startsWithSAP.append(qstringStarsWithSAP.toUInt(0,2));
+        //        QString qstringSAPType = tmpValue.mid(1,3);
+        //        SAPType.append(qstringSAPType.toUInt(0,2));
+        //        QString qstringSAPDeltaTime = tmpValue.mid(4,28);
+        //        SAPDeltaTime.append(qstringSAPDeltaTime.toUInt(0,2))
 
         std::shared_ptr<Box> ret(new MediaHeaderBox(size, type, off, e, v, f, creationTime, modificationTime, timescale, duration,
                                                     pad, language, predefined));
@@ -613,7 +613,7 @@ std::shared_ptr<Box> BoxFactory::getMBox(const unsigned int& size, QString type,
         QList <unsigned int> reserved;
         for(int i = 0; i<6; ++i) {
             reserved.append(analyzer->valueOfGroupOfBytes(1, off + 8 + i ));
-        } 
+        }
 
         unsigned int dataReferenceIndex = analyzer->valueOfGroupOfBytes(2, off + 14);
         unsigned int predefined = analyzer->valueOfGroupOfBytes(2, off + 16);
@@ -1207,36 +1207,36 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
             referenceType.append(analyzer->valueOfGroupOfBits(1, (off + offset + 32)*8));
             //int referenceSizeBitOffset = (offset + 31) * 8;
             //referenceSize.append(analyzer->valueOfBits(referenceSizeBitOffset+249, referenceSizeBitOffset+279));
-//            if (referenceType.at(i)) {
-//                referenceSize.append(analyzer->valueOfGroupOfBytes(4, off + offset + 32) - pow(2.0,31) );
-//            }
-//            else
-//                referenceSize.append(analyzer->valueOfGroupOfBytes(4, off + offset + 32));
+            //            if (referenceType.at(i)) {
+            //                referenceSize.append(analyzer->valueOfGroupOfBytes(4, off + offset + 32) - pow(2.0,31) );
+            //            }
+            //            else
+            //                referenceSize.append(analyzer->valueOfGroupOfBytes(4, off + offset + 32));
             referenceSize.append(analyzer->valueOfGroupOfBits(31, (off + offset + 32)*8 + 1));
             subsegmentDuration.append(analyzer->valueOfGroupOfBytes(4, off + offset + 36));
             startsWithSAP.append(analyzer->valueOfGroupOfBits(1, (off + offset + 40)*8));
             SAPType.append(analyzer->valueOfGroupOfBits(3, (off + offset + 40)*8 + 1));
             SAPDeltaTime.append(analyzer->valueOfGroupOfBits(28, (off + offset + 40)*8 + 4));
             //unsigned long int byteValue = analyzer->valueOfGroupOfBytes(4, off + offset + 40);
-//            QString tmpValue = QString::number(byteValue,2);
-//            int tmpSize = tmpValue.size();
-//            if(tmpSize < 32) {
-//                int delta = 32 - tmpSize;
-//                for (int i = 0; i<delta; ++i) {
-//                    tmpValue = tmpValue.insert(0, "0");
-//                }
-//            }
-//            QString qstringStarsWithSAP = tmpValue.mid(0,1);
-//            startsWithSAP.append(qstringStarsWithSAP.toUInt(0,2));
-//            QString qstringSAPType = tmpValue.mid(1,3);
-//            SAPType.append(qstringSAPType.toUInt(0,2));
-//            QString qstringSAPDeltaTime = tmpValue.mid(4,28);
-//            SAPDeltaTime.append(qstringSAPDeltaTime.toUInt(0,2));
+            //            QString tmpValue = QString::number(byteValue,2);
+            //            int tmpSize = tmpValue.size();
+            //            if(tmpSize < 32) {
+            //                int delta = 32 - tmpSize;
+            //                for (int i = 0; i<delta; ++i) {
+            //                    tmpValue = tmpValue.insert(0, "0");
+            //                }
+            //            }
+            //            QString qstringStarsWithSAP = tmpValue.mid(0,1);
+            //            startsWithSAP.append(qstringStarsWithSAP.toUInt(0,2));
+            //            QString qstringSAPType = tmpValue.mid(1,3);
+            //            SAPType.append(qstringSAPType.toUInt(0,2));
+            //            QString qstringSAPDeltaTime = tmpValue.mid(4,28);
+            //            SAPDeltaTime.append(qstringSAPDeltaTime.toUInt(0,2));
 
             //            startsWithSAP.append(analyzer->bitValue(offset+40,0));
             //            int SAPTypeBitOffset = (offset + 39) * 8;
-//            SAPType.append(analyzer->valueOfBits(SAPTypeBitOffset+312,SAPTypeBitOffset+314));
-//            SAPDeltaTime.append(analyzer->valueOfBits(SAPTypeBitOffset+315,SAPTypeBitOffset+342));
+            //            SAPType.append(analyzer->valueOfBits(SAPTypeBitOffset+312,SAPTypeBitOffset+314));
+            //            SAPDeltaTime.append(analyzer->valueOfBits(SAPTypeBitOffset+315,SAPTypeBitOffset+342));
             offset += 12;
         }
         return std::shared_ptr<Box>(new SegmentIndexBox(size, type, off, e, version, f, referenceId, timescale, earliestPresentationTime,

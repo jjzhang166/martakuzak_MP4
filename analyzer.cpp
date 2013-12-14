@@ -40,7 +40,7 @@ unsigned long int Analyzer::valueOfGroupOfBits(const int & length, const unsigne
     int pattern = 0;
 
     for(int i = 0; i < length; ++i) { //utworzenie wzoru: liczby, ktora w reprezentacji binarnej ma jedynki tam, ktory fragment mamy wyciac
-                                     //i zera w pozostalych przypadkach: wygenerowanie ciagu 1
+        //i zera w pozostalych przypadkach: wygenerowanie ciagu 1
         pattern |= 1;
         pattern = pattern << 1;
     }
@@ -50,9 +50,9 @@ unsigned long int Analyzer::valueOfGroupOfBits(const int & length, const unsigne
             pattern = pattern << 1;
     }
 
-   bitValue = (byteValue & pattern) >> suffix; //iloczyn logiczny bit po bicie i przesuniecie bitowe w prawo
+    bitValue = (byteValue & pattern) >> suffix; //iloczyn logiczny bit po bicie i przesuniecie bitowe w prawo
 
-   return bitValue;
+    return bitValue;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 QString Analyzer:: qstringValue(const unsigned int& length, const unsigned int& offset) {
@@ -76,7 +76,7 @@ void Analyzer::setData(TreeItem* parent, QHash<long, TreeItem *>* items) {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 void Analyzer::setData(TreeItem *&parent, QHash<long, TreeItem *>* items, const unsigned long &off, unsigned long int maxOff) {
-   // qDebug()<<"setData wywołanie!"<<maxOff;
+    // qDebug()<<"setData wywołanie!"<<maxOff;
     unsigned long int offset= off;//offset w pliku
     bool progress= true;
     while(progress) {
@@ -133,9 +133,9 @@ void Analyzer::setData(TreeItem *&parent, QHash<long, TreeItem *>* items, const 
         if( offset >= maxOff ) {
             progress = false;
             //maxTempOff -= size;
-           // qDebug()<<"setData progress-false";
+            // qDebug()<<"setData progress-false";
         }
-    } 
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////

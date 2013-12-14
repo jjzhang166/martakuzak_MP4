@@ -169,7 +169,7 @@ void MainWindow::setBoxInfoSection(const QString& fileName) {
 
     boxParseGroupBox->setLayout(boxParseLayout);
     boxParseGroupBox->setSizePolicy(QSizePolicy::Expanding,
-                                   QSizePolicy::Expanding);
+                                    QSizePolicy::Expanding);
 
     vSplitter->addWidget(boxParseGroupBox);
     vSplitter->setOrientation(Qt::Vertical);
@@ -184,33 +184,33 @@ void MainWindow::setBoxInfoSection(const QString& fileName) {
 void MainWindow::openFile()
 {
     QFileDialog dialog(this);
-   // qDebug()<<"openFile 1";
+    // qDebug()<<"openFile 1";
     dialog.setFileMode(QFileDialog::AnyFile);
     //qDebug()<<"openFile 2";
-//    QString fileName = QFileDialog::getOpenFileName(this,
-//                                                    tr("Open File"), "/", tr("MP4 Files (*.mp4)"));
+    //    QString fileName = QFileDialog::getOpenFileName(this,
+    //                                                    tr("Open File"), "/", tr("MP4 Files (*.mp4)"));
     QString fileName = QFileDialog::getOpenFileName(this,
                                                     tr("Open File"), "/");
 
     //qDebug()<<"openFile 3";
     if(fileName.length()) {
 
-       // qDebug()<<"openFile: fileName.length() 1";
-//        boxParsingProgressDialog = new QProgressDialog(this);
-//        boxParsingProgress = new QProgressBar();
-//        boxParsingProgress->setFormat("Box analyzing %p");
-//        boxParsingProgressDialog->setBar(boxParsingProgress);
-//        boxParsingProgressDialog->show();
+        // qDebug()<<"openFile: fileName.length() 1";
+        //        boxParsingProgressDialog = new QProgressDialog(this);
+        //        boxParsingProgress = new QProgressBar();
+        //        boxParsingProgress->setFormat("Box analyzing %p");
+        //        boxParsingProgressDialog->setBar(boxParsingProgress);
+        //        boxParsingProgressDialog->show();
 
         if(!searchBoxLayout->count()) {
-           // qDebug()<<"openFile: fileName.length() 2";
+            // qDebug()<<"openFile: fileName.length() 2";
             setSearchBoxSection();
         }
         //qDebug()<<"openFile: fileName.length() 3";
         setBoxInfoSection(fileName);
         //boxParsingProgressDialog->close();
     }
-    /*QString type("stsz");
+   /* QString type("stsz");
     int row = 0;
     int col = 0;
     QModelIndexList Items = model->match(model->index(row,col),
@@ -223,9 +223,21 @@ void MainWindow::openFile()
     std::shared_ptr<Box> stsz = model->getChild(model->data(child,Qt::DisplayRole).toInt())->getBox();
     //qDebug()<<"mdatsize"<<QString::number(model->mdatSize(0, 50, stsz, analyzer));
     DashProxy dash(fileName, model);
-    QFile* dashFile = new QFile("dash_testy_moof");
+    QList<unsigned long int> referenceType;
+    referenceType.append(0); referenceType.append(0);
+    QList<unsigned long int> referenceSize;
+    referenceSize.append(529320); referenceSize.append(163092);
+    QList<unsigned long int> subsegmentDuration;
+    subsegmentDuration.append(50); subsegmentDuration.append(14);
+    QList<unsigned short int> startsWithSAP;
+    startsWithSAP.append(1); startsWithSAP.append(0);
+    QList<unsigned short int> SAPType;
+    SAPType.append(1); SAPType.append(0);
+    QList<unsigned long int> SAPDeltaTime;
+    SAPDeltaTime.append(0); SAPDeltaTime.append(0);
+    QFile* dashFile = new QFile("dash_testy_sidx");
     if (dashFile->open(QIODevice::ReadWrite)) {
-        dash.writeMoof(1, 0, 0, 2, 5, 25, 671154176, 0, 0, stsz, dashFile);
+        dash.writeSidx(0, 1, 25, 0, 0, 2, referenceType, referenceSize, subsegmentDuration, startsWithSAP, SAPType, SAPDeltaTime, dashFile);
         dashFile->close();
     }*/
     //qDebug()<<"openFile: after if";
@@ -295,7 +307,7 @@ void MainWindow::searchBox() {
         }
         treeView->selectionModel()->select(backId, QItemSelectionModel::Select | QItemSelectionModel::Rows);
         Items.pop_back();
-    }   
+    }
     QModelIndex child = model->index(tmpId.row(), 2, tmpId.parent());
     boxNameLabel->setText(model->getChild(model->data(child,
                                                       Qt::DisplayRole).toInt())->fullName());

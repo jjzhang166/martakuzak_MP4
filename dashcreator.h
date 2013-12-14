@@ -17,9 +17,9 @@ public:
     unsigned int writeMdat(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz,
                            QFile* dashFile);
     unsigned int writeMoof(const unsigned long int& sequenceNumber, const unsigned int& trackID, const unsigned long &baseMediaDecodeTime,
-                          const unsigned int& trunFlag2,const unsigned int& trunFlag3, const unsigned int& sampleCount,
-                          const signed int& dataOffset,const unsigned int& firstSampleFlags, const unsigned long int& firstSample,
-                          std::shared_ptr<Box>& stsz, QFile* dashFile);
+                           const unsigned int& trunFlag2,const unsigned int& trunFlag3, const unsigned int& sampleCount,
+                           const signed int& dataOffset,const unsigned int& firstSampleFlags, const unsigned long int& firstSample,
+                           std::shared_ptr<Box>& stsz, QFile* dashFile);
     unsigned int writeMfhd(const unsigned long int& sequenceNumber, QFile* dashFile);
     unsigned int writeTraf(const unsigned int& trackID, const unsigned long &baseMediaDecodeTime, const unsigned int& trunFlag2,
                            const unsigned int& trunFlag3, const unsigned int& sampleCount, const signed int& dataOffset,
@@ -30,6 +30,14 @@ public:
     unsigned int writeTrun(const unsigned int& flag2, const unsigned int& flag3, const unsigned int& sampleCount,
                            const signed int& dataOffset, const unsigned int& firstSampleFlags, const unsigned long int& firstSample,
                            std::shared_ptr<Box>& stsz, QFile* dashFile);
+    unsigned int writeSidx(const unsigned short int& version, const unsigned int& referenceID, const unsigned int& timescale,
+                           const unsigned long int& earliestPresentationTime, const unsigned long int& firstOffset,
+                           const unsigned int &referenceCount, const QList<unsigned long int>& referenceType,
+                           const QList<unsigned long int>& referenceSize, const QList<unsigned long int>& subsegmentDuration,
+                           const QList <unsigned short int>& startsWithSAP, const QList <unsigned short int>& SAPType,
+                           const QList <unsigned long int>& SAPDeltaTime, QFile* dashFile);
+
+
 private:
     QString fileName;
     TreeModel* model;

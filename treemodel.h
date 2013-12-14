@@ -95,21 +95,21 @@ public:
     TreeItem *getChild(TreeItem *parent, QString type);
     TreeItem *getChild(int offset);
     QList <std::shared_ptr <Box>> getBoxes(const QString& type);
-//    unsigned long int mdatSize(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz,
-//                               Analyzer* an);
-//    unsigned int writeMdat(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz, QFile* dashFile,
-//                   Analyzer* an);
-//    unsigned int writeMoof(const unsigned long int& sequenceNumber, const unsigned int& trackID, const unsigned long &baseMediaDecodeTime,
-//                          const unsigned int& trunFlag2, const unsigned int& trunFlag3, const unsigned int& sampleCount,
-//                          const signed int& dataOffset, const unsigned int& firstSampleFlags, const unsigned long int& firstSample, std::shared_ptr<Box>& stsz, QFile* dashFile, Analyzer* an);
-//    unsigned int writeMfhd(const unsigned long int& sn, QFile* dashFile, Analyzer* an);
-//    unsigned int writeTfhd(const unsigned int& trackID, QFile* dashFile, Analyzer* an);
-//    unsigned int writeTfdt(const unsigned long &baseMediaDecodeTime, QFile* dashFile, Analyzer* an);
-//    unsigned int writeTrun(const unsigned int& flag2, const unsigned int& flag3, const unsigned int& sampleCount,
-//                           const signed int& dataOffset, const unsigned int& firstSampleFlags, const unsigned long int& firstSample, std::shared_ptr<Box>& stsz, QFile* dashFile, Analyzer* an);
-//    unsigned int writeTraf(const unsigned int& trackID, const unsigned long &baseMediaDecodeTime, const unsigned int& trunFlag2,
-//                           const unsigned int& trunFlag3, const unsigned int& sampleCount, const signed int& dataOffset,
-//                           const unsigned int& firstSampleFlags, const unsigned long int& firstSample, std::shared_ptr<Box>& stsz, QFile* dashFile, Analyzer* an);
+    //    unsigned long int mdatSize(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz,
+    //                               Analyzer* an);
+    //    unsigned int writeMdat(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz, QFile* dashFile,
+    //                   Analyzer* an);
+    //    unsigned int writeMoof(const unsigned long int& sequenceNumber, const unsigned int& trackID, const unsigned long &baseMediaDecodeTime,
+    //                          const unsigned int& trunFlag2, const unsigned int& trunFlag3, const unsigned int& sampleCount,
+    //                          const signed int& dataOffset, const unsigned int& firstSampleFlags, const unsigned long int& firstSample, std::shared_ptr<Box>& stsz, QFile* dashFile, Analyzer* an);
+    //    unsigned int writeMfhd(const unsigned long int& sn, QFile* dashFile, Analyzer* an);
+    //    unsigned int writeTfhd(const unsigned int& trackID, QFile* dashFile, Analyzer* an);
+    //    unsigned int writeTfdt(const unsigned long &baseMediaDecodeTime, QFile* dashFile, Analyzer* an);
+    //    unsigned int writeTrun(const unsigned int& flag2, const unsigned int& flag3, const unsigned int& sampleCount,
+    //                           const signed int& dataOffset, const unsigned int& firstSampleFlags, const unsigned long int& firstSample, std::shared_ptr<Box>& stsz, QFile* dashFile, Analyzer* an);
+    //    unsigned int writeTraf(const unsigned int& trackID, const unsigned long &baseMediaDecodeTime, const unsigned int& trunFlag2,
+    //                           const unsigned int& trunFlag3, const unsigned int& sampleCount, const signed int& dataOffset,
+    //                           const unsigned int& firstSampleFlags, const unsigned long int& firstSample, std::shared_ptr<Box>& stsz, QFile* dashFile, Analyzer* an);
 };
 
 #endif // TREEMODEL_H

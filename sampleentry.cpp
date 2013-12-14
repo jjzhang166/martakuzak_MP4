@@ -145,10 +145,10 @@ ESDBox::ESDBox(const unsigned  int& s, const QString& t, const unsigned long int
 {}
 ///////////////
 AVCSampleEntry::AVCSampleEntry(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e,
-                                           const QList<unsigned int>& res, const unsigned int &dri, const unsigned int &pd,
-                                           const unsigned int& r2,const QList<unsigned int>& pd1,const unsigned int& wdth,
-                                           const unsigned int& hght, const unsigned  int& hr, const unsigned int& vr, const unsigned int& r3,
-                                           const unsigned int& fc, const QString & csn, const unsigned int& dpth, const unsigned int &pd2):
+                               const QList<unsigned int>& res, const unsigned int &dri, const unsigned int &pd,
+                               const unsigned int& r2,const QList<unsigned int>& pd1,const unsigned int& wdth,
+                               const unsigned int& hght, const unsigned  int& hr, const unsigned int& vr, const unsigned int& r3,
+                               const unsigned int& fc, const QString & csn, const unsigned int& dpth, const unsigned int &pd2):
     VisualSampleEntry(s,t,off,e,res, dri,pd,r2,pd1, wdth,hght, hr,vr, r3, fc, csn, dpth, pd2)
 {}
 ///////////////
