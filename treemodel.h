@@ -6,11 +6,11 @@
 #include <QVariant>
 #include <QHash>
 #include <qDebug>
-#include "treeitem.h"
 #include "analyzer.h"
+#include "treeitem.h"
 
-class TreeItem;
 class Analyzer;
+class TreeItem;
 /*!
  * \brief The TreeModel class
  * represents tree model for TreeView
@@ -92,9 +92,10 @@ public:
     TreeItem* getRootItem() { return rootItem; }
     TreeItem *getChild(TreeItem *parent, QString type);
     TreeItem *getChild(int offset);
-
+    unsigned long int mdatSize(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz,
+                               Analyzer* an);
+    void writeMdat(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz, QFile* dashFile,
+                   Analyzer* an);
 };
-
-
 
 #endif // TREEMODEL_H

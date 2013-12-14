@@ -12,6 +12,7 @@ Analyzer::Analyzer(const QString &fileName)
         return ;
     }
     fileSize = file->size();
+    mdatOffset = 0;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 unsigned long int Analyzer:: valueOfGroupOfBytes(const int &length, const unsigned long int& offset) {
@@ -53,17 +54,12 @@ unsigned long int Analyzer::valueOfGroupOfBits(const int & length, const unsigne
 
    return bitValue;
 }
-
 ////////////////////////////////////////////////////////////////////////////////////////////
-
-QString Analyzer:: toQString(unsigned int num, int bytes) {
-    QString result;
-    for(int i=0; i<(bytes-1);i++){
-        result.push_front(QChar((num-((num>>8)<<8))));
-        num= num>>8;
-    }
-    result.push_front(QChar(num));
-    return result;
+QString Analyzer:: qstringValue(const unsigned int& length, const unsigned int& offset) {
+    QByteArray array;
+    file->seek(offset);
+    array = file->read(length);
+    return QString(array);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -71,7 +67,6 @@ Analyzer::~Analyzer() {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 void Analyzer::setData(TreeItem* parent, QHash<long, TreeItem *>* items) {
-    qDebug()<<"setData init";
     file = new QFile(fileName);
     if (!file->open(QIODevice::ReadOnly)) {
         return ;
@@ -86,10 +81,12 @@ void Analyzer::setData(TreeItem *&parent, QHash<long, TreeItem *>* items, const 
     bool progress= true;
     while(progress) {
         unsigned long int size; //rozmiar boxa
-        unsigned long int type; //typ boxa
+        //unsigned long int type; //typ boxa
+        QString type;
         //unsigned int [16] extendedType;//to-do
         size = valueOfGroupOfBytes(4, 0 + offset);
-        type = valueOfGroupOfBytes(4, 4 + offset);
+        //type = valueOfGroupOfBytes(4, 4 + offset);
+        type = qstringValue(4, 4 + offset);
 
         if(size == 0) { //gdy size = 0, to box ciągnie się do końca pliku
             size = fileSize - offset;  //nieprzetestowane!
@@ -98,7 +95,7 @@ void Analyzer::setData(TreeItem *&parent, QHash<long, TreeItem *>* items, const 
             size = valueOfGroupOfBytes(8, 8 + offset);
         }
 
-        if(toQString(type, 4) == QString("uuid")) {
+        if(type == QString("uuid")) {
             if(size == 1) {
                 //to-do
             }
@@ -107,8 +104,11 @@ void Analyzer::setData(TreeItem *&parent, QHash<long, TreeItem *>* items, const 
             }
         }
 
+        if(type == QString("mdat"))
+            mdatOffset = offset;
+
         QList<QVariant> columnData; //konstrukcja danych, ktore beda wyswietlane w drzewie
-        columnData<<toQString(type,4);
+        columnData<<type;
         columnData<<QString::number(size);
         columnData<<QString::number(offset);
 
@@ -137,3 +137,31 @@ void Analyzer::setData(TreeItem *&parent, QHash<long, TreeItem *>* items, const 
         }
     } 
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned long int Analyzer::mdatSize(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz) {
+    unsigned long int mdatSize = 8;
+    for (unsigned int i = firstSample; i< (firstSample + sampleNumber); ++i) {
+        mdatSize += stsz->getSampleSize(i);
+    }
+    return mdatSize;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+void Analyzer::writeMdat(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz,
+                         QFile* dashFile) {
+    unsigned long int size = mdatSize(firstSample, sampleNumber, stsz) - 8;
+    QDataStream stream(dashFile);
+    stream<<quint32(size); //4 bajty
+    stream.writeRawData("mdat", 4); //4 bajty
+    QByteArray array;
+    if(firstSample) {
+        unsigned long int offset = mdatSize(0, firstSample - 1, stsz);
+        file->seek(offset + mdatOffset + 8);
+    }
+    else {
+        file->seek(mdatOffset + 8);
+    }
+    array = file->read(size);
+    dashFile->write(array);
+}
+

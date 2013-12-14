@@ -12,7 +12,6 @@
 #include "sampleentry.h"
 #include "sampletablebox.h"
 
-
 class Analyzer;
 
 class BoxFactory

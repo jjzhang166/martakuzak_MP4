@@ -10,14 +10,17 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
     return a.exec();
-    /*Analyzer an("D:\\_Samples\\Beach.mp4");*/
+    //Analyzer an("D:\\_Samples\\Beach.mp4");
+    //qDebug()<<an.qstringValue(4,4);
     /*QFile* file = new QFile("D:\\_Samples\\Beach.mp4");
     if (!file->open(QIODevice::ReadOnly)) {
 
     }
-    file->seek(2);
-    QByteArray array = file->read(8);
-    unsigned long int num=0;
+    file->seek(4);
+    QByteArray array = file->read(4);
+    QString one(array);
+    qDebug()<<one;
+    /*unsigned long int num=0;
 
     int length = 4;
     file->seek(4);
@@ -54,7 +57,25 @@ int main(int argc, char *argv[])
     num = num>>1;
     int wartoscBitow = wartoscBajtow & num;
     wartoscBitow = wartoscBitow >> suffix;
-    qDebug()<<QString::number(wartoscBitow);
+    qDebug()<<QString::number(wartoscBitow);*/
+    /*QFile* file1 = new QFile("D:\\PDI\\Samples\\multi\\multi_ballroom_side_by_side_2048.mp4");
+        if (!file1->open(QIODevice::ReadOnly)) {
 
+        }
+        int sync = 0 + 8 + 40;
+        int size = 752549;
+        int size2 = 28263;
+        file1->seek(sync);
+        QByteArray array = file1->read(size);
+        //QByteArray arrau = file1->read(size2);
+    QString filename = "Fragmencik";
+    QFile file(filename);
+    if (file.open(QIODevice::ReadWrite)) {
+            //QTextStream stream(&file);
+            //stream << "something" << endl;
+        file.write(array);
+        //file.write(arrau);
+        file.close();
+   }
     return 0;*/
 }

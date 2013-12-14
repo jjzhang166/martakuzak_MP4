@@ -2,6 +2,8 @@
 #define EXCEPTIONS_H
 #include "QException"
 #include <qDebug>
+
+class MainWindow;
 class NoSuchABoxException: public QException
 {
 public:

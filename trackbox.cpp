@@ -169,8 +169,8 @@ QString TrackFragmentHeaderBox::getInfo() {
 ///////////////
 TrackRunBox::TrackRunBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e,
                          const unsigned  int& v, const QList<unsigned int>& f, const unsigned long &sc, const long &dof,
-                         const unsigned int &fsf,const unsigned long &sd, const unsigned long &ss, const unsigned int &sf,
-                         const unsigned long &scto):
+                         const unsigned int &fsf, const QList<unsigned long> &sd, const QList<unsigned long> &ss,
+                         const QList<unsigned int> &sf, const QList<unsigned long> &scto):
     FullBox(s,t,off,e, v, f) ,
     version(v),
     flags(f),
@@ -182,6 +182,61 @@ TrackRunBox::TrackRunBox(const unsigned  int& s, const QString& t, const unsigne
     sampleFlags(sf),
     sampleCompositionTimeOffset(scto)
 {}
+QString TrackRunBox::getInfo() {
+    QString tmp;
+    tmp.append(FullBox::getInfo());
+    tmp.append("\nSample count\t\t");
+    tmp.append(QString::number(sampleCount));
+    tmp.append("\nData offset\t\t");
+    tmp.append(QString::number(dataOffset));
+    tmp.append("\nFirst sample flags\t");
+    tmp.append(QString::number(firstSampleFlags));
+    if(!sampleDuration.empty()) {
+        QList<unsigned long int>::iterator i;
+        int index = 0;
+        for (i = sampleDuration.begin(); i !=sampleDuration.end(); ++i) {
+            tmp.append("\nSample duration[");
+            tmp.append(QString::number(index));
+            tmp.append("]\t\t");
+            tmp.append(QString::number(sampleDuration.at(index)));
+            index ++;
+        }
+    }
+    else if(!sampleSize.empty()) {
+        QList<unsigned long int>::iterator i;
+        int index = 0;
+        for (i = sampleSize.begin(); i !=sampleSize.end(); ++i) {
+            tmp.append("\nSample size[");
+            tmp.append(QString::number(index));
+            tmp.append("]\t\t");
+            tmp.append(QString::number(sampleSize.at(index)));
+            index ++;
+        }
+    }
+    else if(!sampleFlags.empty()) {
+        QList<unsigned int>::iterator i;
+        int index = 0;
+        for (i = sampleFlags.begin(); i !=sampleFlags.end(); ++i) {
+            tmp.append("\nSample flags[");
+            tmp.append(QString::number(index));
+            tmp.append("]\t\t");
+            tmp.append(QString::number(sampleFlags.at(index)));
+            index ++;
+        }
+    }
+    if(!sampleCompositionTimeOffset.empty()) {
+        QList<unsigned long int>::iterator i;
+        int index = 0;
+        for (i = sampleCompositionTimeOffset.begin(); i !=sampleCompositionTimeOffset.end(); ++i) {
+            tmp.append("\nSample composition time offset[");
+            tmp.append(QString::number(index));
+            tmp.append("]\t");
+            tmp.append(QString::number(sampleCompositionTimeOffset.at(index)));
+            index ++;
+        }
+    }
+    return tmp;
+}
 ///////////////
 TrackFragmentRandomAccessBox::TrackFragmentRandomAccessBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e,
                                                            const unsigned  int& v, const QList<unsigned int>& f):

@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     analyzer = new Analyzer();
 
     QWidget *window = new QWidget();
-    setWindowIcon(QIcon("D://vnb//pear.png"));
+    setWindowIcon(QIcon("D://PDI//Code//Images//pear.png"));
     setCentralWidget(window);
 
     window->setLayout(mainLayout);
@@ -202,6 +202,24 @@ void MainWindow::openFile()
         setBoxInfoSection(fileName);
         //boxParsingProgressDialog->close();
     }
+    QString type("stsz");
+    int row = 0;
+    int col = 0;
+    QModelIndexList Items = model->match(model->index(row,col),
+                                         Qt::DisplayRole,
+                                         QVariant::fromValue(QString(type)),
+                                         -1,
+                                         Qt::MatchRecursive);
+    QModelIndex backId = Items.back();
+    QModelIndex child = model->index(backId.row(), 2, (backId.parent()));
+    std::shared_ptr<Box> stsz = model->getChild(model->data(child,Qt::DisplayRole).toInt())->getBox();
+    //qDebug()<<"mdatsize"<<QString::number(model->mdatSize(0, 50, stsz, analyzer));
+    QFile* dashFile = new QFile("dash_testy");
+    if (dashFile->open(QIODevice::ReadWrite)) {
+        model->writeMdat(0, 50, stsz, dashFile, analyzer);
+        dashFile->close();
+    }
+
     //qDebug()<<"openFile: after if";
 }
 ////////////////////////////////////////////////////////////////////////////////////////////

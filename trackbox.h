@@ -16,6 +16,7 @@
 #define TRACKBOX_H
 
 #include "box.h"
+class MainWindow;
 
 class TrackBox : public Box
 {
@@ -120,16 +121,18 @@ private:
     unsigned long int sampleCount;
     long int dataOffset;
     unsigned int firstSampleFlags;
-    unsigned long int sampleDuration;
-    unsigned long int sampleSize;
-    unsigned int sampleFlags;
-    unsigned long int sampleCompositionTimeOffset;
+    QList<unsigned long int> sampleDuration;
+    QList<unsigned long int> sampleSize;
+    QList<unsigned int> sampleFlags;
+    QList<unsigned long int> sampleCompositionTimeOffset;
 
 public:
     TrackRunBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e, const unsigned int& v,
                 const QList<unsigned int>& f, const unsigned long int& sc, const long int& dof, const unsigned int& fsf,
-                const unsigned long int& sd, const unsigned long int& ss, const unsigned int& sf, const unsigned long int& scto);
+                const QList<unsigned long int>& sd, const QList<unsigned long int>& ss, const QList<unsigned int>& sf,
+                const QList<unsigned long int>& scto);
     virtual QString getFullName() { return QString("Track Run Box"); }
+    virtual QString getInfo();
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class TrackFragmentRandomAccessBox : public FullBox

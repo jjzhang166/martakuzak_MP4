@@ -6,7 +6,6 @@ TreeModel::TreeModel(Analyzer *analyzer, QObject *parent)
     rootData << "Name" << "Size"<<"Offset";
     rootItem = new TreeItem(analyzer,rootData);
     treeItems= new QHash<long,TreeItem*>();
-    qDebug()<<"TreeModel constr przed set data";
     analyzer->setData(rootItem, treeItems);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -113,6 +112,17 @@ TreeItem * TreeModel::getChild(int offset) {
     catch(QException) {
         return NULL;
     }
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+
+unsigned long int TreeModel::mdatSize(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz,
+                           Analyzer* an) {
+    return an->mdatSize(firstSample, sampleNumber, stsz);
+}
+
+void TreeModel::writeMdat(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz, QFile* dashFile,
+               Analyzer* an) {
+    an->writeMdat(firstSample, sampleNumber, stsz, dashFile);
 }
 
 

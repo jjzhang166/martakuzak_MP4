@@ -9,6 +9,7 @@
 #include "exceptions.h"
 
 class Analyzer;
+class MainWindow;
 /*!
  * \brief The TreeItem class represent single element of the tree model
  */
@@ -124,6 +125,9 @@ public:
      */
     QString getInfo() {
         return box->getInfo();
+    }
+    std::shared_ptr<Box> getBox() {
+        return box;
     }
 
 };

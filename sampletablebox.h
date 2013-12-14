@@ -20,6 +20,7 @@
 #define SAMPLETABLEBOX_H
 
 #include "box.h"
+class MainWindow;
 
 class SampleTableBox : public Box
 {
@@ -105,6 +106,9 @@ public:
                   const QList<unsigned long int> & es);
     virtual QString getFullName() { return QString("Sample Size Box"); }
     virtual QString getInfo();
+    virtual unsigned long int getSampleSize(const unsigned long int& id) {
+        return entrySize.at(id);
+    }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class CompactSampleSizeBox : public FullBox

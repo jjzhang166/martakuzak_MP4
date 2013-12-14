@@ -5,10 +5,12 @@
 #include <QByteArray>
 #include <QFile>
 #include <QVariant>
+#include <QTextStream>
 #include <qDebug>
 #include "treemodel.h"
 #include "treeitem.h"
-
+#include "sampletablebox.h"
+#include "mainwindow.h"
 
 class TreeItem;
 class TreeModel;
@@ -45,13 +47,13 @@ public:
      */
     unsigned long int valueOfGroupOfBits(const int & length, const unsigned long int& offset);
     /*!
-     * \brief toQString
-     *  converts unsigned int to QString
-     * \param num value to be converted
-     * \param bytes number of bytes the unsigned int has been created from
-     * \return converted QString object
+     * \brief qstringValue takes a given sequence of bytes and converts them into QString value by
+     * changing each byte using ASCII code
+     * \param length number of bytes in the sequence
+     * \param offset offset of the sequence in the file
+     * \return QString value of byte sequence
      */
-    QString toQString(unsigned int num,int bytes);
+    QString qstringValue(const unsigned int& length, const unsigned int& offset);
     /*!
      * \brief set
      * private method is called inside setData method. It adds children to the parent.
@@ -69,6 +71,11 @@ private:
      * \param maxOff max offset possible of the parent analyzed box
      */
     void setData(TreeItem* &parent, QHash<long,TreeItem*>* items, const unsigned long int &off, unsigned long int maxOff = 0L);
+    //void writeMdat(const unsigned int& firstSample, const unsigned int& sampleNumber, const SampleSizeBox& stsz, const );
+public:
+    unsigned long int mdatSize(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz);
+    void writeMdat(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz, QFile* dashFile);
+
     /*!
      * \brief fileName
      *  name of the analyzed file
@@ -82,6 +89,7 @@ private:
      * \brief arraySize
      */
     unsigned long int fileSize;
+    unsigned long int mdatOffset;
 
 };
 

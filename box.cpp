@@ -15,11 +15,11 @@ QString FullBox::getInfo() {
     tmp.append("Version\t\t");
     tmp.append(QString::number(version));
     tmp.append("\nFlags\t\t");
-    tmp.append(QString::number(flags.at(0)));
+    tmp.append(QString::number(flags.at(0), 16));
     tmp.append(" | ");
-    tmp.append(QString::number(flags.at(1)));
+    tmp.append(QString::number(flags.at(1), 16));
     tmp.append(" | ");
-    tmp.append(QString::number(flags.at(2)));
+    tmp.append(QString::number(flags.at(2), 16));
     tmp.append(" | ");
     return tmp;
 }

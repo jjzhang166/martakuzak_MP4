@@ -26,6 +26,7 @@
 #include <QList>
 #include <qDebug>
 
+class MainWindow;
 /*!
  * \brief The Box class
  * is represantion of MP4 Box
@@ -95,6 +96,10 @@ public:
      * \return size in bytes
      */
     virtual unsigned long int getSize() { return size; }
+
+    virtual unsigned long int getSampleSize(const unsigned long int& id) {
+        return id*0;
+    }
 
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////
