@@ -202,7 +202,7 @@ void MainWindow::openFile()
         setBoxInfoSection(fileName);
         //boxParsingProgressDialog->close();
     }
-    QString type("stsz");
+    /*QString type("stsz");
     int row = 0;
     int col = 0;
     QModelIndexList Items = model->match(model->index(row,col),
@@ -216,9 +216,9 @@ void MainWindow::openFile()
     //qDebug()<<"mdatsize"<<QString::number(model->mdatSize(0, 50, stsz, analyzer));
     QFile* dashFile = new QFile("dash_testy");
     if (dashFile->open(QIODevice::ReadWrite)) {
-        model->writeMdat(0, 50, stsz, dashFile, analyzer);
+        model->writeTrun(2, 1, 14, -1811939328, 0, 50, 14, stsz, dashFile, analyzer);
         dashFile->close();
-    }
+    }*/
 
     //qDebug()<<"openFile: after if";
 }

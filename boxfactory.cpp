@@ -853,16 +853,24 @@ std::shared_ptr<Box> BoxFactory::getTBox(const unsigned int& size, QString type,
             f.append(analyzer->valueOfGroupOfBytes(1, off + offset + i + 9));
         }
         unsigned long int sampleCount = analyzer->valueOfGroupOfBytes(4, off + offset + 12);
-        long int dataOffset = analyzer->valueOfGroupOfBytes(4, off + offset + 16);
-        unsigned int firstSampleFlags = analyzer->valueOfGroupOfBytes(4, off + offset + 20);
+        long int dataOffset = 0;
+        if(f.at(3) == 1 || f.at(3) == 5) {
+            dataOffset = analyzer->valueOfGroupOfBytes(4, off + offset + 16);
+            offset += 4;
+        }
+        unsigned int firstSampleFlags = 0;
+        if(f.at(3) == 4 || f.at(3) == 5) {
+            firstSampleFlags = analyzer->valueOfGroupOfBytes(4, off + offset + 16);
+            offset += 4;
+        }
         QList<unsigned long int> sampleDuration;
         QList<unsigned long int> sampleSize;
         QList<unsigned int> sampleFlags;
         QList<unsigned long int> sampleCompositionTimeOffset;
         //?
-        if(f.at(1) == 2 && f.at(2) == 5) {
+        if(f.at(1) == 2) {
             for (unsigned int i = 0; i<sampleCount; ++i) {
-                sampleSize.append(analyzer->valueOfGroupOfBytes(4, off + offset + 24 + 4*i));
+                sampleSize.append(analyzer->valueOfGroupOfBytes(4, off + offset + 20 + 4*i));
             }
         }
         std::shared_ptr<Box> ret(new TrackRunBox(size, type, off, e, v, f,sampleCount,dataOffset,firstSampleFlags,sampleDuration,

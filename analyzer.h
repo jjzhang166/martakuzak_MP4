@@ -74,7 +74,14 @@ private:
     //void writeMdat(const unsigned int& firstSample, const unsigned int& sampleNumber, const SampleSizeBox& stsz, const );
 public:
     unsigned long int mdatSize(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz);
-    void writeMdat(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz, QFile* dashFile);
+    unsigned int writeMdat(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz,
+                           QFile* dashFile);
+    unsigned int writeMfhd(const unsigned long int& sequenceNumber, QFile* dashFile);
+    unsigned int writeTfhd(const unsigned int& trackID, QFile* dashFile);
+    unsigned int writeTfdt(const unsigned long &baseMediaDecodeTime, QFile* dashFile);
+    unsigned int writeTrun(const unsigned int& flag2, const unsigned int& flag3, const unsigned int& sampleCount,
+                           const signed int& dataOffset, const unsigned int& firstSampleFlags, const unsigned long int& firstSample,
+                           const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz, QFile* dashFile);
 
     /*!
      * \brief fileName

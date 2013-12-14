@@ -147,7 +147,7 @@ unsigned long int Analyzer::mdatSize(const unsigned long int& firstSample, const
     return mdatSize;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
-void Analyzer::writeMdat(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz,
+unsigned int Analyzer::writeMdat(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz,
                          QFile* dashFile) {
     unsigned long int size = mdatSize(firstSample, sampleNumber, stsz) - 8;
     QDataStream stream(dashFile);
@@ -163,5 +163,79 @@ void Analyzer::writeMdat(const unsigned long int& firstSample, const unsigned in
     }
     array = file->read(size);
     dashFile->write(array);
+    return size + 8;
 }
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int Analyzer::writeMfhd(const unsigned long int& sequenceNumber, QFile* dashFile) {
+    QDataStream stream(dashFile);
+    stream<<quint32(16); //size
+    stream.writeRawData("mfhd", 4);
+    stream<<quint8(0); //version
+    stream<<quint8(0); //flags
+    stream<<quint16(0);
+    stream<<quint32(sequenceNumber);
+    return 16;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int Analyzer::writeTfhd(const unsigned int& trackID, QFile* dashFile) {
+    QDataStream stream(dashFile);
+    stream<<quint32(16); //size
+    stream.writeRawData("tfhd", 4);
+    stream<<quint8(0); //version
+    stream<<quint8(2); //flags //dlaczego 2?
+    stream<<quint16(0);
+    stream<<quint32(trackID);
+    return 16;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int Analyzer::writeTfdt(const unsigned long int& baseMediaDecodeTime, QFile* dashFile) {
+    QDataStream stream(dashFile);
+    stream<<quint32(16); //size
+    stream.writeRawData("tfdt", 4);
+    int version;
+    if(baseMediaDecodeTime > 65535)
+        version = 1;
+    else
+        version = 0;
+    stream<<quint8(version); //version
+    stream<<quint8(0); //flags //dlaczego 2?
+    stream<<quint16(0);
+    if(version)
+        stream<<quint64(baseMediaDecodeTime);
+    else
+        stream<<quint32(baseMediaDecodeTime);
+    return 16;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int Analyzer::writeTrun(const unsigned int& flag2, const unsigned int& flag3, const unsigned int& sampleCount,
+                       const signed int& dataOffset, const unsigned int& firstSampleFlags, const unsigned long int& firstSample,
+                       const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz, QFile* dashFile) {
+    QDataStream stream(dashFile);
+    int size = 16; //size + type + version + flags + sampleCount
+    if(flag2 == 2) //sample sizes are present
+        size += sampleNumber*4;
+    if(flag3 == 1 || flag3 == 4) //1- data-offset, 4 - firstsampleflags
+        size += 4;
+    else if(flag3 == 5) //oba
+        size += 8;
+    stream<<quint32(size); //size
+    stream.writeRawData("trun", 4);
+    stream<<quint8(0); //version
+    stream<<quint8(0); //flags
+    stream<<quint8(flag2);
+    stream<<quint8(flag3);
+    stream<<quint32(sampleCount); //sample count
+    if(flag3 == 1 || flag3 == 5)
+        stream<<qint32(dataOffset);
+    if(flag3 == 2 || flag3 == 5)
+        stream<<quint32(firstSampleFlags);
+    if(flag2 == 2) {
+        for(unsigned int i = firstSample; i< firstSample + sampleNumber; ++i) {
+            stream<<quint32(stsz->getSampleSize(i));
+        }
+    }
+    return size;
+}
+
+
 

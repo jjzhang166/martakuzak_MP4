@@ -94,8 +94,14 @@ public:
     TreeItem *getChild(int offset);
     unsigned long int mdatSize(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz,
                                Analyzer* an);
-    void writeMdat(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz, QFile* dashFile,
+    unsigned int writeMdat(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz, QFile* dashFile,
                    Analyzer* an);
+    unsigned int writeMfhd(const unsigned long int& sn, QFile* dashFile, Analyzer* an);
+    unsigned int writeTfhd(const unsigned int& trackID, QFile* dashFile, Analyzer* an);
+    unsigned int writeTfdt(const unsigned long &baseMediaDecodeTime, QFile* dashFile, Analyzer* an);
+    unsigned int writeTrun(const unsigned int& flag2, const unsigned int& flag3, const unsigned int& sampleCount,
+                           const signed int& dataOffset, const unsigned int& firstSampleFlags, const unsigned long int& firstSample,
+                           const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz, QFile* dashFile, Analyzer* an);
 };
 
 #endif // TREEMODEL_H
