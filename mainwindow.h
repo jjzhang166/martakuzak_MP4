@@ -29,10 +29,13 @@
 #include "treemodel.h"
 #include "treeitem.h"
 #include "analyzer.h"
+#include "dashproxy.h"
 
 
 class Analyzer;
 class TreeModel;
+class DashProxy;
+
 /*!
  * \brief The MainWindow class defines a mind window of the application
  */
@@ -46,6 +49,10 @@ private:
     QAction *splitAct;
     QAction *exitAct;
     QAction * searchBoxAct;
+    //Actions - MPEG-DASH
+
+    QAction *dashOneFile;
+    QAction *dashSeparatedFiles;
     //Actions- Help
     QAction * helpAct;
     /*!
@@ -82,6 +89,7 @@ private:
      * \brief fileMenu
      */
     QMenu *fileMenu;
+    QMenu *dashMenu;
     /*!
      * \brief helpMenu
      */
@@ -90,6 +98,7 @@ private:
      * \brief analyzer
      */
     Analyzer * analyzer;
+    DashProxy * dashProxy;
 public:
     //!Constructor
     /*!

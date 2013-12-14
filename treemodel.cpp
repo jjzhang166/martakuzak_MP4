@@ -114,35 +114,67 @@ TreeItem * TreeModel::getChild(int offset) {
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
-
-unsigned long int TreeModel::mdatSize(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz,
-                           Analyzer* an) {
-    return an->mdatSize(firstSample, sampleNumber, stsz);
+QList <std::shared_ptr<Box>> TreeModel::getBoxes(const QString& type) {
+    QList <std::shared_ptr<Box>> boxes;
+    int row = 0;
+    int col = 0;
+    QModelIndexList Items = match(index(row,col),
+                                         Qt::DisplayRole,
+                                         QVariant::fromValue(QString(type)),
+                                         -1,
+                                         Qt::MatchRecursive);
+    while (!Items.isEmpty()) {
+        QModelIndex backId = Items.back();
+        QModelIndex child = index(backId.row(), 2, (backId.parent()));
+        boxes.append(getChild(data(child,Qt::DisplayRole).toInt())->getBox());
+    }
+     return boxes;
 }
-
-unsigned int TreeModel::writeMdat(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz, QFile* dashFile,
-               Analyzer* an) {
-    return an->writeMdat(firstSample, sampleNumber, stsz, dashFile);
-}
-
-unsigned int TreeModel::writeMfhd(const unsigned long int& sn, QFile* dashFile, Analyzer* an) {
-    return an->writeMfhd(sn, dashFile);
-}
-
-unsigned int TreeModel::writeTfhd(const unsigned int& tid, QFile* dashFile, Analyzer* an) {
-    return an->writeTfhd(tid, dashFile);
-}
-
-unsigned int TreeModel::writeTfdt(const unsigned long &baseMediaDecodeTime, QFile* dashFile, Analyzer* an) {
-    return an->writeTfdt(baseMediaDecodeTime, dashFile);
-}
-
-unsigned int TreeModel::writeTrun(const unsigned int& flag2, const unsigned int& flag3, const unsigned int& sampleCount,
-                       const signed int& dataOffset, const unsigned int& firstSampleFlags, const unsigned long int& firstSample,
-                       const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz, QFile* dashFile, Analyzer* an) {
-    return an->writeTrun(flag2, flag3, sampleCount, dataOffset, firstSampleFlags, firstSample, sampleNumber, stsz, dashFile);
-}
-
+////////////////////////////////////////////////////////////////////////////////////////////
+//unsigned long int TreeModel::mdatSize(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz,
+//                           Analyzer* an) {
+//    return an->mdatSize(firstSample, sampleNumber, stsz);
+//}
+//////////////////////////////////////////////////////////////////////////////////////////////
+//unsigned int TreeModel::writeMdat(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz, QFile* dashFile,
+//               Analyzer* an) {
+//    return an->writeMdat(firstSample, sampleNumber, stsz, dashFile);
+//}
+//////////////////////////////////////////////////////////////////////////////////////////////
+//unsigned int TreeModel::writeMoof(const unsigned long int& sequenceNumber, const unsigned int& trackID,
+//                                  const unsigned long &baseMediaDecodeTime, const unsigned int& trunFlag2, const unsigned int& trunFlag3,
+//                                  const unsigned int& sampleCount, const signed int& dataOffset, const unsigned int& firstSampleFlags,
+//                                  const unsigned long int& firstSample, std::shared_ptr<Box>& stsz,
+//                                  QFile* dashFile, Analyzer* an) {
+//    return an->writeMoof(sequenceNumber, trackID, baseMediaDecodeTime, trunFlag2, trunFlag3, sampleCount, dataOffset, firstSampleFlags,
+//                         firstSample, stsz, dashFile);
+//}
+//////////////////////////////////////////////////////////////////////////////////////////////
+//unsigned int TreeModel::writeMfhd(const unsigned long int& sn, QFile* dashFile, Analyzer* an) {
+//    return an->writeMfhd(sn, dashFile);
+//}
+//////////////////////////////////////////////////////////////////////////////////////////////
+//unsigned int TreeModel::writeTfhd(const unsigned int& tid, QFile* dashFile, Analyzer* an) {
+//    return an->writeTfhd(tid, dashFile);
+//}
+//////////////////////////////////////////////////////////////////////////////////////////////
+//unsigned int TreeModel::writeTfdt(const unsigned long &baseMediaDecodeTime, QFile* dashFile, Analyzer* an) {
+//    return an->writeTfdt(baseMediaDecodeTime, dashFile);
+//}
+//////////////////////////////////////////////////////////////////////////////////////////////
+//unsigned int TreeModel::writeTrun(const unsigned int& flag2, const unsigned int& flag3, const unsigned int& sampleCount,
+//                       const signed int& dataOffset, const unsigned int& firstSampleFlags, const unsigned long int& firstSample,
+//                       std::shared_ptr<Box>& stsz, QFile* dashFile, Analyzer* an) {
+//    return an->writeTrun(flag2, flag3, sampleCount, dataOffset, firstSampleFlags, firstSample, stsz, dashFile);
+//}
+//////////////////////////////////////////////////////////////////////////////////////////////
+//unsigned int TreeModel::writeTraf(const unsigned int& trackID, const unsigned long &baseMediaDecodeTime, const unsigned int& trunFlag2,
+//                       const unsigned int& trunFlag3, const unsigned int& sampleCount, const signed int& dataOffset,
+//                       const unsigned int& firstSampleFlags, const unsigned long int& firstSample,
+//                       std::shared_ptr<Box>& stsz, QFile* dashFile, Analyzer *an) {
+//    return an->writeTraf(trackID, baseMediaDecodeTime, trunFlag2, trunFlag3, sampleCount, dataOffset, firstSampleFlags, firstSample,
+//                         stsz, dashFile);
+//}
 
 /*void TreeModel::setupModelData(const QStringList &lines, TreeItem *parent)
 {

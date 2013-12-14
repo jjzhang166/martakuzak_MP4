@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include <QApplication>
-#include "analyzer.h"
+//#include "analyzer.h"
 #include "boxfactory.h"
 #include "exceptions.h"
 

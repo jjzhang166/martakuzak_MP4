@@ -71,6 +71,9 @@ void MainWindow::createActions()
 
     helpAct = new QAction(tr("&Help"), this);
     connect(helpAct, SIGNAL(triggered()), this, SLOT(launchHelp()));
+
+    dashOneFile = new QAction(tr("&Split into segments in one file"), this);
+    dashSeparatedFiles = new QAction(tr("&Split with each segment in separated file"), this);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::createMenu()
@@ -80,6 +83,11 @@ void MainWindow::createMenu()
     fileMenu->addAction(splitAct);
     fileMenu->addSeparator();
     fileMenu->addAction(exitAct);
+
+    dashMenu = menuBar()->addMenu(tr("&MPEG-DASH"));
+    //dashMenu->addMenu(tr("&Create"));
+    dashMenu->addAction(dashOneFile);
+    dashMenu->addAction(dashSeparatedFiles);
 
     helpMenu = menuBar()->addMenu(tr("&Help"));
     helpMenu->addAction(helpAct);
@@ -214,12 +222,12 @@ void MainWindow::openFile()
     QModelIndex child = model->index(backId.row(), 2, (backId.parent()));
     std::shared_ptr<Box> stsz = model->getChild(model->data(child,Qt::DisplayRole).toInt())->getBox();
     //qDebug()<<"mdatsize"<<QString::number(model->mdatSize(0, 50, stsz, analyzer));
-    QFile* dashFile = new QFile("dash_testy");
+    DashProxy dash(fileName, model);
+    QFile* dashFile = new QFile("dash_testy_moof");
     if (dashFile->open(QIODevice::ReadWrite)) {
-        model->writeTrun(2, 1, 14, -1811939328, 0, 50, 14, stsz, dashFile, analyzer);
+        dash.writeMoof(1, 0, 0, 2, 5, 25, 671154176, 0, 0, stsz, dashFile);
         dashFile->close();
     }*/
-
     //qDebug()<<"openFile: after if";
 }
 ////////////////////////////////////////////////////////////////////////////////////////////

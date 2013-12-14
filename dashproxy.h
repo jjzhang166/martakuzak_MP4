@@ -1,17 +1,16 @@
-#ifndef DASHCREATOR_H
-#define DASHCREATOR_H
+#ifndef DASHPROXY_H
+#define DASHPROXY_H
 
-#include <QFile>
-#include <QByteArray>
-#include <QString>
+#include "dashcreator.h"
 #include "treemodel.h"
 
 class TreeModel;
+class DashCreator;
 
-class DashCreator
+class DashProxy
 {
 public:
-    DashCreator(const QString& fileName, TreeModel* model);
+    DashProxy(const QString& fileName, TreeModel* model);
 
     unsigned long int mdatSize(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz);
     unsigned int writeMdat(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz,
@@ -31,9 +30,7 @@ public:
                            const signed int& dataOffset, const unsigned int& firstSampleFlags, const unsigned long int& firstSample,
                            std::shared_ptr<Box>& stsz, QFile* dashFile);
 private:
-    QString fileName;
-    TreeModel* model;
-    QFile* file;
+    DashCreator* dashCreator;
 };
 
-#endif // DASHCREATOR_H
+#endif // DASHPROXY_H
