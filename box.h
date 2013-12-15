@@ -75,7 +75,7 @@ public:
      * \brief getOffset
      * \return offset of child boxes
      */
-    virtual unsigned  int getOffset() { return 8; }
+    virtual unsigned int getContainerOffset() { return 8; }
     /*!
      * \brief getType
      * \return type of the box
@@ -96,11 +96,22 @@ public:
      * \return size in bytes
      */
     virtual unsigned long int getSize() { return size; }
-
+    virtual unsigned long int getOffset() { return offset; }
     virtual unsigned long int getSampleSize(const unsigned long int& id) {
         return id*0;
     }
-
+    virtual unsigned long int getEntryCount() {
+        return 0;
+    }
+    virtual unsigned long int getSyncSample(const int& id) {
+        return 0*id;
+    }
+    virtual unsigned long int getMediaTimeScale() {
+        return 0;
+    }
+    virtual unsigned int getTrackID() {
+        return 0;
+    }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////
 class FullBox : public Box
@@ -165,6 +176,9 @@ public:
                    const unsigned long int & dur, const bool & pad, const QList<unsigned int> & lan, const unsigned int & pd);
     virtual QString getFullName() { return QString("Media Header Box"); }
     virtual QString getInfo();
+    virtual unsigned long int getMediaTimeScale() {
+        return timescale;
+    }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MovieBox : public Box
@@ -311,7 +325,7 @@ public:
     virtual QString getFullName() { return QString("Data Reference Box"); }
     virtual QString getInfo();
     virtual bool isContainer() { return true; }
-    virtual unsigned int getOffset() { return 16; }
+    virtual unsigned int getContainerOffset() { return 16; }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -91,7 +91,7 @@ public:
                          const unsigned int& vr, const unsigned int& r3, const unsigned int& fc, const QString & csn,
                          const unsigned int& dpth, const unsigned int &pd2);
     virtual bool isContainer() { return true; }
-    virtual unsigned int getOffset() { return 86; }
+    virtual unsigned int getContainerOffset() { return 86; }
     virtual QString getFullName() { return QString("MP4 Visual Sample Entry"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,7 +103,7 @@ public:
                         const unsigned int &chc, const unsigned int &ss, const unsigned int &pred, const unsigned int &res2,
                         const unsigned int &srate);
     virtual bool isContainer() { return true; }
-    virtual unsigned int getOffset() { return 36; }
+    virtual unsigned int getContainerOffset() { return 36; }
     virtual QString getFullName() { return QString("MP4 Audio Sample Entry"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -133,7 +133,7 @@ private:
     QList<unsigned int> flags;
 public:
     ESDBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int& e, const unsigned int& v,const QList<unsigned int>& f);
-    virtual unsigned int getOffset() { return 8; }
+    virtual unsigned int getContainerOffset() { return 8; }
     virtual QString getFullName() { return QString("ESD Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -146,7 +146,7 @@ public:
                    const unsigned int& vr, const unsigned int& r3, const unsigned int& fc, const QString & csn,
                    const unsigned int& dpth, const unsigned int &pd2);
     virtual bool isContainer() { return true; }
-    virtual unsigned int getOffset() { return 86; }
+    virtual unsigned int getContainerOffset() { return 86; }
     virtual QString getFullName() { return QString("AVC Sample Entry"); }
 };
 

@@ -82,13 +82,13 @@ public:
     SampleDescriptionBox(const unsigned int &s, const QString& t, const unsigned long int& off, const unsigned int &e, const unsigned int& v,
                          const QList<unsigned int>& f, const unsigned int &ec);
     virtual bool isContainer() { return true; }
-    virtual unsigned int getOffset() { return (16); }
+    virtual unsigned int getContainerOffset() { return (16); }
     virtual QString getFullName() { return QString("Sample Description Box"); }
     /*!
      * \brief getEntryCount
      * \return entry_count
      */
-    unsigned int getEntryCount() { return entryCount; }
+    unsigned long int getEntryCount() { return entryCount; }
     virtual QString getInfo();
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -178,6 +178,13 @@ public:
                   const QList<unsigned int>& f, const unsigned long int&ec, const QList<unsigned long int> sn);
     virtual QString getFullName() { return QString("Sync Sample Box"); }
     virtual QString getInfo();
+    virtual unsigned long int getEntryCount() {
+        return entryCount;
+    }
+    virtual unsigned long int getSyncSample(const int& id) {
+        qDebug()<<"stss getSyncSample"<<QString::number(id)<<QString::number(sampleNumber.at(id));
+        return sampleNumber.at(id);
+    }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class ShadowSyncSampleBox : public FullBox

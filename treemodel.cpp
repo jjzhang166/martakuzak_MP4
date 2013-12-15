@@ -124,9 +124,10 @@ QList <std::shared_ptr<Box>> TreeModel::getBoxes(const QString& type) {
                                                            -1,
                                                            Qt::MatchRecursive);
                              while (!Items.isEmpty()) {
-                             QModelIndex backId = Items.back();
-                             QModelIndex child = index(backId.row(), 2, (backId.parent()));
-                             boxes.append(getChild(data(child,Qt::DisplayRole).toInt())->getBox());
+                                QModelIndex backId = Items.back();
+                                QModelIndex child = index(backId.row(), 2, (backId.parent()));
+                                boxes.append(getChild(data(child,Qt::DisplayRole).toInt())->getBox());
+                                Items.pop_back();
                              }
                              return boxes;
                              }

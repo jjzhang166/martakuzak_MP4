@@ -103,7 +103,7 @@ TrackExtendsBox::TrackExtendsBox(const unsigned  int& s, const QString& t, const
     FullBox(s,t,off,e, v, f) ,
     version(v),
     flags(f),
-    trackID(tid),
+    getTrackID(tid),
     defaultSampleDescriptionIndex(dsdi),
     defaultSampleDuration(dsd),
     defaultSampleSize(dss),
@@ -113,7 +113,7 @@ QString TrackExtendsBox::getInfo() {
     QString tmp("");
     tmp.append(FullBox::getInfo());
     tmp.append("\nTrack ID\t\t");
-    tmp.append(QString::number(trackID));
+    tmp.append(QString::number(getTrackID));
     tmp.append("\nDefault Sample Description Index\t");
     tmp.append(QString::number(defaultSampleDescriptionIndex));
     tmp.append("\nDefault Sample Duration\t");
@@ -132,7 +132,7 @@ TrackFragmentHeaderBox::TrackFragmentHeaderBox(const unsigned  int& s, const QSt
                                                const unsigned long int& tid, const unsigned long &bdo, const unsigned long &dsdi,
                                                const unsigned long &dsd, const unsigned long &dss, const unsigned long &dsf):
     FullBox(s,t,off,e, v, f),
-    trackID(tid),
+    getTrackID(tid),
     baseDataOffset(bdo),
     sampleDescriptionIndex(dsdi),
     defaultSampleDuration(dsd),
@@ -143,7 +143,7 @@ QString TrackFragmentHeaderBox::getInfo() {
     QString tmp("");
     tmp.append(FullBox::getInfo());
     tmp.append("\nTrack ID\t\t");
-    tmp.append(QString::number(trackID));
+    tmp.append(QString::number(getTrackID));
     if (getSize() >= 24) {
         tmp.append(("\nBase Data Offset\t"));
         tmp.append(QString::number(baseDataOffset));

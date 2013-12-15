@@ -7,6 +7,10 @@ DashCreator::DashCreator(const QString &fn, TreeModel* m): fileName(fn), model(m
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
+void DashCreator::closeFileStream() {
+    file->close();
+}
+////////////////////////////////////////////////////////////////////////////////////////////
 unsigned long int DashCreator::mdatSize(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz) {
     unsigned long int mdatSize = 8;
     for (unsigned int i = firstSample; i< (firstSample + sampleNumber); ++i) {
@@ -17,7 +21,9 @@ unsigned long int DashCreator::mdatSize(const unsigned long int& firstSample, co
 ////////////////////////////////////////////////////////////////////////////////////////////
 unsigned int DashCreator::writeMdat(const unsigned long int& firstSample, const unsigned int &sampleNumber, std::shared_ptr<Box>& stsz,
                                     QFile* dashFile) {
-    unsigned long int size = mdatSize(firstSample, sampleNumber, stsz) - 8;
+    unsigned long int size = mdatSize(firstSample, sampleNumber, stsz);
+    if(dashFile == NULL)
+        return size;
     QDataStream stream(dashFile);
     stream<<quint32(size); //4 bajty
     stream.writeRawData("mdat", 4); //4 bajty
@@ -30,9 +36,21 @@ unsigned int DashCreator::writeMdat(const unsigned long int& firstSample, const 
     else {
         file->seek(mdatOffset + 8);
     }
-    array = file->read(size);
-    dashFile->write(array);
-    return size + 8;
+    if(size < 2028)
+        array = file->read(size - 8);
+    else {
+        int number = (size - 8)/2028 + 1;
+        int lastSize = (size - 8) % 2028;
+        for(int i = 0; i < number; ++i) {
+            if(i == number - 1 && lastSize) {
+                array = file->read(lastSize);
+            }
+            else
+                array = file->read(2028);
+            dashFile->write(array);
+        }
+    }
+    return size;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 unsigned int DashCreator::writeMoof(const unsigned long int& sequenceNumber, const unsigned int& trackID,
@@ -53,6 +71,8 @@ unsigned int DashCreator::writeMoof(const unsigned long int& sequenceNumber, con
     else if(trunFlag3 == 5) //oba
         size += 8;
     //
+    if(dashFile == NULL)
+        return size;
     stream<<quint32(size);
     stream.writeRawData("moof", 4);
 
@@ -64,6 +84,8 @@ unsigned int DashCreator::writeMoof(const unsigned long int& sequenceNumber, con
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 unsigned int DashCreator::writeMfhd(const unsigned long int& sequenceNumber, QFile* dashFile) {
+    if(dashFile == NULL)
+        return 16;
     QDataStream stream(dashFile);
     stream<<quint32(16); //size
     stream.writeRawData("mfhd", 4);
@@ -90,6 +112,8 @@ unsigned int DashCreator::writeTraf(const unsigned int& trackID, const unsigned 
     else if(flag3 == 5) //oba
         size += 8;
     //
+    if(dashFile == NULL)
+        return size;
     stream<<quint32(size);
     stream.writeRawData("traf", 4);
 
@@ -101,6 +125,8 @@ unsigned int DashCreator::writeTraf(const unsigned int& trackID, const unsigned 
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 unsigned int DashCreator::writeTfhd(const unsigned int& trackID, QFile* dashFile) {
+    if(dashFile == NULL)
+        return 16;
     QDataStream stream(dashFile);
     stream<<quint32(16); //size
     stream.writeRawData("tfhd", 4);
@@ -112,6 +138,8 @@ unsigned int DashCreator::writeTfhd(const unsigned int& trackID, QFile* dashFile
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 unsigned int DashCreator::writeTfdt(const unsigned long int& baseMediaDecodeTime, QFile* dashFile) {
+    if(dashFile == NULL)
+        return 16;
     QDataStream stream(dashFile);
     stream<<quint32(16); //size
     stream.writeRawData("tfdt", 4);
@@ -141,6 +169,8 @@ unsigned int DashCreator::writeTrun(const unsigned int& flag2, const unsigned in
         size += 4;
     else if(flag3 == 5) //oba
         size += 8;
+    if(dashFile == NULL)
+        return size;
     stream<<quint32(size); //size
     stream.writeRawData("trun", 4);
     stream<<quint8(0); //version
@@ -162,7 +192,7 @@ unsigned int DashCreator::writeTrun(const unsigned int& flag2, const unsigned in
 ////////////////////////////////////////////////////////////////////////////////////////////
 unsigned int DashCreator::writeSidx(const unsigned short int& version, const unsigned int& referenceID, const unsigned int& timescale,
                                     const unsigned long int& earliestPresentationTime, const unsigned long int& firstOffset,
-                                    const unsigned int& referenceCount, const QList<unsigned long int>& referenceType,
+                                    const unsigned int& referenceCount, const QList<unsigned short int>& referenceType,
                                     const QList<unsigned long int>& referenceSize, const QList<unsigned long int>& subsegmentDuration,
                                     const QList <unsigned short int>& startsWithSAP, const QList <unsigned short int>& SAPType,
                                     const QList <unsigned long int>& SAPDeltaTime, QFile *dashFile) {
@@ -176,6 +206,8 @@ unsigned int DashCreator::writeSidx(const unsigned short int& version, const uns
         size += 8;
     size += 4; //reserved, referenceCount
     size += referenceCount*12;
+    if(dashFile == NULL)
+        return size;
     stream<<quint32(size);
     stream.writeRawData("sidx", 4);
     stream<<quint8(version); //version
@@ -208,3 +240,149 @@ unsigned int DashCreator::writeSidx(const unsigned short int& version, const uns
     }
     return size;
 }
+////////////////////////////////////////////////////////////////////////////////////////////
+void DashCreator::writeSegments(const unsigned int& maxSampleNum, QFile* dashFile) {
+    qDebug()<<"dash creator write segments"<<"0";
+    std::shared_ptr<Box> stsz = model->getBoxes("stsz").at(0); //Sample Size Box
+    std::shared_ptr<Box> stss = model->getBoxes("stss").at(0); //Sync Sample Box
+    std::shared_ptr<Box> mdhd = model->getBoxes("mdhd").at(0); //Media Header Box
+    std::shared_ptr<Box> tkhd = model->getBoxes("tkhd").at(0); //Track Header Box
+    unsigned int maxSegmentNum = stss->getEntryCount(); //segmentow tyle co sync punktow?
+    unsigned int segmentID = 0; //aktualny numer segmentu
+    unsigned long int sequenceNumber = 0;
+    unsigned long int baseMediaDecodeTime = 0;
+
+    while(segmentID < maxSegmentNum) {
+        unsigned int subsegmentID = 0; //numer podsegmentu
+        unsigned int firstSample = stss->getSyncSample(subsegmentID); //numer pierwszej probki segmentu
+        unsigned int secondSample = stss->getSyncSample(subsegmentID + 1); //numer pierwszej probki poza segmentem
+        unsigned int samplesInSubsegmentNum = secondSample - firstSample; //ilosc probek w segmencie
+        //qDebug()<<"dashcreator writeSeg"<<"subsegmentLen"<<QString::number(samplesInSubsegmentNum);
+        unsigned int subsegmentNum = 1; //ilosc podsegmentow - co najmniej 1
+        if(samplesInSubsegmentNum > maxSampleNum) { //jesli jest ich wiecej niz maxSampleNum
+            subsegmentNum = samplesInSubsegmentNum/maxSampleNum; //to ilosc podsegmentow jest ilorazem wszystkich probek w segmencie i maxSampleNum
+            if(samplesInSubsegmentNum % maxSampleNum) {//zaokraglone ku gorze
+                ++ subsegmentNum;
+            }
+        }
+        //write sidx
+        //przygotowanie parametrow
+        unsigned short int version = 0;
+        unsigned int referenceID = tkhd->getTrackID(); //numer tracku z tkhd
+        unsigned int timescale = mdhd->getMediaTimeScale(); //timescale z mdhd
+        unsigned long int earliestPresentationTime = stss->getSyncSample(segmentID) - 1;//odleglosc od poprzedniej sync sample?
+        unsigned long int firstOffset = 0; //?
+        unsigned int referenceCount = subsegmentNum;
+        QList <unsigned short int> referenceType;
+        QList <unsigned long int> referenceSize;
+        QList <unsigned long int> subsegmentDuration;
+        QList <unsigned short int> startsWithSAP;
+        QList <unsigned short int> SAPType;
+        QList <unsigned long int> SAPDeltaTime;
+        while(subsegmentID < subsegmentNum) { //dla wszystkich podsegmentow
+            unsigned long int baseTMP = baseMediaDecodeTime;
+            unsigned long int sequenceTMP = sequenceNumber;
+            unsigned int subsegmentLen = maxSampleNum; //normalnie wynosi maxSampleNum
+            if(subsegmentID + 1 == subsegmentNum) //ale dla ostatniego podsegmentu to jest tylko reszta z dzielenia
+                subsegmentLen = samplesInSubsegmentNum % maxSampleNum;
+            referenceType.append(0);
+            //przygotowanie parametrow moof
+            referenceSize.append(writeMoof(++sequenceTMP, referenceID, baseTMP, 2, 5, subsegmentLen, 0 /**/,
+                                           0, baseTMP , stsz)
+                                 +
+                                 mdatSize(baseTMP, subsegmentLen, stsz));
+            qDebug()<<"why"<<QString::number(baseTMP)<<QString::number(subsegmentLen)<<QString::number(mdatSize(baseMediaDecodeTime, subsegmentLen, stsz));
+            subsegmentDuration.append(subsegmentLen);
+            startsWithSAP.append(subsegmentID == 0);
+            SAPType.append(subsegmentID == 0);
+            SAPDeltaTime.append(0);
+            baseTMP += subsegmentLen;
+            ++ subsegmentID;
+        }
+        writeSidx(version, referenceID, timescale, earliestPresentationTime, firstOffset, referenceCount, referenceType,
+                  referenceSize, subsegmentDuration, startsWithSAP, SAPType, SAPDeltaTime, dashFile);
+        subsegmentID = 0;
+        while(subsegmentID < subsegmentNum) { //dla wszystkich podsegmentow
+            unsigned int subsegmentLen = maxSampleNum; //normalnie wynosi maxSampleNum
+            if(subsegmentID + 1 == subsegmentNum) //ale dla ostatniego podsegmentu to jest tylko reszta z dzielenia
+                subsegmentLen = samplesInSubsegmentNum % maxSampleNum;
+
+            //write moof
+            writeMoof(++sequenceNumber, referenceID, baseMediaDecodeTime, 2, 5, subsegmentLen, 0 /**/,
+                                                       0, baseMediaDecodeTime, stsz, dashFile);
+            //write mdat
+            writeMdat(baseMediaDecodeTime, subsegmentLen, stsz, dashFile);
+            baseMediaDecodeTime += subsegmentLen;
+            ++ subsegmentID;
+        }
+        qDebug()<<"dashcreator writeSeg"<<"base"<<QString::number(baseMediaDecodeTime);
+        segmentID++;
+    }
+    /*std::shared_ptr<Box> stsz = model->getBoxes("stsz").at(0); //Sample Size Box
+    std::shared_ptr<Box> stss = model->getBoxes("stss").at(0); //Sync Sample Box
+    std::shared_ptr<Box> mdhd = model->getBoxes("mdhd").at(0); //Media Header Box
+    std::shared_ptr<Box> tkhd = model->getBoxes("tkhd").at(0); //Track Header Box
+    unsigned long int segmentNumber = stss->getEntryCount();
+    qDebug()<<"dash creator write segments"<<"1"<<QString::number(segmentNumber);
+    unsigned int tmpSyncSample = 0;
+    qDebug()<<"dash creator"<<"1.1";
+    for(unsigned int i = 0; i < segmentNumber; ++i) {
+        qDebug()<<"dash creator"<<"1.2";
+        int mediaSegmentLen =  0;
+        qDebug()<<"dash creator"<<"1.3";
+        unsigned int subsegmentNum = 1;
+        qDebug()<<"dash creator write segments"<<"2";
+        if(tmpSyncSample != (segmentNumber)) {
+            //mediaSegmentLen = stsz->getSampleSize(stss->getSyncSample(i + 1)) - stsz->getSampleSize(stss->getSyncSample(i));
+            mediaSegmentLen = mdatSize(stss->getSyncSample(i), stss->getSyncSample(i + 1) - stss->getSyncSample(i), stsz);
+            subsegmentNum = mediaSegmentLen/maxSampleNum + 1;
+            qDebug()<<"dash creator write segments"<<"2"<<QString::number(mediaSegmentLen)<<QString::number(maxSampleNum)<<QString::number(subsegmentNum);
+        }
+        return;
+        qDebug()<<"dash creator write segments"<<"3";
+        QList<unsigned long int> referenceType;
+        QList<unsigned long int> referenceSize;
+        QList<unsigned long int> subsegmentDuration;
+        QList<unsigned short int> startsWithSAP;
+        QList <unsigned short int> SAPType;
+        QList <unsigned long int> SAPDeltaTime;
+
+        for (unsigned int k = 0; k <subsegmentNum; ++k) {
+            qDebug()<<"dash creator write segments"<<"4";
+            referenceType.append(0);//?
+            int sampleNumber;
+            if(k == subsegmentNum)
+                sampleNumber = stsz->getSyncSample(i+1) - tmpSyncSample;
+            else
+                sampleNumber = maxSampleNum;
+            qDebug()<<"dash creator write segments"<<"5";
+            referenceSize.append(writeMoof(k, tkhd->getTrackID(), stss->getEntryCount() + k*maxSampleNum - 1, 2, 5,
+                                           mediaSegmentLen, 0, 0, stsz->getSyncSample(i) + maxSampleNum*k, stsz)
+                                 +
+                                 writeMdat(stsz->getSyncSample(i) + maxSampleNum*k, sampleNumber, stsz));
+            subsegmentDuration.append(sampleNumber);
+            startsWithSAP.append(k == 0);
+            qDebug()<<"dash creator write segments"<<"6";
+            SAPType.append(k == 0);
+            SAPDeltaTime.append(0);
+            tmpSyncSample += sampleNumber;
+        }
+        qDebug()<<"dash creator write segments"<<"7";
+        writeSidx(0, tkhd->getTrackID(), mdhd->getMediaTimeScale(), stss->getSyncSample(i), 0, subsegmentNum, referenceType,
+                  referenceSize, subsegmentDuration, startsWithSAP, SAPType, SAPDeltaTime, dashFile);
+        qDebug()<<"dash creator write segments"<<"8";
+        subsegmentNum = 1;
+        for (unsigned int k = 0; k <subsegmentNum; ++k) {
+            int sampleNumber;
+            if(k == subsegmentNum)
+                sampleNumber = stsz->getSyncSample(i+1) - tmpSyncSample;
+            else
+                sampleNumber = maxSampleNum;
+            writeMoof(k, tkhd->getTrackID(), stss->getEntryCount() + k*maxSampleNum - 1, 2, 5,
+                                                       mediaSegmentLen, 0, 0, stsz->getSyncSample(i) + maxSampleNum*k, stsz, dashFile);
+            writeMdat(stsz->getSyncSample(i) + maxSampleNum*k, sampleNumber, stsz, dashFile);
+
+        }
+    }*/
+}
+

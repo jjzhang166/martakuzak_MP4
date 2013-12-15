@@ -11,7 +11,7 @@ class DashProxy
 {
 public:
     DashProxy(const QString& fileName, TreeModel* model);
-
+    void closeFileStream();
     unsigned long int mdatSize(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz);
     unsigned int writeMdat(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz,
                            QFile* dashFile);
@@ -31,10 +31,12 @@ public:
                            std::shared_ptr<Box>& stsz, QFile* dashFile);
     unsigned int writeSidx(const unsigned short int& version, const unsigned int& referenceID, const unsigned int& timescale,
                            const unsigned long int& earliestPresentationTime, const unsigned long int& firstOffset,
-                           const unsigned int &referenceCount, const QList<unsigned long int>& referenceType,
+                           const unsigned int &referenceCount, const QList<unsigned short int>& referenceType,
                            const QList<unsigned long int>& referenceSize, const QList<unsigned long int>& subsegmentDuration,
                            const QList <unsigned short int>& startsWithSAP, const QList <unsigned short int>& SAPType,
                            const QList <unsigned long int>& SAPDeltaTime, QFile* dashFile);
+    void writeSegments(const unsigned int &maxSampleNum, QFile* dashFile);
+
 private:
     DashCreator* dashCreator;
 };

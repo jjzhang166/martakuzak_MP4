@@ -55,6 +55,9 @@ public:
                    const unsigned int & wdth, const unsigned int & hght);
     virtual QString getFullName() { return QString("Track Header Box"); }
     virtual QString getInfo();
+    virtual unsigned int getTrackID() {
+        return trackID;
+    }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class TrackReferenceBox : public Box
@@ -69,7 +72,7 @@ class TrackExtendsBox : public FullBox
 private:
     unsigned int version;
     QList<unsigned int> flags;
-    unsigned int trackID;
+    unsigned int getTrackID;
     unsigned int defaultSampleDescriptionIndex;
     unsigned int defaultSampleDuration;
     unsigned int defaultSampleSize;
@@ -98,7 +101,7 @@ class TrackFragmentHeaderBox : public FullBox
 private:
     unsigned int version;
     QList<unsigned int> flags;
-    unsigned long int trackID;
+    unsigned long int getTrackID;
     unsigned long int baseDataOffset;
     unsigned long int sampleDescriptionIndex;
     unsigned long int defaultSampleDuration;

@@ -46,13 +46,11 @@ class MainWindow : public QMainWindow
 private:
     //Actions- File
     QAction *openAct;
-    QAction *splitAct;
     QAction *exitAct;
     QAction * searchBoxAct;
     //Actions - MPEG-DASH
-
-    QAction *dashOneFile;
-    QAction *dashSeparatedFiles;
+    QAction *dashOneFileAct;
+    QAction *dashSeparatedFilesAct;
     //Actions- Help
     QAction * helpAct;
     /*!
@@ -117,10 +115,6 @@ private slots:
      */
     void openFile();
     /*!
-     * \brief splitFile
-     */
-    void splitFile();
-    /*!
      * \brief printSelectedBox prints info about selected Box in boxInfo->
      */
     void printSelectedBox();
@@ -135,6 +129,8 @@ private slots:
      * \brief launchHelp launches help html site.
      */
     void launchHelp();
+    void splitOneFile();
+
 
 private:
     /*!

@@ -94,7 +94,7 @@ public:
      * \return
      */
     int unsigned getOffset() {
-        if(box) return box->getOffset();
+        if(box) return box->getContainerOffset();
         else return 8;
     }
     /*!

@@ -34,10 +34,12 @@ MainWindow::~MainWindow()
     delete fileMenu;
     delete treeView;
     delete openAct;
-    delete splitAct;
     delete exitAct;
     delete helpMenu;
     delete helpAct;
+    delete dashMenu;
+    delete dashOneFileAct;
+    delete dashSeparatedFilesAct;
     delete model;
     delete boxInfo;
     delete nextSearchButton;
@@ -59,9 +61,6 @@ void MainWindow::createActions()
     openAct->setShortcuts(QKeySequence::Open);
     connect(openAct, SIGNAL(triggered()), this, SLOT(openFile()));
 
-    splitAct = new QAction(tr("&Split"), this);
-    connect(splitAct, SIGNAL(triggered()), this, SLOT(splitFile()));
-
     exitAct = new QAction(tr("E&xit"), this);
     exitAct->setShortcuts(QKeySequence::Quit);
     connect(exitAct, SIGNAL(triggered()), this, SLOT(close()));
@@ -72,22 +71,23 @@ void MainWindow::createActions()
     helpAct = new QAction(tr("&Help"), this);
     connect(helpAct, SIGNAL(triggered()), this, SLOT(launchHelp()));
 
-    dashOneFile = new QAction(tr("&Split into segments in one file"), this);
-    dashSeparatedFiles = new QAction(tr("&Split with each segment in separated file"), this);
+    dashOneFileAct = new QAction(tr("&Split into segments in one file"), this);
+    connect(dashOneFileAct, SIGNAL(triggered()), this, SLOT(splitOneFile()));
+
+    dashSeparatedFilesAct = new QAction(tr("&Split with each segment in separated file"), this);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 void MainWindow::createMenu()
 {
     fileMenu = menuBar()->addMenu(tr("&File"));
     fileMenu->addAction(openAct);
-    fileMenu->addAction(splitAct);
     fileMenu->addSeparator();
     fileMenu->addAction(exitAct);
 
     dashMenu = menuBar()->addMenu(tr("&MPEG-DASH"));
     //dashMenu->addMenu(tr("&Create"));
-    dashMenu->addAction(dashOneFile);
-    dashMenu->addAction(dashSeparatedFiles);
+    dashMenu->addAction(dashOneFileAct);
+    dashMenu->addAction(dashSeparatedFilesAct);
 
     helpMenu = menuBar()->addMenu(tr("&Help"));
     helpMenu->addAction(helpAct);
@@ -175,7 +175,8 @@ void MainWindow::setBoxInfoSection(const QString& fileName) {
     vSplitter->setOrientation(Qt::Vertical);
 
     mainLayout->update();
-    setWindowTitle(title+fileName);
+    title = QString("MP4 " + fileName);
+    setWindowTitle(title);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -321,11 +322,18 @@ void MainWindow::searchBox() {
 
 }
 ////////////////////////////////////////////////////////////
-void MainWindow::splitFile() {
-
+void MainWindow::splitOneFile() {
+    QString fileName = title.mid(4);
+    dashProxy = new DashProxy(fileName, model);
+    QFile* dashFile = new QFile("olaboga");
+    if (dashFile->open(QIODevice::ReadWrite)) {
+        dashProxy->writeSegments(50, dashFile);
+        dashFile->close();
+    }
 }
 ////////////////////////////////////////////////////////////
 void MainWindow::launchHelp() {
     QDesktopServices::openUrl(QUrl("D://PDI//Code//help.html"));
 }
+
 

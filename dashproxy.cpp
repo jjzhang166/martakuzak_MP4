@@ -4,6 +4,10 @@ DashProxy::DashProxy(const QString& fileName, TreeModel* model) {
     dashCreator = new DashCreator(fileName, model);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
+void DashProxy::closeFileStream() {
+    dashCreator->closeFileStream();
+}
+////////////////////////////////////////////////////////////////////////////////////////////
 unsigned long int DashProxy::mdatSize(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz) {
     return dashCreator->mdatSize(firstSample, sampleNumber, stsz);
 }
@@ -49,11 +53,16 @@ unsigned int DashProxy::writeTrun(const unsigned int& flag2, const unsigned int&
 ////////////////////////////////////////////////////////////////////////////////////////////
 unsigned int DashProxy:: writeSidx(const unsigned short int& version, const unsigned int& referenceID, const unsigned int& timescale,
                                    const unsigned long int& earliestPresentationTime, const unsigned long int& firstOffset,
-                                   const unsigned int &referenceCount, const QList<unsigned long int>& referenceType,
+                                   const unsigned int &referenceCount, const QList<unsigned short int>& referenceType,
                                    const QList<unsigned long int>& referenceSize, const QList<unsigned long int>& subsegmentDuration,
                                    const QList <unsigned short int>& startsWithSAP, const QList <unsigned short int>& SAPType,
                                    const QList <unsigned long int>& SAPDeltaTime, QFile* dashFile) {
     return dashCreator->writeSidx(version, referenceID, timescale, earliestPresentationTime, firstOffset, referenceCount, referenceType,
                                   referenceSize, subsegmentDuration, startsWithSAP, SAPType, SAPDeltaTime, dashFile);
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+void DashProxy::writeSegments(const unsigned int &maxSampleNum, QFile* dashFile) {
+    qDebug()<<"dashProxy writeSegements";
+    dashCreator->writeSegments(maxSampleNum, dashFile);
 }
 
