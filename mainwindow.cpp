@@ -338,9 +338,10 @@ void MainWindow::splitOneFile() {
     //QFile* dashFile = new QFile("olaboga");*/
     QString fileName = title.mid(4);
     dashProxy = new DashProxy(fileName, model);
-    QFile* dashFile = new QFile("dupaZpodzialem");
+    QFile* dashFile = new QFile("mvex");
     if (dashFile->open(QIODevice::ReadWrite)) {
-        dashProxy->writeSegments(50, dashFile);
+        //dashProxy->writeSegments(50, dashFile);
+        dashProxy->writeMvex(dashFile);
         //dashProxy->writeMdat(50, 14, stsz, dashFile);
         dashFile->close();
     }

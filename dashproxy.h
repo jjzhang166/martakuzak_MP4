@@ -36,6 +36,11 @@ public:
                            const QList <unsigned short int>& startsWithSAP, const QList <unsigned short int>& SAPType,
                            const QList <unsigned long int>& SAPDeltaTime, QFile* dashFile);
     unsigned int writeFtyp(QFile* dashFile);
+    unsigned int writeFree(QFile* dashFile);
+    unsigned int writeMvhd(QFile* dashFile);
+    unsigned int writeMehd(QFile* dashFile);
+    unsigned int writeTrex(QFile* dashFile);
+    unsigned int writeMvex(QFile* dashFile = NULL);
     void writeSegments(const unsigned int &maxSampleNum, QFile* dashFile);
 
 private:

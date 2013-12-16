@@ -31,7 +31,6 @@ unsigned int DashCreator::writeMdat(const unsigned long int& firstSample, const 
     QByteArray array;
     if(firstSample) {
         unsigned long int offset = mdatSize(0, firstSample, stsz);
-        qDebug()<<"mdat off"<<QString::number(offset);
         file->seek(offset + mdatOffset);
     }
     else {
@@ -43,7 +42,7 @@ unsigned int DashCreator::writeMdat(const unsigned long int& firstSample, const 
         dashFile->write(array);
     }
     else {
-            int position = 0;
+            unsigned int position = 0;
             while(position <= (size - 8)) {
                 if(position + 2028 > size - 8)
                     array = file->read(size - 8 - position);
@@ -258,6 +257,24 @@ unsigned int DashCreator::writeFtyp(QFile* dashFile) {
 
     return size;
 }
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeFree(QFile* dashFile) {
+    QList <std::shared_ptr<Box>> free = model->getBoxes("free");
+    free.append(model->getBoxes("skip"));
+    unsigned int size = 0;
+    while (!free.empty()) {
+        std::shared_ptr<Box> free1 = free.back();
+        unsigned long int offset = free1->getOffset();
+        unsigned long int size1 = free1->getSize();
+        file->seek(offset);
+        QByteArray array = file->read(size1);
+        if(dashFile != NULL)
+            dashFile->write(array);
+        free.pop_back();
+        size += size1;
+    }
+    return size;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 void DashCreator::writeSegments(const unsigned int& maxSampleNum, QFile* dashFile) {
@@ -351,4 +368,100 @@ void DashCreator::writeSegments(const unsigned int& maxSampleNum, QFile* dashFil
         ++ segmentID;
     }
 }
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeMehd(QFile* dashFile) {
+    std::shared_ptr<Box> mvhd = model->getBoxes("mvhd").at(0);
+    unsigned long int duration = mvhd->getDuration();
+    QDataStream stream(dashFile);
+
+    if(duration > 0xFFFFFFFF) {
+        if(dashFile == NULL)
+            return 20;
+        stream<<quint32(20);
+        stream.writeRawData("mehd", 4);
+        stream<<quint8(1); //version
+        stream<<quint8(0); //flags
+        stream<<quint16(0);
+        stream<<quint64(duration);
+        return 20;
+    }
+    else {
+        if(dashFile == NULL)
+            return 16;
+        stream<<quint32(16);
+        stream.writeRawData("mehd", 4);
+        stream<<quint8(0); //version
+        stream<<quint8(0); //flags
+        stream<<quint16(0);
+        stream<<quint32(duration);
+        return 16;
+    }
+    return 0;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeTrex(QFile* dashFile) {
+    if(dashFile == NULL)
+        return 32;
+    std::shared_ptr<Box> tkhd = model->getBoxes("tkhd").at(0);
+    QDataStream stream(dashFile);
+    stream<<quint32(32);
+    stream.writeRawData("trex", 4);
+    stream<<quint8(0); //version
+    stream<<quint8(0); //flags
+    stream<<quint16(0);
+    stream<<quint32(tkhd->getTrackID()); //trackID
+    stream<<quint32(1); // ? default_sample_description_index
+    stream<<quint32(1); // ? default_sample_duration
+    stream<<quint32(1); // ? default_sample_size
+    stream<<quint32(65536); //? default_sample_flags
+    return 32;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeMvex(QFile *dashFile) {
+    unsigned int size = 8;
+    size += writeMehd();
+    size += writeTrex();
+    if(dashFile == NULL)
+        return size;
+    QDataStream stream(dashFile);
+    stream<<quint32(size);
+    stream.writeRawData("mvex", 4);
+    writeMehd(dashFile);
+    writeTrex(dashFile);
+    return size;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeMvhd(QFile* dashFile) {
+    std::shared_ptr<Box> mvhd = model->getBoxes("mvhd").at(0);
+    if(dashFile == NULL)
+        return mvhd->getSize();
+    QDataStream stream(dashFile);
+    unsigned int version = mvhd->getVersion();
+    unsigned int size = mvhd->getSize();
+    stream<<quint32(size);
+    stream.writeRawData("mvhd", 4);
+    stream<<quint8(version); //version
+    stream<<quint8(0); //flags
+    stream<<quint16(0);
+    file->seek(mvhd->getOffset() + 12);
+    if(version) {
+        QByteArray array = file->read(20); //creation_time, modification_time, timescale
+        dashFile->write(array);
+        stream<<quint64(0); //duration
+        file->seek(mvhd->getOffset() + 12 + 28); //ustawiamy sie po duration
+        array = file->read(size - 12 - 28); //wczytujemy wszystko po duration
+        dashFile->write(array);
+    }
+    else {
+        QByteArray array = file->read(12); //creation_time, modification_time, timescale
+        dashFile->write(array);
+        stream<<quint32(0); //duration
+        file->seek(mvhd->getOffset() + 12 + 16);  //ustawiamy sie po duration
+        array = file->read(size - 12 - 16); //wczytujemy wszystko po duration
+        dashFile->write(array);
+    }
+    return size;
+}
+
+
 

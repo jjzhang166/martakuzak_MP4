@@ -60,12 +60,34 @@ unsigned int DashProxy:: writeSidx(const unsigned short int& version, const unsi
     return dashCreator->writeSidx(version, referenceID, timescale, earliestPresentationTime, firstOffset, referenceCount, referenceType,
                                   referenceSize, subsegmentDuration, startsWithSAP, SAPType, SAPDeltaTime, dashFile);
 }
+unsigned int DashProxy::writeFree(QFile* dashFile) {
+    return dashCreator->writeFree(dashFile);
+}
 ////////////////////////////////////////////////////////////////////////////////////////////
 unsigned int DashProxy::writeFtyp(QFile* dashFile) {
     return dashCreator->writeFtyp(dashFile);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashProxy::writeMvhd(QFile* dashFile) {
+    return dashCreator->writeMvhd(dashFile);
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashProxy::writeMehd(QFile* dashFile) {
+    return dashCreator->writeMehd(dashFile);
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashProxy::writeMvex(QFile* dashFile) {
+    return dashCreator->writeMvex(dashFile);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashProxy::writeTrex(QFile* dashFile) {
+    return dashCreator->writeTrex(dashFile);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////
 void DashProxy::writeSegments(const unsigned int &maxSampleNum, QFile* dashFile) {
     dashCreator->writeSegments(maxSampleNum, dashFile);
 }
+
 

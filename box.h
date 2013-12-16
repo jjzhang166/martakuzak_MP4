@@ -112,17 +112,26 @@ public:
     virtual unsigned int getTrackID() {
         return 0;
     }
+
+    virtual unsigned int getVersion() {
+        return 2;
+    }
+
+    virtual unsigned long int getDuration() {
+        return 0;
+    }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////
 class FullBox : public Box
 {
 private:
-    unsigned  int version;
+    unsigned int version;
     QList<unsigned int> flags;
 public:
     FullBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int& e, const unsigned  int& v, const QList<unsigned int>& f);
     virtual QString getFullName() { return QString(" "); }
     virtual QString getInfo();
+    virtual unsigned int getVersion() { return version; }
 };
 //////////////////////////////////////////////////////////////////////////////////////////////////
 class FileTypeBox : public Box
@@ -216,6 +225,9 @@ public:
                    const QList<unsigned long int>& pr, const unsigned long int& nextTrackId);
     virtual QString getFullName() { return QString("Movie Header Box "); }
     virtual QString getInfo();
+    virtual unsigned long int getDuration() {
+        return duration;
+    }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class MediaInformationBox : public Box
