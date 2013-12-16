@@ -149,5 +149,43 @@ public:
     virtual unsigned int getContainerOffset() { return 86; }
     virtual QString getFullName() { return QString("AVC Sample Entry"); }
 };
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+class AVCConfigurationBox: public Box
+{
+    unsigned int configurationVersion;
+    unsigned int AVCProfileIndication;
+    unsigned int profileCompability;
+    unsigned int AVCLevelIndication;
+    unsigned int reserved1;
+    unsigned int lengthSizeMinusOne;
+    unsigned int reserved2;
+    unsigned int numOfSequenceParameterSets;
+    QList<unsigned int> sequenceParameterSetLength;
+    QList<unsigned long int> sequenceParameterSetNALUnit;
+    unsigned int numOfPictureParameterSets;
+    QList<unsigned int> pictureParameterSetLength;
+    QList<unsigned long int> pictureParameterSetNALUnit;
+public:
+    AVCConfigurationBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e,
+                        const unsigned int& cv, const unsigned int& avcpi, const unsigned int& pc, const unsigned int& avcli,
+                        const unsigned int& r1, const unsigned int& lsmo, const unsigned int& r2, const unsigned int& nosps,
+                        const QList<unsigned int>& spsl, const QList<unsigned long int>& spsnu, const unsigned int& nopps,
+                        const QList<unsigned int>& ppsl, const QList<unsigned long int>& ppsnu);
+    virtual bool isContainer() { return false; }
+    virtual QString getFullName() { return QString("AVC Configuration box"); }
+    virtual QString getInfo();
 
+};
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+class MPEG4BitRateBox: public Box {
+    unsigned long int bufferSizeDB;
+    unsigned long int maxBitrate;
+    unsigned long int avgBitrate;
+public:
+    MPEG4BitRateBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e,
+                        const unsigned long int& bsDB, const unsigned long int& maxbr, const unsigned long int& avgBr);
+    virtual bool isContainer() { return false; }
+    virtual QString getFullName() { return QString("MPEG4 Bitrate Box"); }
+    virtual QString getInfo();
+};
 #endif // SAMPLEENTRY_H

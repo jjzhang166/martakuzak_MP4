@@ -13,7 +13,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         return this->getSBox(size, type, off, e);
     else if(type.at(0) == QChar('h'))
         return this->getHBox(size, type, off, e);
-    else if(type=="ftyp") {
+    else if(type == "ftyp") {
         QString majorBrand = analyzer->qstringValue(4, off + 8);
         QString minorVersion = analyzer->qstringValue(4, off + 12);
 
@@ -27,7 +27,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
 
         return std::shared_ptr<Box>(new FileTypeBox(size, type, off, e, majorBrand, minorVersion, compatibleBrands));
     }
-    else if(type=="vmhd"){
+    else if(type == "vmhd"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -46,7 +46,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         std::shared_ptr<Box> ret(new VideoMediaHeaderBox(size, type, off, e, v, f, graphicsMode, opcolor));
         return ret;
     }
-    else if(type=="nmhd"){
+    else if(type == "nmhd"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -60,7 +60,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         std::shared_ptr<Box> ret(new NullMediaHeaderBox(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="dinf"){
+    else if(type == "dinf"){
         std::shared_ptr<Box> ret(new DataInformationBox(size, type, off, e));
         return ret;
     }
@@ -89,7 +89,38 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
                                                        width,height,horizonresolution, vertresolution, reserved2, frameCount,
                                                        compressorName, depth, predefined2));
     }
-    else if(type=="url "){
+    else if(type == "avcC") {
+        unsigned int configurationVersion = analyzer->valueOfGroupOfBytes(1, off + 8);
+        unsigned int AVCProfileIndication = analyzer->valueOfGroupOfBytes(1, off + 9);
+        unsigned int profileCompatibility = analyzer->valueOfGroupOfBytes(1, off + 10);
+        unsigned int AVCLevelIndication = analyzer->valueOfGroupOfBytes(1, 11);
+        unsigned int reserved1 = analyzer->valueOfGroupOfBits(6, (off + 12)*8);
+        unsigned int lengthSizeMinusOne = analyzer->valueOfGroupOfBits(2, (off + 12)*8 + 6);
+        unsigned int reserved2 = analyzer->valueOfGroupOfBits(3, (off + 13)*8);
+        unsigned int numOfSequenceParameterSets = analyzer->valueOfGroupOfBits(5, (off + 13)*8 + 3);
+        QList <unsigned int> sequenceParameterSetLength;
+        QList <unsigned long int> sequenceParameterSetNALUnit;
+        unsigned int offset = 0;
+        for (unsigned int i = 0; i <numOfSequenceParameterSets; ++i) {
+            sequenceParameterSetLength.append(analyzer->valueOfGroupOfBytes(2, off + offset + 14 ));
+            sequenceParameterSetNALUnit.append(analyzer->valueOfGroupOfBytes(sequenceParameterSetLength.at(i), off + offset + 16));
+            offset = offset + 2 + sequenceParameterSetLength.at(i);
+        }
+        unsigned int numOfPictureParameterSets = analyzer->valueOfGroupOfBytes(1, off + offset + 14);
+        QList <unsigned int> pictureParameterSetLength;
+        QList <unsigned long int> pictureParameterSetNALUnit;
+        for (unsigned int i = 0; i <numOfPictureParameterSets; ++i) {
+            pictureParameterSetLength.append(analyzer->valueOfGroupOfBytes(2, off + offset + 15 ));
+            pictureParameterSetNALUnit.append(analyzer->valueOfGroupOfBytes(pictureParameterSetLength.at(i), off + offset + 17));
+            offset = offset + 2 + pictureParameterSetLength.at(i);
+        }
+        return std::shared_ptr<Box>(new AVCConfigurationBox(size, type, off, e, configurationVersion, AVCProfileIndication,
+                                                            profileCompatibility, AVCLevelIndication, reserved1, lengthSizeMinusOne,
+                                                            reserved2,numOfSequenceParameterSets, sequenceParameterSetLength,
+                                                            sequenceParameterSetNALUnit, numOfPictureParameterSets,
+                                                            pictureParameterSetLength, pictureParameterSetNALUnit));
+    }
+    else if(type == "url "){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -109,7 +140,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         std::shared_ptr<Box> ret(new DataEntryUrlBox(size, type, off, e, v, f, location));
         return ret;
     }
-    else if(type=="urn "){
+    else if(type == "urn "){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -123,7 +154,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         std::shared_ptr<Box> ret(new DataEntryUrnBox(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="dref"){
+    else if(type == "dref"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -138,7 +169,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         std::shared_ptr<Box> ret(new DataReferenceBox(size, type, off, e, v, f, entryCount));
         return ret;
     }
-    else if(type=="ctts"){
+    else if(type == "ctts"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -164,7 +195,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         std::shared_ptr<Box> ret(new TimeToSampleBox(size, type, off, e, v, f, entryCount, sampleCount, sampleDelta));
         return ret;
     }
-    else if(type=="co64"){
+    else if(type == "co64"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -183,7 +214,14 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         std::shared_ptr<Box> ret(new ChunkLargeOffsetBox(size, type, off, e, v, f, entryCount, chunkOffset));
         return ret;
     }
-    else if(type=="padb"){
+    else if(type == "btrt") {
+        unsigned long int bufferSizeDB = analyzer->valueOfGroupOfBytes(4, off + 8);
+        unsigned long int maxBitrate = analyzer->valueOfGroupOfBytes(4, off + 12);
+        unsigned long int avgBitrate = analyzer->valueOfGroupOfBytes(4, off + 16);
+
+        return std::shared_ptr<Box> (new MPEG4BitRateBox(size, type, off, e, bufferSizeDB, maxBitrate, avgBitrate));
+    }
+    else if(type == "padb"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -197,15 +235,15 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         std::shared_ptr<Box> ret(new PaddingBitsBox(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="free"){
+    else if(type == "free"){
         std::shared_ptr<Box> ret(new FreeSpaceBox(false,size, type, off, e));
         return ret;
     }
-    else if(type=="edts"){
+    else if(type == "edts"){
         std::shared_ptr<Box> ret(new EditBox(size, type, off, e));
         return ret;
     }
-    else if(type=="elst"){
+    else if(type == "elst"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -241,11 +279,11 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
                                                  mediaRateFraction));
         return ret;
     }
-    else if(type=="udta"){
+    else if(type == "udta"){
         std::shared_ptr<Box> ret(new UserDataBox(size, type, off, e));
         return ret;
     }
-    else if(type=="cprt"){
+    else if(type == "cprt"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -259,7 +297,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         std::shared_ptr<Box> ret(new CopyRightBox(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="pdin"){
+    else if(type == "pdin"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -273,7 +311,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         std::shared_ptr<Box> ret(new ProgressiveDownloadInfoBox(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="xml "){
+    else if(type == "xml "){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -287,7 +325,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         std::shared_ptr<Box> ret(new XMLBox(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="bxml"){
+    else if(type == "bxml"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -301,7 +339,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         std::shared_ptr<Box> ret(new BinaryXMLBox(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="iloc"){
+    else if(type == "iloc"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -315,7 +353,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         std::shared_ptr<Box> ret(new ItemLocationBox(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="pitm"){
+    else if(type == "pitm"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -329,7 +367,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         std::shared_ptr<Box> ret(new PrimaryItemBox(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="ipro"){
+    else if(type == "ipro"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -344,7 +382,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         return ret;
 
     }
-    else if(type=="infe"){
+    else if(type == "infe"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -358,7 +396,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         std::shared_ptr<Box> ret(new ItemInfoEntry(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="iinf"){
+    else if(type == "iinf"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -372,11 +410,11 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         std::shared_ptr<Box> ret(new ItemInfoBox(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="frma"){
+    else if(type == "frma"){
         std::shared_ptr<Box> ret(new OriginalFormatBox(size, type, off, e));
         return ret;
     }
-    else if(type=="imif"){
+    else if(type == "imif"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -390,7 +428,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         std::shared_ptr<Box> ret(new IPMPInfoBox(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="ipmc"){
+    else if(type == "ipmc"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -404,11 +442,11 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         std::shared_ptr<Box> ret(new IPMPControlBox(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="rtp "){
+    else if(type == "rtp "){
         std::shared_ptr<Box> ret(new RTPMovieHintInformation(size, type, off, e));
         return ret;
     }
-    else if(type=="iods"){
+    else if(type == "iods"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -421,7 +459,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         }
         return std::shared_ptr<Box>(new ObjectDescriptorBox(size, type, off, e, v, f));
     }
-    else if(type=="esds"){
+    else if(type == "esds"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -438,7 +476,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         return std::shared_ptr<Box>(new VisualSampleEntry(size, type, off, e,0,0,0,0,analyzer->valueOfGroupOfFields(2, off + 33),analyzer->valueOfGroupOfFields(34,35)));
 
     }*/
-    else if(type=="leva"){
+    else if(type == "leva"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -451,7 +489,7 @@ std::shared_ptr<Box> BoxFactory::getBox(const unsigned int& size, QString type, 
         }
         return std::shared_ptr<Box>(new LevelAssignmentBox(size, type, off, e, v, f));
     }
-    else if(type=="prft"){
+    else if(type == "prft"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -476,10 +514,10 @@ std::shared_ptr<Box> BoxFactory::getMBox(const unsigned int& size, QString type,
     if(type== "moov"){
         return std::shared_ptr<Box>(new MovieBox(size, type, off, e));
     }
-    else if(type=="mdat"){
+    else if(type == "mdat"){
         return std::shared_ptr<Box>(new MediaDataBox(size, type, off, e));
     }
-    else if(type=="mvhd"){
+    else if(type == "mvhd"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -528,7 +566,7 @@ std::shared_ptr<Box> BoxFactory::getMBox(const unsigned int& size, QString type,
                                                     rate, volume, reserved16, reserved32, matrix, predefined, nextTrackId));
         return ret;
     }
-    else if(type=="mdhd"){
+    else if(type == "mdhd"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -586,15 +624,15 @@ std::shared_ptr<Box> BoxFactory::getMBox(const unsigned int& size, QString type,
                                                     pad, language, predefined));
         return ret;
     }
-    else if(type=="mdia"){
+    else if(type == "mdia"){
         std::shared_ptr<Box> ret(new MediaBox(size, type, off, e));
         return ret;
     }
-    else if(type=="moof"){
+    else if(type == "moof"){
         std::shared_ptr<Box> ret(new MovieFragmentBox(size, type, off, e));
         return ret;
     }
-    else if(type=="mfhd"){
+    else if(type == "mfhd"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -609,7 +647,7 @@ std::shared_ptr<Box> BoxFactory::getMBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new MovieFragmentHeaderBox(size, type, off, e, sn, v, f));
         return ret;
     }
-    else if(type=="mp4v" /*|| type == "avc1"*/){
+    else if(type == "mp4v" /*|| type == "avc1"*/){
         QList <unsigned int> reserved;
         for(int i = 0; i<6; ++i) {
             reserved.append(analyzer->valueOfGroupOfBytes(1, off + 8 + i ));
@@ -635,7 +673,7 @@ std::shared_ptr<Box> BoxFactory::getMBox(const unsigned int& size, QString type,
                                                              predefined1, width, height, horizonresolution, vertresolution, reserved2,
                                                              frameCount, compressorName, depth, predefined2));
     }
-    else if(type=="mp4a"){
+    else if(type == "mp4a"){
         //SampleEntry
         QList <unsigned int> reserved;
         for(int i = 0; i<6; ++i) {
@@ -654,7 +692,7 @@ std::shared_ptr<Box> BoxFactory::getMBox(const unsigned int& size, QString type,
         return std::shared_ptr<Box>(new MP4AudioSampleEntry(size, type, off, e,reserved,dataReferenceIndex, reserved1, channelCount,
                                                             sampleSize, predefined, reserved2, sampleRate));
     }
-    else if(type=="mp4s"){
+    else if(type == "mp4s"){
         QList <unsigned int> reserved;
         for(int i = 0; i<6; ++i) {
             reserved.append(analyzer->valueOfGroupOfBytes(1, off + 8 + i ));
@@ -662,11 +700,11 @@ std::shared_ptr<Box> BoxFactory::getMBox(const unsigned int& size, QString type,
         unsigned int dataReferenceIndex = analyzer->valueOfGroupOfBytes(2, off +14);
         return std::shared_ptr<Box>(new MpegSampleEntry(size, type, off, e,reserved,dataReferenceIndex));
     }
-    else if(type=="mvex"){
+    else if(type == "mvex"){
         std::shared_ptr<Box> ret(new MovieExtendsBox(size, type, off, e));
         return ret;
     }
-    else if(type=="mehd"){
+    else if(type == "mehd"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -685,15 +723,15 @@ std::shared_ptr<Box> BoxFactory::getMBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new MovieExtendsHeaderBox(size, type, off, e, v, f, fd));
         return ret;
     }
-    else if(type=="minf"){
+    else if(type == "minf"){
         std::shared_ptr<Box> ret(new MediaInformationBox(size, type, off, e));
         return ret;
     }
-    else if(type=="mfra"){
+    else if(type == "mfra"){
         std::shared_ptr<Box> ret(new MovieFragmentRandomAccessBox(size, type, off, e));
         return ret;
     }
-    else if(type=="meta"){
+    else if(type == "meta"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -707,7 +745,7 @@ std::shared_ptr<Box> BoxFactory::getMBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new MetaBox(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="mfro"){
+    else if(type == "mfro"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -725,11 +763,11 @@ std::shared_ptr<Box> BoxFactory::getMBox(const unsigned int& size, QString type,
 }
 ////////////////////////////////////////////////////////////////
 std::shared_ptr<Box> BoxFactory::getTBox(const unsigned int& size, QString type, unsigned long int off, const unsigned int&  e) {
-    if(type=="trak"){
+    if(type == "trak"){
         std::shared_ptr<Box> ret(new TrackBox(size, type, off, e));
         return ret;
     }
-    else if(type=="tkhd"){
+    else if(type == "tkhd"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -779,11 +817,11 @@ std::shared_ptr<Box> BoxFactory::getTBox(const unsigned int& size, QString type,
                                                     reserved2, layer, alternateGroup, volume, reserved3, matrix, width, height));
         return ret;
     }
-    else if(type=="tref"){
+    else if(type == "tref"){
         std::shared_ptr<Box> ret(new TrackReferenceBox(size, type, off, e));
         return ret;
     }
-    else if(type=="trex"){
+    else if(type == "trex"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -803,11 +841,11 @@ std::shared_ptr<Box> BoxFactory::getTBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new TrackExtendsBox(size, type, off, e, v, f, tid, dsdi, dsd, dss, dsf));
         return ret;
     }
-    else if(type=="traf"){
+    else if(type == "traf"){
         std::shared_ptr<Box> ret(new TrackFragmentBox(size, type, off, e));
         return ret;
     }
-    else if(type=="tfhd"){
+    else if(type == "tfhd"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -841,7 +879,7 @@ std::shared_ptr<Box> BoxFactory::getTBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new TrackFragmentHeaderBox(size, type, off, e, v, f, tid, bdo, sdi, dsd, dss, dsf));
         return ret;
     }
-    else if(type=="trun"){
+    else if(type == "trun"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -877,7 +915,7 @@ std::shared_ptr<Box> BoxFactory::getTBox(const unsigned int& size, QString type,
                                                  sampleSize,sampleFlags,sampleCompositionTimeOffset));
         return ret;
     }
-    else if(type=="tfra"){
+    else if(type == "tfra"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -892,15 +930,15 @@ std::shared_ptr<Box> BoxFactory::getTBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new TrackFragmentRandomAccessBox(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="tims"){
+    else if(type == "tims"){
         std::shared_ptr<Box> ret(new TimeScaleEntry(size, type, off, e));
         return ret;
     }
-    else if(type=="tsro"){
+    else if(type == "tsro"){
         std::shared_ptr<Box> ret(new TimeOffset(size, type, off, e));
         return ret;
     }
-    else if(type=="tfdt"){
+    else if(type == "tfdt"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -922,7 +960,7 @@ std::shared_ptr<Box> BoxFactory::getTBox(const unsigned int& size, QString type,
 }
 ////////////////////////////////////////////////////////////////
 std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type, unsigned long int off, const unsigned int&  e) {
-    if(type=="smhd"){
+    if(type == "smhd"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -938,11 +976,11 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new SoundMediaHeaderBox(size, type, off, e, v, f, balance, reserved));
         return ret;
     }
-    else if(type=="stbl"){
+    else if(type == "stbl"){
         std::shared_ptr<Box> ret(new SampleTableBox(size, type, off, e));
         return ret;
     }
-    else if(type=="stts"){
+    else if(type == "stts"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -968,7 +1006,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new TimeToSampleBox(size, type, off, e, v, f, entryCount, sampleCount, sampleDelta));
         return ret;
     }
-    else if(type=="stsd"){
+    else if(type == "stsd"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -983,7 +1021,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new SampleDescriptionBox(size, type, off, e,v,f,entryCount));
         return ret;
     }
-    else if(type=="stsz"){
+    else if(type == "stsz"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -1005,7 +1043,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new SampleSizeBox(size, type, off, e, v, f, sampleSize, sampleCount, entrySize));
         return ret;
     }
-    else if(type=="stz2"){
+    else if(type == "stz2"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -1019,7 +1057,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new CompactSampleSizeBox(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="stsc"){
+    else if(type == "stsc"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -1043,7 +1081,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
                                                       sampleDescriptionIndex));
         return ret;
     }
-    else if(type=="stco"){
+    else if(type == "stco"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -1062,7 +1100,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new ChunkOffsetBox(size, type, off, e, v, f, entryCount, chunkOffset));
         return ret;
     }
-    else if(type=="stss"){
+    else if(type == "stss"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -1081,7 +1119,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new SyncSampleBox(size, type, off, e, v, f, entryCount,sampleNumber));
         return ret;
     }
-    else if(type=="stsh"){
+    else if(type == "stsh"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -1095,7 +1133,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new ShadowSyncSampleBox(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="stdp"){
+    else if(type == "stdp"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -1109,11 +1147,11 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new DegradationPriorityBox(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="skip"){
+    else if(type == "skip"){
         std::shared_ptr<Box> ret(new FreeSpaceBox(true,size, type, off, e));
         return ret;
     }
-    else if(type=="sdtp"){
+    else if(type == "sdtp"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -1127,7 +1165,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new SampleDependencyTypeBox(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="sbgp"){
+    else if(type == "sbgp"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -1141,7 +1179,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new SampleToGroupBox(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="sgpd"){
+    else if(type == "sgpd"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -1155,7 +1193,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new SampleGroupDescriptionBox(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="stsl"){
+    else if(type == "stsl"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -1169,7 +1207,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new SampleScaleBox(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="sidx"){
+    else if(type == "sidx"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -1243,7 +1281,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
                                                         firstOffset, reserved, referenceType, referenceSize, subsegmentDuration,
                                                         startsWithSAP, SAPType, SAPDeltaTime));
     }
-    else if(type=="ssix"){
+    else if(type == "ssix"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -1256,7 +1294,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         }
         return std::shared_ptr<Box>(new SubsegmentIndexBox(size, type, off, e, version, f));
     }
-    else if(type=="subs"){
+    else if(type == "subs"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -1270,11 +1308,11 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new SubSampleInformationBox(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="sinf"){
+    else if(type == "sinf"){
         std::shared_ptr<Box> ret(new ProtectionSchemeInfoBox(size, type, off, e));
         return ret;
     }
-    else if(type=="schm"){
+    else if(type == "schm"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -1288,15 +1326,15 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new SchemeTypeBox(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="schi"){
+    else if(type == "schi"){
         std::shared_ptr<Box> ret(new SchemeInformationBox(size, type, off, e));
         return ret;
     }
-    else if(type=="snro"){
+    else if(type == "snro"){
         std::shared_ptr<Box> ret(new SequenceOffset(size, type, off, e));
         return ret;
     }
-    else if(type=="srpp"){
+    else if(type == "srpp"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -1310,11 +1348,11 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new SRTPProcessBox(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="sdp "){
+    else if(type == "sdp "){
         std::shared_ptr<Box> ret(new RTPTrackSDPHintInformation(size, type, off, e));
         return ret;
     }
-    else if(type=="saiz"){
+    else if(type == "saiz"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -1327,7 +1365,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
         }
         return std::shared_ptr<Box>(new SampleAuxiliaryInformationSizesBox(size, type, off, e, v, f));
     }
-    else if(type=="saio"){
+    else if(type == "saio"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -1344,7 +1382,7 @@ std::shared_ptr<Box> BoxFactory::getSBox(const unsigned int& size, QString type,
 }
 ////////////////////////////////////////////////////////////////
 std::shared_ptr<Box> BoxFactory::getHBox(const unsigned int& size, QString type, unsigned long int off, const unsigned int&  e) {
-    if(type=="hdlr"){
+    if(type == "hdlr"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -1380,7 +1418,7 @@ std::shared_ptr<Box> BoxFactory::getHBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new HandlerBox(size, type, off, e, v, f, predefined, handlerType, reserved, name));
         return ret;
     }
-    else if(type=="hmhd"){
+    else if(type == "hmhd"){
         unsigned int offset = 0;
         if(size == 1)
             offset+=8;
@@ -1394,11 +1432,11 @@ std::shared_ptr<Box> BoxFactory::getHBox(const unsigned int& size, QString type,
         std::shared_ptr<Box> ret(new HintMediaHeaderBox(size, type, off, e, v, f));
         return ret;
     }
-    else if(type=="hnti"){
+    else if(type == "hnti"){
         std::shared_ptr<Box> ret(new MovieHintInformation(size, type, off, e));
         return ret;
     }
-    else if(type=="hinf"){
+    else if(type == "hinf"){
         std::shared_ptr<Box> ret(new HintStatisticsBox(size, type, off, e));
         return ret;
     }

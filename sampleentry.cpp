@@ -152,4 +152,81 @@ AVCSampleEntry::AVCSampleEntry(const unsigned int& s, const QString& t, const un
     VisualSampleEntry(s,t,off,e,res, dri,pd,r2,pd1, wdth,hght, hr,vr, r3, fc, csn, dpth, pd2)
 {}
 ///////////////
-
+AVCConfigurationBox::AVCConfigurationBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e,
+                                         const unsigned int& cv, const unsigned int& avcpi, const unsigned int& pc, const unsigned int& avcli,
+                                         const unsigned int& r1, const unsigned int& lsmo, const unsigned int& r2, const unsigned int& nosps,
+                                         const QList<unsigned int>& spsl, const QList<unsigned long int>& spsnu, const unsigned int& nopps,
+                                         const QList<unsigned int>& ppsl, const QList<unsigned long int>& ppsnu):
+    Box(s, t, off, e),
+    configurationVersion(cv),
+    AVCProfileIndication(avcpi),
+    profileCompability(pc),
+    AVCLevelIndication(avcli),
+    reserved1(r1),
+    lengthSizeMinusOne(lsmo),
+    reserved2(r2),
+    numOfSequenceParameterSets(nosps),
+    sequenceParameterSetLength(spsl),
+    sequenceParameterSetNALUnit(spsnu),
+    numOfPictureParameterSets(nopps),
+    pictureParameterSetLength(ppsl),
+    pictureParameterSetNALUnit(ppsnu)
+{}
+QString AVCConfigurationBox::getInfo() {
+    QString tmp("");
+    tmp.append("Configuration version\t\t");
+    tmp.append(QString::number(configurationVersion));
+    tmp.append("\nAVC Profile Indication\t\t");
+    tmp.append(QString::number(AVCProfileIndication));
+    tmp.append("\nReserved1\t\t\t");
+    tmp.append(QString::number(reserved1, 2));
+    tmp.append("b");
+    tmp.append("\nlengthSizeMinusOne\t\t");
+    tmp.append(QString::number(lengthSizeMinusOne));
+    tmp.append("\nReserved2\t\t\t");
+    tmp.append(QString::number(reserved2, 2));
+    tmp.append("b");
+    tmp.append("\nnumOfSequenceParameterSets\t\t");
+    tmp.append(QString::number(numOfSequenceParameterSets));
+    for(unsigned int i = 0; i < numOfSequenceParameterSets; ++i) {
+        tmp.append("\nsequenceParameterSetLength [");
+        tmp.append(QString::number(i));
+        tmp.append("]\t");
+        tmp.append(QString::number(sequenceParameterSetLength.at(i)));
+        tmp.append("\nsequenceParameterSetNALUnit [");
+        tmp.append(QString::number(i));
+        tmp.append("]\t");
+        tmp.append(QString::number(sequenceParameterSetNALUnit.at(i)));
+    }
+    tmp.append("\nnumOfPictureParameterSets\t\t");
+    tmp.append(QString::number(numOfPictureParameterSets));
+    for(unsigned int i = 0; i < numOfPictureParameterSets; ++i) {
+        tmp.append("\npictureParameterSetLength [");
+        tmp.append(QString::number(i));
+        tmp.append("]\t\t");
+        tmp.append(QString::number(pictureParameterSetLength.at(i)));
+        tmp.append("\npictureParameterSetNALUnit [");
+        tmp.append(QString::number(i));
+        tmp.append("]\t\t");
+        tmp.append(QString::number(pictureParameterSetNALUnit.at(i)));
+    }
+    return tmp;
+}
+///////////////
+MPEG4BitRateBox::MPEG4BitRateBox(const unsigned int& s, const QString& t, const unsigned long int& off, const unsigned int &  e,
+                                 const unsigned long int& bsDB, const unsigned long int& maxbr, const unsigned long int& avgBr):
+    Box(s, t, off, e),
+    bufferSizeDB(bsDB),
+    maxBitrate(maxbr),
+    avgBitrate(avgBr)
+{}
+QString MPEG4BitRateBox::getInfo() {
+    QString tmp("");
+    tmp.append("Buffer size DB\t\t");
+    tmp.append(QString::number(bufferSizeDB));
+    tmp.append("\nMax bitrate\t\t");
+    tmp.append(QString::number(maxBitrate));
+    tmp.append("\nAverage bitrate\t\t");
+    tmp.append(QString::number(avgBitrate));
+    return tmp;
+}
