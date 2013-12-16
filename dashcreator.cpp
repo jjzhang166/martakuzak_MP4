@@ -243,6 +243,22 @@ unsigned int DashCreator::writeSidx(const unsigned short int& version, const uns
     return size;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeFtyp(QFile* dashFile) {
+    QDataStream stream(dashFile);
+    unsigned int size = 28;
+    if(dashFile == NULL)
+        return size;
+    stream<<quint32(size);
+    stream.writeRawData("iso5", 4); //major_brand
+    stream<<quint32(0); //minor_version
+    stream.writeRawData("avc1", 4); //copatible brands
+    stream.writeRawData("iso5", 4);
+    stream.writeRawData("dash", 4);
+
+    return size;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////
 void DashCreator::writeSegments(const unsigned int& maxSampleNum, QFile* dashFile) {
     qDebug()<<"dash creator write segments"<<"0";
     std::shared_ptr<Box> stsz = model->getBoxes("stsz").at(0); //Sample Size Box
