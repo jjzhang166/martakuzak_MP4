@@ -855,7 +855,7 @@ std::shared_ptr<Box> BoxFactory::getTBox(const unsigned int& size, QString type,
         unsigned long int sampleCount = analyzer->valueOfGroupOfBytes(4, off + offset + 12);
         long int dataOffset = 0;
         if(f.at(2) == 1 || f.at(2) == 5) {
-            dataOffset = analyzer->valueOfGroupOfBytes(4, off + offset + 16);
+            dataOffset = analyzer->signedValueOfGroupOfBytes(4, off + offset + 16);
             offset += 4;
         }
         unsigned int firstSampleFlags = 0;

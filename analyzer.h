@@ -38,6 +38,7 @@ public:
      * \return value of byte sequence
      */
     unsigned long int valueOfGroupOfBytes(const int & length, const unsigned long int& offset = 0);
+    signed long int signedValueOfGroupOfBytes(const int & length, const unsigned long int& offset = 0);
     /*!
      * \brief valueOfGroupOfBits takes a given sequence of bits and converts them into unsigned long int value
      * \param length number of bits in the sequence

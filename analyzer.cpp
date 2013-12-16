@@ -29,6 +29,20 @@ unsigned long int Analyzer:: valueOfGroupOfBytes(const int &length, const unsign
     return num;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
+signed long int Analyzer:: signedValueOfGroupOfBytes(const int &length, const unsigned long int& offset) {
+    QByteArray array;
+    signed long int num = 0;
+    file->seek(offset);
+    array = file->read(length);
+    for(int i = 0; i< length; ++i) {
+        num |= static_cast<unsigned int>(array[i]) & 0xFF; //suma bit po bicie
+        if(0!=length && i!=(length-1)) {
+            num=(num<<8); //przesuniecie o 8 bitow w lewo
+        }
+    }
+    return num;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
 unsigned long int Analyzer::valueOfGroupOfBits(const int & length, const unsigned long int& offset) {
     int firstByteNum = offset/8;
     int lastByteNum = (offset + length)/8;

@@ -109,6 +109,9 @@ public:
     virtual unsigned long int getSampleSize(const unsigned long int& id) {
         return entrySize.at(id);
     }
+    virtual unsigned long int getEntryCount() {
+        return sampleCount;
+    }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class CompactSampleSizeBox : public FullBox
@@ -182,7 +185,6 @@ public:
         return entryCount;
     }
     virtual unsigned long int getSyncSample(const int& id) {
-        qDebug()<<"stss getSyncSample"<<QString::number(id)<<QString::number(sampleNumber.at(id));
         return sampleNumber.at(id);
     }
 };
