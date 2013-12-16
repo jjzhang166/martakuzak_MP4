@@ -323,11 +323,25 @@ void MainWindow::searchBox() {
 }
 ////////////////////////////////////////////////////////////
 void MainWindow::splitOneFile() {
+    /*QString type("stsz");
+        int row = 0;
+        int col = 0;
+        QModelIndexList Items = model->match(model->index(row,col),
+                                             Qt::DisplayRole,
+                                             QVariant::fromValue(QString(type)),
+                                             -1,
+                                             Qt::MatchRecursive);
+        QModelIndex backId = Items.back();
+        QModelIndex child = model->index(backId.row(), 2, (backId.parent()));
+        std::shared_ptr<Box> stsz = model->getChild(model->data(child,Qt::DisplayRole).toInt())->getBox();
+    QString fileName = title.mid(4);
+    //QFile* dashFile = new QFile("olaboga");*/
     QString fileName = title.mid(4);
     dashProxy = new DashProxy(fileName, model);
-    QFile* dashFile = new QFile("olaboga");
+    QFile* dashFile = new QFile("dupaZpodzialem");
     if (dashFile->open(QIODevice::ReadWrite)) {
         dashProxy->writeSegments(50, dashFile);
+        //dashProxy->writeMdat(50, 14, stsz, dashFile);
         dashFile->close();
     }
 }

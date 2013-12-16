@@ -62,7 +62,7 @@ unsigned int DashProxy:: writeSidx(const unsigned short int& version, const unsi
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 unsigned int DashProxy::writeFtyp(QFile* dashFile) {
-    return dashCreator(dashFile);
+    return dashCreator->writeFtyp(dashFile);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 void DashProxy::writeSegments(const unsigned int &maxSampleNum, QFile* dashFile) {

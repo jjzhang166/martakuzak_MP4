@@ -115,20 +115,24 @@ TreeItem * TreeModel::getChild(int offset) {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 QList <std::shared_ptr<Box>> TreeModel::getBoxes(const QString& type) {
+                             qDebug()<<"getboxes 0";
                              QList <std::shared_ptr<Box>> boxes;
                              int row = 0;
                              int col = 0;
+                             qDebug()<<"getboxes 1";
                              QModelIndexList Items = match(index(row,col),
                                                            Qt::DisplayRole,
                                                            QVariant::fromValue(QString(type)),
                                                            -1,
                                                            Qt::MatchRecursive);
+                             qDebug()<<"getboxes 2";
                              while (!Items.isEmpty()) {
                                 QModelIndex backId = Items.back();
                                 QModelIndex child = index(backId.row(), 2, (backId.parent()));
                                 boxes.append(getChild(data(child,Qt::DisplayRole).toInt())->getBox());
                                 Items.pop_back();
                              }
+                             qDebug()<<"getboxes 3";
                              return boxes;
                              }
                              ////////////////////////////////////////////////////////////////////////////////////////////

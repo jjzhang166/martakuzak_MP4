@@ -30,8 +30,9 @@ unsigned int DashCreator::writeMdat(const unsigned long int& firstSample, const 
     unsigned long int mdatOffset = model->getBoxes("mdat").at(0)->getOffset();
     QByteArray array;
     if(firstSample) {
-        unsigned long int offset = mdatSize(0, firstSample - 1, stsz);
-        file->seek(offset + mdatOffset + 8);
+        unsigned long int offset = mdatSize(0, firstSample, stsz);
+        qDebug()<<"mdat off"<<QString::number(offset);
+        file->seek(offset + mdatOffset);
     }
     else {
         file->seek(mdatOffset + 8);
@@ -43,7 +44,7 @@ unsigned int DashCreator::writeMdat(const unsigned long int& firstSample, const 
     }
     else {
             int position = 0;
-            while(position < (size - 8)) {
+            while(position <= (size - 8)) {
                 if(position + 2028 > size - 8)
                     array = file->read(size - 8 - position);
                 else
@@ -262,8 +263,11 @@ unsigned int DashCreator::writeFtyp(QFile* dashFile) {
 void DashCreator::writeSegments(const unsigned int& maxSampleNum, QFile* dashFile) {
     qDebug()<<"dash creator write segments"<<"0";
     std::shared_ptr<Box> stsz = model->getBoxes("stsz").at(0); //Sample Size Box
+    qDebug()<<"dashcreator 1";
     std::shared_ptr<Box> stss = model->getBoxes("stss").at(0); //Sync Sample Box
+    qDebug()<<"dashcreator 2";
     std::shared_ptr<Box> mdhd = model->getBoxes("mdhd").at(0); //Media Header Box
+    qDebug()<<"dashcreator 3";
     std::shared_ptr<Box> tkhd = model->getBoxes("tkhd").at(0); //Track Header Box
     qDebug()<<"dashcreator entry count"<<QString::number(stsz->getEntryCount());
     unsigned int maxSegmentNum = stss->getEntryCount(); //segmentow tyle co sync punktow?
