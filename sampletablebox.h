@@ -112,6 +112,9 @@ public:
     virtual unsigned long int getEntryCount() {
         return sampleCount;
     }
+    virtual unsigned long int getSampleSize() {
+        return sampleSize;
+    }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class CompactSampleSizeBox : public FullBox

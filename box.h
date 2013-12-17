@@ -120,6 +120,9 @@ public:
     virtual unsigned long int getDuration() {
         return 0;
     }
+    virtual unsigned long int getSampleSize() {
+        return 0;
+    }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////
 class FullBox : public Box

@@ -11,12 +11,105 @@ void DashCreator::closeFileStream() {
     file->close();
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::copyBox(const QString& type, QFile* dashFile, const unsigned long &maxSize) {
+    QList<std::shared_ptr<Box>> boxes = model->getBoxes(type);
+    if(dashFile == NULL) {
+        if(!boxes.empty())
+            return boxes.at(0)->getSize();
+        else
+            return 0;
+    }
+
+    while(!boxes.empty()) {
+        std::shared_ptr<Box> box = boxes.back();
+        unsigned long int offset = box->getOffset();
+        unsigned long int size = box->getSize();
+        if(maxSize)
+            size = maxSize;
+        file->seek(offset);
+        QByteArray array = file->read(size);
+        dashFile->write(array);
+        boxes.pop_back();
+    }
+    return 0;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
 unsigned long int DashCreator::mdatSize(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz) {
     unsigned long int mdatSize = 8;
     for (unsigned int i = firstSample; i< (firstSample + sampleNumber); ++i) {
         mdatSize += stsz->getSampleSize(i);
     }
     return mdatSize;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeAvc1(QFile* dashFile) {
+    if(model->getBoxes("avc1").empty())
+        return 0;
+    std::shared_ptr<Box> avc1 = model->getBoxes("avc1").at(0);
+    unsigned long int size = avc1->getSize();
+    unsigned long int maxSize = avc1->getContainerOffset();
+    if(dashFile == NULL)
+        return size;
+    copyBox("avc1", dashFile, maxSize);
+    copyBox("avcC", dashFile);
+    copyBox("btrt", dashFile);
+    return size;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeAvcC(QFile* dashFile) {
+    if(model->getBoxes("avcC").empty())
+        return 0;
+    std::shared_ptr<Box> avcC = model->getBoxes("avcC").at(0);
+    unsigned long int size = avcC->getSize();
+    if(dashFile == NULL)
+        return size;
+    copyBox("avcC", dashFile);
+    return size;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeBtrt(QFile* dashFile) {
+    if(model->getBoxes("btrt").empty())
+        return 0;
+    std::shared_ptr<Box> btrt = model->getBoxes("btrt").at(0);
+    unsigned long int size = btrt->getSize();
+    if(dashFile == NULL)
+        return size;
+    copyBox("btrt", dashFile);
+    return size;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeFree(QFile* dashFile) {
+    QList <std::shared_ptr<Box>> free = model->getBoxes("free");
+    free.append(model->getBoxes("skip"));
+    unsigned int size = 0;
+    while (!free.empty()) {
+        std::shared_ptr<Box> free1 = free.back();
+        unsigned long int offset = free1->getOffset();
+        unsigned long int size1 = free1->getSize();
+        file->seek(offset);
+        QByteArray array = file->read(size1);
+        if(dashFile != NULL)
+            dashFile->write(array);
+        free.pop_back();
+        size += size1;
+    }
+    return size;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeFtyp(QFile* dashFile) {
+    QDataStream stream(dashFile);
+    unsigned int size = 28;
+    if(dashFile == NULL)
+        return size;
+    stream<<quint32(size);
+    stream.writeRawData("ftyp", 4);
+    stream.writeRawData("iso5", 4); //major_brand
+    stream<<quint32(0); //minor_version
+    stream.writeRawData("avc1", 4); //copatible brands
+    stream.writeRawData("iso5", 4);
+    stream.writeRawData("dash", 4);
+
+    return size;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 unsigned int DashCreator::writeMdat(const unsigned long int& firstSample, const unsigned int &sampleNumber, std::shared_ptr<Box>& stsz,
@@ -55,7 +148,100 @@ unsigned int DashCreator::writeMdat(const unsigned long int& firstSample, const 
     }
     return size;
 }
+
 ////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeMdhd(QFile* dashFile) {
+    std::shared_ptr<Box> mdhd = model->getBoxes("mdhd").at(0);
+    unsigned long int size = mdhd->getSize();
+    if(dashFile == NULL)
+        return size;
+    QDataStream stream(dashFile);
+    unsigned int version = mdhd->getVersion();
+    unsigned int maxSize = 24;
+    if(version)
+        maxSize = 32;
+    copyBox("mdhd", dashFile, maxSize);
+    if(version)
+        stream<<quint64(0);
+    else
+        stream<<quint32(0);
+    unsigned long int offset = mdhd->getOffset() + maxSize + 4 + 4*version;
+    file->seek(offset);
+    QByteArray array = file->read(size - maxSize - 4*(version + 1));
+    dashFile->write(array);
+    return size;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeMdia(QFile* dashFile) {
+    unsigned int long size = 8; //naglowek
+    size = size + writeMdhd() + copyBox("hdlr") + writeMinf();
+    if(dashFile == NULL)
+        return size;
+    QDataStream stream(dashFile);
+    stream<<quint32(size);
+    stream.writeRawData("mdia", 4);
+    writeMdhd(dashFile);
+    copyBox("hdlr", dashFile);
+    writeMinf(dashFile);
+    return size;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeMehd(QFile* dashFile) {
+    std::shared_ptr<Box> mvhd = model->getBoxes("mvhd").at(0);
+    unsigned long int duration = mvhd->getDuration();
+    QDataStream stream(dashFile);
+
+    if(duration > 0xFFFFFFFF) {
+        if(dashFile == NULL)
+            return 20;
+        stream<<quint32(20);
+        stream.writeRawData("mehd", 4);
+        stream<<quint8(1); //version
+        stream<<quint8(0); //flags
+        stream<<quint16(0);
+        stream<<quint64(duration);
+        return 20;
+    }
+    else {
+        if(dashFile == NULL)
+            return 16;
+        stream<<quint32(16);
+        stream.writeRawData("mehd", 4);
+        stream<<quint8(0); //version
+        stream<<quint8(0); //flags
+        stream<<quint16(0);
+        stream<<quint32(duration);
+        return 16;
+    }
+    return 0;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeMfhd(const unsigned long int& sequenceNumber, QFile* dashFile) {
+    if(dashFile == NULL)
+        return 16;
+    QDataStream stream(dashFile);
+    stream<<quint32(16); //size
+    stream.writeRawData("mfhd", 4);
+    stream<<quint8(0); //version
+    stream<<quint8(0); //flags
+    stream<<quint16(0);
+    stream<<quint32(sequenceNumber);
+    return 16;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeMinf(QFile* dashFile) {
+    unsigned long int size = 8; //naglowek
+    size = size + writeVmhd() + copyBox("dinf") + writeStbl();
+    if(dashFile == NULL)
+        return size;
+    QDataStream stream(dashFile);
+    stream<<quint32(size);
+    stream.writeRawData("minf", 4);
+    writeVmhd(dashFile);
+    copyBox("dinf", dashFile); //wszystko kopiujemy, lacznie z dziecmi: dref i url
+    writeStbl(dashFile);
+    return size;
+}////////////////////////////////////////////////////////////////////////////////////////////
 unsigned int DashCreator::writeMoof(const unsigned long int& sequenceNumber, const unsigned int& trackID,
                                     const unsigned long &baseMediaDecodeTime, const unsigned int& trunFlag2,const unsigned int& trunFlag3,
                                     const unsigned int& sampleCount, const signed int& dataOffset,const unsigned int& firstSampleFlags,
@@ -86,109 +272,63 @@ unsigned int DashCreator::writeMoof(const unsigned long int& sequenceNumber, con
     return size;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
-unsigned int DashCreator::writeMfhd(const unsigned long int& sequenceNumber, QFile* dashFile) {
-    if(dashFile == NULL)
-        return 16;
-    QDataStream stream(dashFile);
-    stream<<quint32(16); //size
-    stream.writeRawData("mfhd", 4);
-    stream<<quint8(0); //version
-    stream<<quint8(0); //flags
-    stream<<quint16(0);
-    stream<<quint32(sequenceNumber);
-    return 16;
-}
-////////////////////////////////////////////////////////////////////////////////////////////
-unsigned int DashCreator::writeTraf(const unsigned int& trackID, const unsigned long &baseMediaDecodeTime, const unsigned int& flag2,
-                                    const unsigned int& flag3, const unsigned int& sampleCount, const signed int& dataOffset,
-                                    const unsigned int& firstSampleFlags, const unsigned long int& firstSample,
-                                    std::shared_ptr<Box>& stsz, QFile* dashFile) {
-    QDataStream stream(dashFile);
-    //obliczenie rozmiaru
-    int size = 8;
-    size += 48; //po 16 od tfhd i tfdt, początek trun
-    //poniżej dalej trun
-    if(flag2 == 2) //sample sizes are present
-        size += sampleCount*4;
-    if(flag3 == 1 || flag3 == 4) //1- data-offset, 4 - firstsampleflags
-        size += 4;
-    else if(flag3 == 5) //oba
-        size += 8;
-    //
+unsigned int DashCreator::writeMoov(QFile* dashFile) {
+    unsigned long int size = 8;
+    size = size + writeMvhd() + writeMvex() + writeTrak() + copyBox("udta");
     if(dashFile == NULL)
         return size;
+    QDataStream stream(dashFile);
     stream<<quint32(size);
-    stream.writeRawData("traf", 4);
-
-    writeTfhd(trackID, dashFile);
-    writeTfdt(baseMediaDecodeTime, dashFile);
-    writeTrun(flag2, flag3, sampleCount, dataOffset, firstSampleFlags, firstSample, stsz, dashFile);
-
+    stream.writeRawData("moov", 4);
+    writeMvhd(dashFile);
+    writeMvex(dashFile);
+    writeTrak(dashFile);
+    copyBox("udta", dashFile);
     return size;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
-unsigned int DashCreator::writeTfhd(const unsigned int& trackID, QFile* dashFile) {
-    if(dashFile == NULL)
-        return 16;
-    QDataStream stream(dashFile);
-    stream<<quint32(16); //size
-    stream.writeRawData("tfhd", 4);
-    stream<<quint8(0); //version
-    stream<<quint8(2); //flags //dlaczego 2?
-    stream<<quint16(0);
-    stream<<quint32(trackID);
-    return 16;
-}
-////////////////////////////////////////////////////////////////////////////////////////////
-unsigned int DashCreator::writeTfdt(const unsigned long int& baseMediaDecodeTime, QFile* dashFile) {
-    if(dashFile == NULL)
-        return 16;
-    QDataStream stream(dashFile);
-    stream<<quint32(16); //size
-    stream.writeRawData("tfdt", 4);
-    int version;
-    if(baseMediaDecodeTime > 65535)
-        version = 1;
-    else
-        version = 0;
-    stream<<quint8(version); //version
-    stream<<quint8(0); //flags //dlaczego 2?
-    stream<<quint16(0);
-    if(version)
-        stream<<quint64(baseMediaDecodeTime);
-    else
-        stream<<quint32(baseMediaDecodeTime);
-    return 16;
-}
-////////////////////////////////////////////////////////////////////////////////////////////
-unsigned int DashCreator::writeTrun(const unsigned int& flag2, const unsigned int& flag3, const unsigned int& sampleCount,
-                                    const signed int& dataOffset, const unsigned int& firstSampleFlags, const unsigned long int& firstSample,
-                                    std::shared_ptr<Box>& stsz, QFile* dashFile) {
-    QDataStream stream(dashFile);
-    int size = 16; //size + type + version + flags + sampleCount
-    if(flag2 == 2) //sample sizes are present
-        size += sampleCount*4;
-    if(flag3 == 1 || flag3 == 4) //1- data-offset, 4 - firstsampleflags
-        size += 4;
-    else if(flag3 == 5) //oba
-        size += 8;
+unsigned int DashCreator::writeMvex(QFile *dashFile) {
+    unsigned int size = 8;
+    size += writeMehd();
+    size += writeTrex();
     if(dashFile == NULL)
         return size;
-    stream<<quint32(size); //size
-    stream.writeRawData("trun", 4);
-    stream<<quint8(0); //version
+    QDataStream stream(dashFile);
+    stream<<quint32(size);
+    stream.writeRawData("mvex", 4);
+    writeMehd(dashFile);
+    writeTrex(dashFile);
+    return size;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeMvhd(QFile* dashFile) {
+    std::shared_ptr<Box> mvhd = model->getBoxes("mvhd").at(0);
+    if(dashFile == NULL)
+        return mvhd->getSize();
+    QDataStream stream(dashFile);
+    unsigned int version = mvhd->getVersion();
+    unsigned int size = mvhd->getSize();
+    stream<<quint32(size);
+    stream.writeRawData("mvhd", 4);
+    stream<<quint8(version); //version
     stream<<quint8(0); //flags
-    stream<<quint8(flag2);
-    stream<<quint8(flag3);
-    stream<<quint32(sampleCount); //sample count
-    if(flag3 == 1 || flag3 == 5)
-        stream<<qint32(dataOffset);
-    if(flag3 == 2 || flag3 == 5)
-        stream<<quint32(firstSampleFlags);
-    if(flag2 == 2) {
-        for(unsigned int i = firstSample; i< firstSample + sampleCount; ++i) {
-            stream<<quint32(stsz->getSampleSize(i));
-        }
+    stream<<quint16(0);
+    file->seek(mvhd->getOffset() + 12);
+    if(version) {
+        QByteArray array = file->read(20); //creation_time, modification_time, timescale
+        dashFile->write(array);
+        stream<<quint64(0); //duration
+        file->seek(mvhd->getOffset() + 12 + 28); //ustawiamy sie po duration
+        array = file->read(size - 12 - 28); //wczytujemy wszystko po duration
+        dashFile->write(array);
+    }
+    else {
+        QByteArray array = file->read(12); //creation_time, modification_time, timescale
+        dashFile->write(array);
+        stream<<quint32(0); //duration
+        file->seek(mvhd->getOffset() + 12 + 16);  //ustawiamy sie po duration
+        array = file->read(size - 12 - 16); //wczytujemy wszystko po duration
+        dashFile->write(array);
     }
     return size;
 }
@@ -243,39 +383,217 @@ unsigned int DashCreator::writeSidx(const unsigned short int& version, const uns
     return size;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
-unsigned int DashCreator::writeFtyp(QFile* dashFile) {
+unsigned int DashCreator::writeStbl(QFile* dashFile) {
+    unsigned long int size = 8;
+    size = size + writeStsd() + writeStsz() + writeStxx("stco") + writeStxx("stsc") + writeStxx("stts");
+    if(dashFile == NULL)
+        return size;
     QDataStream stream(dashFile);
-    unsigned int size = 28;
+    stream<<quint32(size);
+    stream.writeRawData("stbl", 4);
+    writeStsd(dashFile);
+    writeStxx("stts", dashFile);
+    writeStxx("stsc", dashFile);
+    writeStsz(dashFile);
+    writeStxx("stco", dashFile);
+    return size;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeStsd(QFile* dashFile) {
+    std::shared_ptr<Box> stsd = model->getBoxes("stsd").at(0);
+    unsigned long int size = stsd->getSize();
+    unsigned long int maxSize = stsd->getContainerOffset();
+    if(dashFile == NULL)
+        return size;
+    copyBox("stsd", dashFile, maxSize);
+    writeAvc1(dashFile);
+    //writeMp4v(dashFile);
+    return size;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeStsz(QFile* dashFile) {
+    if(dashFile == NULL)
+        return 20;
+    QDataStream stream(dashFile);
+    stream<<quint32(20); //size
+    stream.writeRawData("stsz", 4);
+    stream<<quint32(0); //version i flags
+    std::shared_ptr<Box> stsz = model->getBoxes("stsz").at(0);
+    stream<<quint32(stsz->getSampleSize());
+    stream<<quint32(0); //sample count
+    return 20;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeStxx(const QString& type, QFile* dashFile) {
+    if(dashFile == NULL)
+        return 16;
+    QDataStream stream(dashFile);
+    stream<<quint32(16); //size
+    stream.writeRawData(type.toStdString().c_str(), 4);
+    stream<<quint32(0); //version i flags
+    stream<<quint32(0); //entryCount
+    return 16;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeTfdt(const unsigned long int& baseMediaDecodeTime, QFile* dashFile) {
+    if(dashFile == NULL)
+        return 16;
+    QDataStream stream(dashFile);
+    stream<<quint32(16); //size
+    stream.writeRawData("tfdt", 4);
+    int version;
+    if(baseMediaDecodeTime > 65535)
+        version = 1;
+    else
+        version = 0;
+    stream<<quint8(version); //version
+    stream<<quint8(0); //flags //dlaczego 2?
+    stream<<quint16(0);
+    if(version)
+        stream<<quint64(baseMediaDecodeTime);
+    else
+        stream<<quint32(baseMediaDecodeTime);
+    return 16;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeTfhd(const unsigned int& trackID, QFile* dashFile) {
+    if(dashFile == NULL)
+        return 16;
+    QDataStream stream(dashFile);
+    stream<<quint32(16); //size
+    stream.writeRawData("tfhd", 4);
+    stream<<quint8(0); //version
+    stream<<quint8(2); //flags //dlaczego 2?
+    stream<<quint16(0);
+    stream<<quint32(trackID);
+    return 16;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeTkhd(QFile* dashFile) {
+    std::shared_ptr<Box> tkhd = model->getBoxes("tkhd").at(0);
+    unsigned long int size = tkhd->getSize();
+    if(dashFile == NULL)
+        return size;
+    QDataStream stream(dashFile);
+    unsigned int version = tkhd->getVersion();
+    unsigned int maxSize = 24;
+    if(version)
+        maxSize = 32;
+    copyBox("tkhd", dashFile, maxSize);
+    if(version)
+        stream<<quint64(0);
+    else
+        stream<<quint32(0);
+    unsigned long int offset = tkhd->getOffset() + maxSize + 4 + 4*version;
+    file->seek(offset);
+    QByteArray array = file->read(size - maxSize - 4*(version + 1));
+    dashFile->write(array);
+    return size;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeTraf(const unsigned int& trackID, const unsigned long &baseMediaDecodeTime, const unsigned int& flag2,
+                                    const unsigned int& flag3, const unsigned int& sampleCount, const signed int& dataOffset,
+                                    const unsigned int& firstSampleFlags, const unsigned long int& firstSample,
+                                    std::shared_ptr<Box>& stsz, QFile* dashFile) {
+    QDataStream stream(dashFile);
+    //obliczenie rozmiaru
+    int size = 8;
+    size += 48; //po 16 od tfhd i tfdt, początek trun
+    //poniżej dalej trun
+    if(flag2 == 2) //sample sizes are present
+        size += sampleCount*4;
+    if(flag3 == 1 || flag3 == 4) //1- data-offset, 4 - firstsampleflags
+        size += 4;
+    else if(flag3 == 5) //oba
+        size += 8;
+    //
     if(dashFile == NULL)
         return size;
     stream<<quint32(size);
-    stream.writeRawData("iso5", 4); //major_brand
-    stream<<quint32(0); //minor_version
-    stream.writeRawData("avc1", 4); //copatible brands
-    stream.writeRawData("iso5", 4);
-    stream.writeRawData("dash", 4);
+    stream.writeRawData("traf", 4);
+
+    writeTfhd(trackID, dashFile);
+    writeTfdt(baseMediaDecodeTime, dashFile);
+    writeTrun(flag2, flag3, sampleCount, dataOffset, firstSampleFlags, firstSample, stsz, dashFile);
 
     return size;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
-unsigned int DashCreator::writeFree(QFile* dashFile) {
-    QList <std::shared_ptr<Box>> free = model->getBoxes("free");
-    free.append(model->getBoxes("skip"));
-    unsigned int size = 0;
-    while (!free.empty()) {
-        std::shared_ptr<Box> free1 = free.back();
-        unsigned long int offset = free1->getOffset();
-        unsigned long int size1 = free1->getSize();
-        file->seek(offset);
-        QByteArray array = file->read(size1);
-        if(dashFile != NULL)
-            dashFile->write(array);
-        free.pop_back();
-        size += size1;
+unsigned int DashCreator::writeTrak(QFile* dashFile) {
+    unsigned long int size = 8;
+    size = size + writeTkhd() + writeMdia();
+    if(dashFile == NULL)
+        return size;
+    QDataStream stream(dashFile);
+    stream<<quint32(size);
+    stream.writeRawData("trak", 4);
+    writeTkhd(dashFile);
+    writeMdia(dashFile);
+    return size;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeTrex(QFile* dashFile) {
+    if(dashFile == NULL)
+        return 32;
+    std::shared_ptr<Box> tkhd = model->getBoxes("tkhd").at(0);
+    QDataStream stream(dashFile);
+    stream<<quint32(32);
+    stream.writeRawData("trex", 4);
+    stream<<quint8(0); //version
+    stream<<quint8(0); //flags
+    stream<<quint16(0);
+    stream<<quint32(tkhd->getTrackID()); //trackID
+    stream<<quint32(1); // ? default_sample_description_index
+    stream<<quint32(1); // ? default_sample_duration
+    stream<<quint32(1); // ? default_sample_size
+    stream<<quint32(65536); //? default_sample_flags
+    return 32;
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeTrun(const unsigned int& flag2, const unsigned int& flag3, const unsigned int& sampleCount,
+                                    const signed int& dataOffset, const unsigned int& firstSampleFlags, const unsigned long int& firstSample,
+                                    std::shared_ptr<Box>& stsz, QFile* dashFile) {
+    QDataStream stream(dashFile);
+    int size = 16; //size + type + version + flags + sampleCount
+    if(flag2 == 2) //sample sizes are present
+        size += sampleCount*4;
+    if(flag3 == 1 || flag3 == 4) //1- data-offset, 4 - firstsampleflags
+        size += 4;
+    else if(flag3 == 5) //oba
+        size += 8;
+    if(dashFile == NULL)
+        return size;
+    stream<<quint32(size); //size
+    stream.writeRawData("trun", 4);
+    stream<<quint8(0); //version
+    stream<<quint8(0); //flags
+    stream<<quint8(flag2);
+    stream<<quint8(flag3);
+    stream<<quint32(sampleCount); //sample count
+    if(flag3 == 1 || flag3 == 5)
+        stream<<qint32(dataOffset);
+    if(flag3 == 2 || flag3 == 5)
+        stream<<quint32(firstSampleFlags);
+    if(flag2 == 2) {
+        for(unsigned int i = firstSample; i< firstSample + sampleCount; ++i) {
+            stream<<quint32(stsz->getSampleSize(i));
+        }
     }
     return size;
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////
+unsigned int DashCreator::writeVmhd(QFile* dashFile) {
+    if(dashFile == NULL)
+        return 20;
+    QDataStream stream(dashFile);
+    stream<<quint32(20); //size
+    stream.writeRawData("vmhd", 4);
+    stream<<quint16(0); //version i pierwsza flaga
+    stream<<quint16(1); //druga i trzecia flaga
+    stream<<quint32(0); //graphics mode i r z opcolor
+    stream<<quint32(0); //opcolor g i b
+    return 20;
+}
 ////////////////////////////////////////////////////////////////////////////////////////////
 void DashCreator::writeSegments(const unsigned int& maxSampleNum, QFile* dashFile) {
     qDebug()<<"dash creator write segments"<<"0";
@@ -369,99 +687,15 @@ void DashCreator::writeSegments(const unsigned int& maxSampleNum, QFile* dashFil
     }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
-unsigned int DashCreator::writeMehd(QFile* dashFile) {
-    std::shared_ptr<Box> mvhd = model->getBoxes("mvhd").at(0);
-    unsigned long int duration = mvhd->getDuration();
-    QDataStream stream(dashFile);
+void DashCreator::writeFile(const unsigned int& maxSampleNum, QFile* dashFile) {
+    writeFtyp(dashFile);
+    writeFree(dashFile);
+    writeMoov(dashFile);
+    writeSegments(maxSampleNum, dashFile);
+}
 
-    if(duration > 0xFFFFFFFF) {
-        if(dashFile == NULL)
-            return 20;
-        stream<<quint32(20);
-        stream.writeRawData("mehd", 4);
-        stream<<quint8(1); //version
-        stream<<quint8(0); //flags
-        stream<<quint16(0);
-        stream<<quint64(duration);
-        return 20;
-    }
-    else {
-        if(dashFile == NULL)
-            return 16;
-        stream<<quint32(16);
-        stream.writeRawData("mehd", 4);
-        stream<<quint8(0); //version
-        stream<<quint8(0); //flags
-        stream<<quint16(0);
-        stream<<quint32(duration);
-        return 16;
-    }
-    return 0;
-}
-////////////////////////////////////////////////////////////////////////////////////////////
-unsigned int DashCreator::writeTrex(QFile* dashFile) {
-    if(dashFile == NULL)
-        return 32;
-    std::shared_ptr<Box> tkhd = model->getBoxes("tkhd").at(0);
-    QDataStream stream(dashFile);
-    stream<<quint32(32);
-    stream.writeRawData("trex", 4);
-    stream<<quint8(0); //version
-    stream<<quint8(0); //flags
-    stream<<quint16(0);
-    stream<<quint32(tkhd->getTrackID()); //trackID
-    stream<<quint32(1); // ? default_sample_description_index
-    stream<<quint32(1); // ? default_sample_duration
-    stream<<quint32(1); // ? default_sample_size
-    stream<<quint32(65536); //? default_sample_flags
-    return 32;
-}
-////////////////////////////////////////////////////////////////////////////////////////////
-unsigned int DashCreator::writeMvex(QFile *dashFile) {
-    unsigned int size = 8;
-    size += writeMehd();
-    size += writeTrex();
-    if(dashFile == NULL)
-        return size;
-    QDataStream stream(dashFile);
-    stream<<quint32(size);
-    stream.writeRawData("mvex", 4);
-    writeMehd(dashFile);
-    writeTrex(dashFile);
-    return size;
-}
-////////////////////////////////////////////////////////////////////////////////////////////
-unsigned int DashCreator::writeMvhd(QFile* dashFile) {
-    std::shared_ptr<Box> mvhd = model->getBoxes("mvhd").at(0);
-    if(dashFile == NULL)
-        return mvhd->getSize();
-    QDataStream stream(dashFile);
-    unsigned int version = mvhd->getVersion();
-    unsigned int size = mvhd->getSize();
-    stream<<quint32(size);
-    stream.writeRawData("mvhd", 4);
-    stream<<quint8(version); //version
-    stream<<quint8(0); //flags
-    stream<<quint16(0);
-    file->seek(mvhd->getOffset() + 12);
-    if(version) {
-        QByteArray array = file->read(20); //creation_time, modification_time, timescale
-        dashFile->write(array);
-        stream<<quint64(0); //duration
-        file->seek(mvhd->getOffset() + 12 + 28); //ustawiamy sie po duration
-        array = file->read(size - 12 - 28); //wczytujemy wszystko po duration
-        dashFile->write(array);
-    }
-    else {
-        QByteArray array = file->read(12); //creation_time, modification_time, timescale
-        dashFile->write(array);
-        stream<<quint32(0); //duration
-        file->seek(mvhd->getOffset() + 12 + 16);  //ustawiamy sie po duration
-        array = file->read(size - 12 - 16); //wczytujemy wszystko po duration
-        dashFile->write(array);
-    }
-    return size;
-}
+
+
 
 
 
