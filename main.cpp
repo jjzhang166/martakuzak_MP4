@@ -3,10 +3,11 @@
 //#include "analyzer.h"
 #include "boxfactory.h"
 #include "exceptions.h"
+#include "mpd.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    /*QApplication a(argc, argv);
     MainWindow w;
     w.show();
     return a.exec();
@@ -76,6 +77,9 @@ int main(int argc, char *argv[])
         file.write(array);
         //file.write(arrau);
         file.close();
-   }
-    return 0;*/
+   }*/
+    MPDWriter mpdwriter("dnsf");
+    QFile* file = new QFile("D://mp.xml");
+    mpdwriter.writeMPD(file);
+    return 0;
 }

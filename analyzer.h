@@ -71,26 +71,7 @@ private:
      * \param maxOff max offset possible of the parent analyzed box
      */
     void setData(TreeItem* &parent, QHash<long,TreeItem*>* items, const unsigned long int &off, unsigned long int maxOff = 0L);
-    //void writeMdat(const unsigned int& firstSample, const unsigned int& sampleNumber, const SampleSizeBox& stsz, const );
 public:
-    //    unsigned long int mdatSize(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz);
-    //    unsigned int writeMdat(const unsigned long int& firstSample, const unsigned int& sampleNumber, std::shared_ptr<Box>& stsz,
-    //                           QFile* dashFile);
-    //    unsigned int writeMoof(const unsigned long int& sequenceNumber, const unsigned int& trackID, const unsigned long &baseMediaDecodeTime,
-    //                          const unsigned int& trunFlag2,const unsigned int& trunFlag3, const unsigned int& sampleCount,
-    //                          const signed int& dataOffset,const unsigned int& firstSampleFlags, const unsigned long int& firstSample,
-    //                          std::shared_ptr<Box>& stsz, QFile* dashFile);
-    //    unsigned int writeMfhd(const unsigned long int& sequenceNumber, QFile* dashFile);
-    //    unsigned int writeTraf(const unsigned int& trackID, const unsigned long &baseMediaDecodeTime, const unsigned int& trunFlag2,
-    //                           const unsigned int& trunFlag3, const unsigned int& sampleCount, const signed int& dataOffset,
-    //                           const unsigned int& firstSampleFlags, const unsigned long int& firstSample, std::shared_ptr<Box>& stsz,
-    //                           QFile* dashFile);
-    //    unsigned int writeTfhd(const unsigned int& trackID, QFile* dashFile);
-    //    unsigned int writeTfdt(const unsigned long &baseMediaDecodeTime, QFile* dashFile);
-    //    unsigned int writeTrun(const unsigned int& flag2, const unsigned int& flag3, const unsigned int& sampleCount,
-    //                           const signed int& dataOffset, const unsigned int& firstSampleFlags, const unsigned long int& firstSample,
-    //                           std::shared_ptr<Box>& stsz, QFile* dashFile);
-
     /*!
      * \brief fileName
      *  name of the analyzed file
