@@ -596,15 +596,15 @@ unsigned int DashCreator::writeVmhd(QFile* dashFile) {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////
 void DashCreator::writeSegments(const unsigned int& maxSampleNum, QFile* dashFile) {
-    qDebug()<<"dash creator write segments"<<"0";
+    //qDebug()<<"dash creator write segments"<<"0";
     std::shared_ptr<Box> stsz = model->getBoxes("stsz").at(0); //Sample Size Box
-    qDebug()<<"dashcreator 1";
+    //qDebug()<<"dashcreator 1";
     std::shared_ptr<Box> stss = model->getBoxes("stss").at(0); //Sync Sample Box
-    qDebug()<<"dashcreator 2";
+    //qDebug()<<"dashcreator 2";
     std::shared_ptr<Box> mdhd = model->getBoxes("mdhd").at(0); //Media Header Box
-    qDebug()<<"dashcreator 3";
+    //qDebug()<<"dashcreator 3";
     std::shared_ptr<Box> tkhd = model->getBoxes("tkhd").at(0); //Track Header Box
-    qDebug()<<"dashcreator entry count"<<QString::number(stsz->getEntryCount());
+    //qDebug()<<"dashcreator entry count"<<QString::number(stsz->getEntryCount());
     unsigned int maxSegmentNum = stss->getEntryCount(); //segmentow tyle co sync punktow?
     unsigned int segmentID = 0; //aktualny numer segmentu
     unsigned long int sequenceNumber = 0;
@@ -622,7 +622,7 @@ void DashCreator::writeSegments(const unsigned int& maxSampleNum, QFile* dashFil
             secondSample = stss->getSyncSample(segmentID + 1);
         }
         unsigned int samplesInSegmentNum = secondSample - firstSample; //ilosc probek w segmencie
-        qDebug()<<"dashcreator writeSeg"<<"samplesInSegment"<<QString::number(samplesInSegmentNum);
+        //qDebug()<<"dashcreator writeSeg"<<"samplesInSegment"<<QString::number(samplesInSegmentNum);
         unsigned int subsegmentNum = 1; //ilosc podsegmentow - co najmniej 1
         if(samplesInSegmentNum > maxSampleNum) { //jesli jest ich wiecej niz maxSampleNum
             subsegmentNum = samplesInSegmentNum/maxSampleNum; //to ilosc podsegmentow jest ilorazem wszystkich probek w segmencie i maxSampleNum

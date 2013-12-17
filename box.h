@@ -390,6 +390,8 @@ public:
     UserDataBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int &  e);
     virtual QString getFullName() { return QString("User Data Box"); }
     virtual QString getInfo() { return QString("User Data Box is container for objects that declare user information about the containing box and its data (presentation or track)."); }
+    virtual bool isContainer() { return true; }
+    virtual unsigned int getContainerOffset() { return 8;}
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 class CopyRightBox : public FullBox
@@ -534,6 +536,7 @@ private:
 public:
     MetaBox(const unsigned  int& s, const QString& t, const unsigned long int& off, const unsigned  int& e, const unsigned  int& v, const QList<unsigned int>& f);
     virtual bool isContainer() { return true; }
+    virtual unsigned int getContainerOffset() { return 12;}
     virtual QString getFullName() { return QString("Meta Box"); }
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
