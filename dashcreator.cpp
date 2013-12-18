@@ -604,6 +604,7 @@ void DashCreator::writeSegments(const unsigned int& maxSampleNum, QFile* dashFil
     std::shared_ptr<Box> mdhd = model->getBoxes("mdhd").at(0); //Media Header Box
     //qDebug()<<"dashcreator 3";
     std::shared_ptr<Box> tkhd = model->getBoxes("tkhd").at(0); //Track Header Box
+    unsigned int dataOffset = 296;
     //qDebug()<<"dashcreator entry count"<<QString::number(stsz->getEntryCount());
     unsigned int maxSegmentNum = stss->getEntryCount(); //segmentow tyle co sync punktow?
     unsigned int segmentID = 0; //aktualny numer segmentu
@@ -652,7 +653,7 @@ void DashCreator::writeSegments(const unsigned int& maxSampleNum, QFile* dashFil
                 subsegmentLen = samplesInSegmentNum % maxSampleNum;
             referenceType.append(0);
             //przygotowanie parametrow moof
-            referenceSize.append(writeMoof(++sequenceTMP, referenceID, baseTMP, 2, 5, subsegmentLen, 0 /**/,
+            referenceSize.append(writeMoof(++sequenceTMP, referenceID, baseTMP, 2, 5, subsegmentLen, dataOffset /**/,
                                            0, baseTMP , stsz)
                                  +
                                  mdatSize(baseTMP, subsegmentLen, stsz));
